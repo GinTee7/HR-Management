@@ -1,5 +1,5 @@
 import React from "react";
-import Avatar from "../img/Avatar.jpg";
+import Avatar from "../../components/Login/image/Avatar.jpg";
 import { Link } from "react-router-dom";
 
 function Header() {

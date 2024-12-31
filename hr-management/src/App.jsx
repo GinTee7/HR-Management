@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./components/LoginPage";
-import Header from "./components/Header";
-import ForgotPassword from "./components/ForgotPassword";
+import Login from "./components/Login/LoginPage";
+import Header from "./components/Login/Header";
+import ForgotPassword from "./components/Login/ForgotPassword";
 
 function App() {
   return (
