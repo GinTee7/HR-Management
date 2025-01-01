@@ -43,7 +43,7 @@ const LoginPage = () => {
 
             <button
               type="submit"
-              className="w-full py-4 text-lg font-bold text-white bg-gradient-to-r from-[#2E4F4F] to-[#3A6565] rounded-lg shadow-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#2E4F4F]"
+              className="relative w-full py-4 text-lg font-bold text-white bg-gradient-to-r from-[#2E4F4F] to-[#3A6565] rounded-lg shadow-md hover:before:bg-[#3A6565] focus:outline-none focus:ring-2 focus:ring-[#2E4F4F] before:absolute before:top-[-30px] before:left-[-30px] before:w-[calc(100%+60px)] before:h-[calc(100%+60px)] before:bg-transparent before:rounded-lg before:transition-all before:duration-300 hover:before:opacity-50 active:before:bg-[#3A6565] active:before:transition-none"
             >
               Login
             </button>

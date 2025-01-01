@@ -15,6 +15,7 @@ const LoginPage = () => {
           />
         </div>
 
+        {/* Right Section */}
         <div className="flex flex-col justify-center w-1/2 p-10 bg-white rounded-r-lg">
           <h2 className="mb-6 text-5xl font-extrabold text-center text-gray-800">
             Welcome Back
