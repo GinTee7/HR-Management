@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import logo from "./image/logo.png";
+import logo from "../assets/logo.png";
 
 const LoginPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -13,7 +13,6 @@ const LoginPage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#E7F0FD] to-[#D6E4F0]">
       <div className="flex shadow-2xl bg-white border border-[#2E4F4F] rounded-lg w-[1100px] h-[600px] overflow-hidden">
-        {/* Left Section */}
         <div className="flex items-center justify-center w-1/2 bg-gradient-to-b from-[#2E4F4F] to-[#3A6565] rounded-l-lg">
           <img
             src={logo}
@@ -22,36 +21,17 @@ const LoginPage = () => {
           />
         </div>
 
-        {/* Right Section */}
         <div className="flex flex-col justify-center w-1/2 p-10 bg-white rounded-r-lg">
-          {/* Language Selector */}
-          {/* <div className="flex justify-end mb-4 space-x-4">
-            <button
-              onClick={() => changeLanguage("en")}
-              className="px-3 py-2 text-sm font-medium bg-gray-200 rounded-md hover:bg-gray-300"
-            >
-              English
-            </button>
-            <button
-              onClick={() => changeLanguage("vi")}
-              className="px-3 py-2 text-sm font-medium bg-gray-200 rounded-md hover:bg-gray-300"
-            >
-              Tiếng Việt
-            </button>
-          </div> */}
-
           <h2 className="mb-6 text-5xl font-extrabold text-center text-gray-800">
             {t("Welcome Back")}
           </h2>
           <form className="flex flex-col w-full gap-5">
-            {/* Username Input */}
             <input
               className="w-full px-5 py-4 text-lg text-gray-900 placeholder-gray-400 bg-gray-100 border border-[#2E4F4F] rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#2E4F4F]"
               type="text"
               placeholder={t("Username")}
             />
 
-            {/* Password Input */}
             <div className="relative">
               <input
                 className="w-full px-5 py-4 text-lg text-gray-900 placeholder-gray-400 bg-gray-100 border border-[#2E4F4F] rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#2E4F4F]"
@@ -67,7 +47,6 @@ const LoginPage = () => {
               </button>
             </div>
 
-            {/* Login Button */}
             <button
               type="submit"
               className="w-full py-4 text-lg font-bold text-white bg-gradient-to-r from-[#2E4F4F] to-[#3A6565] rounded-lg shadow-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#2E4F4F]"
@@ -75,7 +54,6 @@ const LoginPage = () => {
               {t("Login")}
             </button>
 
-            {/* Forgot Password */}
             <div className="mt-4 text-center">
               <a
                 href="/forgot-password"

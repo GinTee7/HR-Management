@@ -4,43 +4,23 @@ import logo from "./image/logo.png";
 
 const LoginPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const { t, i18n } = useTranslation();
-
-  const changeLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-  };
+  const { t } = useTranslation();
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#E7F0FD] to-[#D6E4F0]">
-      <div className="flex shadow-2xl bg-white border border-[#2E4F4F] rounded-lg w-[1100px] h-[600px] overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#E7F0FD] to-[#D6E4F0] px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col md:flex-row shadow-2xl bg-white border border-[#2E4F4F] rounded-lg w-full max-w-[1100px] h-auto md:h-[600px] overflow-hidden">
         {/* Left Section */}
-        <div className="flex items-center justify-center w-1/2 bg-gradient-to-b from-[#2E4F4F] to-[#3A6565] rounded-l-lg">
+        <div className="flex items-center justify-center w-full md:w-1/2 bg-gradient-to-b from-[#2E4F4F] to-[#3A6565] rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
           <img
             src={logo}
             alt={t("Enterprise Logo")}
-            className="object-cover w-[85%] h-[85%] shadow-xl rounded-lg"
+            className="object-cover w-[85%] max-w-[300px] h-auto shadow-xl rounded-lg"
           />
         </div>
 
         {/* Right Section */}
-        <div className="flex flex-col justify-center w-1/2 p-10 bg-white rounded-r-lg">
-          {/* Language Selector */}
-          {/* <div className="flex justify-end mb-4 space-x-4">
-            <button
-              onClick={() => changeLanguage("en")}
-              className="px-3 py-2 text-sm font-medium bg-gray-200 rounded-md hover:bg-gray-300"
-            >
-              English
-            </button>
-            <button
-              onClick={() => changeLanguage("vi")}
-              className="px-3 py-2 text-sm font-medium bg-gray-200 rounded-md hover:bg-gray-300"
-            >
-              Tiếng Việt
-            </button>
-          </div> */}
-
-          <h2 className="mb-6 text-5xl font-extrabold text-center text-gray-800">
+        <div className="flex flex-col justify-center w-full p-8 bg-white rounded-b-lg md:w-1/2 md:rounded-r-lg">
+          <h2 className="mb-6 text-4xl font-extrabold text-center text-gray-800 md:text-5xl">
             {t("Welcome Back")}
           </h2>
           <form className="flex flex-col w-full gap-5">

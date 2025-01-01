@@ -25,7 +25,7 @@ const LoginPage = () => {
         {/* Right Section */}
         <div className="flex flex-col justify-center w-1/2 p-10 bg-white rounded-r-lg">
           {/* Language Selector */}
-          {/* <div className="flex justify-end mb-4 space-x-4">
+          <div className="flex justify-end mb-4 space-x-4">
             <button
               onClick={() => changeLanguage("en")}
               className="px-3 py-2 text-sm font-medium bg-gray-200 rounded-md hover:bg-gray-300"
@@ -38,7 +38,7 @@ const LoginPage = () => {
             >
               Tiếng Việt
             </button>
-          </div> */}
+          </div>
 
           <h2 className="mb-6 text-5xl font-extrabold text-center text-gray-800">
             {t("Welcome Back")}
