@@ -3,6 +3,8 @@ import Login from "./components/Login/LoginPage";
 
 import ForgotPassword from "./components/Login/ForgotPassword";
 import Header from "./components/Login/Header";
+import MainLayout from "./components/Admin/MainLayout/MainLayout";
+import Dashboard from "./components/Admin/pages/Dashboard/Dashboard";
 
 function App() {
   return (
@@ -20,6 +22,9 @@ function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+        </Routes>
+        <Routes path="/admin" element={<MainLayout />}>
+          <Route path="dashboard" element={<Dashboard />} />
         </Routes>
       </div>
     </Router>
