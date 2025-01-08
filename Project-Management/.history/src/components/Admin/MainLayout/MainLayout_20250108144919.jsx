@@ -17,7 +17,7 @@ const MainLayout = ({ children }) => {
         <MenuNavigate buttonClick={handleButtonChangeSpanLayout} />
       </Col>
       <Col style={{ transition: "0.5s" }} span={spanLayout[1]}>
-        <Outlet />
+        <Outlet/>
       </Col>
     </Row>
   );

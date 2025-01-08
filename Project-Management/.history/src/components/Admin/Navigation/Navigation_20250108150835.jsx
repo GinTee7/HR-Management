@@ -5,7 +5,7 @@ import GroupButton from "../GroupButton/GroupButton";
 import useViewport from "../hooks/useViewport";
 import { Input, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import userImage from "../../../assets/Avatar.jpg";
+import userImage from "../../../assets/Avatar.jpd";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";

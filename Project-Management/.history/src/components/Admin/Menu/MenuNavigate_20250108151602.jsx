@@ -68,7 +68,7 @@ const MenuNavigate = ({ buttonClick }) => {
     if (value.key === "vi" || value.key === "en") {
       i18n.changeLanguage(value.key);
     } else {
-      navigate("/admin/" + value.key);
+      navigate("/" + value.key);
     }
   };
 

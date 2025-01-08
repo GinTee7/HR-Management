@@ -1,9 +1,9 @@
-import logo from "../../assets/logo.png";
+import logo from "./image/logo.png";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import vietnam from "../../assets/vietnam.png";
-import unitedkingdom from "../../assets/united-kingdom.png";
+import vietnam from "./image/vietnam.png";
+import unitedkingdom from "./image/united-kingdom.png";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
