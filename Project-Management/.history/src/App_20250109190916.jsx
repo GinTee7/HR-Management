@@ -3,6 +3,7 @@ import Header from "./pages/Login/Header";
 import ForgotPassword from "./pages/Login/ForgotPassword";
 import MainLayout from "./MainLayout/MainLayout";
 import Dashboard from "./pages/Admin/Dashboard/Dashboard";
+
 import LoginPage from "./pages/Login/LoginPage";
 import MembersList from "./pages/Admin/MembersList/MembersList";
 
@@ -23,7 +24,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/admin" element={<MainLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="members" element={<MembersList />} />
+          <Route path="membersList" element={<MembersList />} />
         </Route>
       </Routes>
     </Router>

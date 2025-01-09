@@ -23,7 +23,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/admin" element={<MainLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="members" element={<MembersList />} />
+          <Route path="membersList" element={<MembersList />} />
         </Route>
       </Routes>
     </Router>

@@ -98,7 +98,7 @@ const MenuNavigate = ({ buttonClick }) => {
       label: t("List Management"),
       icon: <TeamOutlined />,
       children: [
-        { key: "members", label: t("Members list") },
+        { key: "membersList", label: t("Members list") },
         { key: "groupList", label: t("Group list") },
       ],
     },
