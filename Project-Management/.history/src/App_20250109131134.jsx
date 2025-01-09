@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Header from "./pages/Login/Header";
-import ForgotPassword from "./pages/Login/ForgotPassword";
-import MainLayout from "./MainLayout/MainLayout";
-import Dashboard from "./pages/Admin/Dashboard/Dashboard";
-import MembersList from "./pages/Admin/MembersList/MembersList";
-import LoginPage from "./pages/Login/LoginPage";
+import Login from "./components/Login/LoginPage";
+import ForgotPassword from "./components/Login/ForgotPassword";
+import Header from "./components/Login/Header";
+import MainLayout from "./components/Admin/MainLayout/MainLayout";
+import Dashboard from "./components/Admin/pages/Dashboard/Dashboard";
+import MembersList from "./components/Admin/pages/MembersList/MembersList";
 
 function App() {
   return (
@@ -15,11 +15,11 @@ function App() {
           element={
             <>
               <Header />
-              <LoginPage />
+              <Login />
             </>
           }
         />
-        {/* <Route path="/login" element={<Login />} /> */}
+        <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/admin" element={<MainLayout />}>
           <Route path="dashboard" element={<Dashboard />} />

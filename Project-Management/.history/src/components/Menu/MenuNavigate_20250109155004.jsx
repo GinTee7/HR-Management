@@ -9,7 +9,7 @@ import Icon, {
   RightOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
-import logo from "../../../assets/Avatar.jpg";
+import logo from "../../assets/Avatar.jpg";
 import { useNavigate } from "react-router-dom";
 import useViewport from "../hooks/useViewport";
 import { useTranslation } from "react-i18next";
@@ -98,7 +98,7 @@ const MenuNavigate = ({ buttonClick }) => {
       label: t("List Management"),
       icon: <TeamOutlined />,
       children: [
-        { key: "internList", label: t("Intern list") },
+        { key: "membersList", label: t("Members list") },
         { key: "groupList", label: t("Group list") },
       ],
     },
