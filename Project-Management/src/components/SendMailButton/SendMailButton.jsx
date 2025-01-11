@@ -112,9 +112,9 @@ const SendEmailPopup = ({ onClose, openPopup, typesEmail }) => {
                 onDropdownVisibleChange={handleDropdownVisibleChange}
                 suffixIcon={open ? <UpOutlined /> : <DownOutlined />}
               >
-                {email_types.map((type, index) => {
-                  return <Option key={index} value={type}></Option>;
-                })}
+                {/* {email_types.map((type, index) => {
+                  // return <Option key={index} value={type}></Option>;
+                })} */}
               </Select>
             </Form.Item>
           </Form>

@@ -26,7 +26,7 @@ const MembersList = () => {
   const [filter, setFilter] = useState({});
   const [dataTable, setDataTable] = useState(DataMembersList);
   const viewPort = useViewport();
-  const isMobile = viewPort.width <= 1024;
+  // const isMobile = viewPort.width <= 1024;
   const { t } = useTranslation();
 
   const optionsRole = generateOptions("role", DataMembersList);
@@ -54,15 +54,15 @@ const MembersList = () => {
 
   const columns = useMemo(
     () => [
-      {
-        title: "",
-        dataIndex: "select",
-        render: () => <Checkbox />,
-        width: "40px",
-      },
+      // {
+      //   title: "",
+      //   dataIndex: "select",
+      //   render: () => <Checkbox />,
+      //   width: "40px",
+      // },
       {
         title: t("ID"),
-        dataIndex: "id",
+        dataIndex: "key",
         align: "center",
       },
       {
