@@ -112,11 +112,11 @@ const MenuNavigate = ({ buttonClick }) => {
       label: t("Position Management"),
       icon: <PositionIcon />,
     },
-    // {
-    //   key: "technologyManagement",
-    //   label: t("Technology Management"),
-    //   icon: <TechnologyIcon />,
-    // },
+    {
+      key: "technologyManagement",
+      label: t("Technology Management"),
+      icon: <TechnologyIcon />,
+    },
     {
       key: "groupZaloManagement",
       label: t("Group Zalo Management"),

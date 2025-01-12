@@ -99,7 +99,7 @@ const MenuNavigate = ({ buttonClick }) => {
       icon: <TeamOutlined />,
       children: [
         { key: "members", label: t("Members list") },
-        { key: "customer", label: t("Customer list") },
+        { key: "groupList", label: t("Group list") },
       ],
     },
     {
@@ -112,11 +112,11 @@ const MenuNavigate = ({ buttonClick }) => {
       label: t("Position Management"),
       icon: <PositionIcon />,
     },
-    // {
-    //   key: "technologyManagement",
-    //   label: t("Technology Management"),
-    //   icon: <TechnologyIcon />,
-    // },
+    {
+      key: "technologyManagement",
+      label: t("Technology Management"),
+      icon: <TechnologyIcon />,
+    },
     {
       key: "groupZaloManagement",
       label: t("Group Zalo Management"),
