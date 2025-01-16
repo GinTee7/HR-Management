@@ -20,17 +20,18 @@ const Footer = () => {
               Minh Long
             </h1>
             <p className="">
-              Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet
-              consectetur adipisicing elit. Possimus, voluptate.{" "}
+              Các sản phẩm của chúng tôi luôn tạo ra những cây khỏe mạnh hơn, dễ
+              trồng, giúp tăng đáng kể năng suất và lợi nhuận cho người nông dân
+              Việt Nam.{" "}
             </p>
             <br />
             <div className="flex items-center gap-3">
               <FaLocationArrow />
-              <p>Noida, Uttar Pradesh</p>
+              <p>Trụ sở chính: Số 98, Ấp Đông Thành, Xã Thạnh Đông A, Tân Hiệp, Kiên Giang</p>
             </div>
             <div className="flex items-center gap-3 mt-3">
               <FaMobileAlt />
-              <p>+91 123456789</p>
+              <p>1900 8982</p>
             </div>
             {/* Social Handle */}
             <div className="flex items-center gap-3 mt-6">

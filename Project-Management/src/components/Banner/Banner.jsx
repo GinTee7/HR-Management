@@ -25,21 +25,17 @@ const Banner = () => {
                   data-aos="fade-up"
                   className="text-3xl font-bold sm:text-4xl"
                 >
-                  Lorem, ipsum dolor.
+                  Về Minh Long
                 </h1>
                 <p
                   data-aos="fade-up"
                   className="text-sm leading-5 tracking-wide text-gray-500"
                 >
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Eaque reiciendis inventore iste ratione ex alias quis magni at
-                  optio
+                  Công Ty TNHH BVTV Minh Long được xây dựng từ hoài bão phát triển nông nghiệp của những con người đã có hơn 30 năm gắn bó với nông nghiệp.
                   <br />
                   <br />
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Beatae ab sed, exercitationem minima aliquid eligendi
-                  distinctio? Fugit repudiandae numquam hic quo recusandae.
-                  Excepturi totam ad nam velit quasi quidem aspernatur.
+                  Thấy hiểu được nỗi vất vả của nhà nông, nên Công Ty Minh Long quyết tâm phục vụ vì lợi ích người nông dân.
+                  Các sản phẩm do Công ty Minh Long sản xuất và phân phối luôn đáp ứng các tiêu chí khắt khe về chất lượng, được các cơ quan quản lý công nhận, được người dân tin dùng.
                 </p>
                 <div className="flex gap-6">
                   <div data-aos="fade-up">

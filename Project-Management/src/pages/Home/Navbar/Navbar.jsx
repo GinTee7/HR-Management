@@ -43,7 +43,7 @@ const Navbar = () => {
                 ))}
               </ul>
               <button className="px-4 py-1 text-white duration-200 rounded-full bg-gradient-to-r from-primary to-secondary hover:scale-105">
-                Giao hàng
+                Login
               </button>
             </div>
           </div>
