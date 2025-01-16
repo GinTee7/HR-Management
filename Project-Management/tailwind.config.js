@@ -3,6 +3,12 @@ export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   theme: {
     extend: {
+      spacing: {
+        "150px": "150px",
+        "120px": "120px",
+        "10px": "10px",
+        "20px": "20px",
+      },
       width: {
         ...Array.from({ length: 100 }, (_, i) => i + 1).reduce(
           (acc, val) => ({ ...acc, [`${val}p`]: `${val}%` }),
@@ -22,6 +28,10 @@ export default {
         custom: "20px",
       },
       colors: {
+        primary: "#0190ec",
+        secondary: "#044fa9",
+        dark: "#1e1e1e",
+        light: "#f5f5f5",
         white: "#ffffff",
         lightPrimary: "#F4F7FE",
         blueSecondary: "#4318FF",
@@ -82,6 +92,17 @@ export default {
       "3xl-max": { max: "1600px" },
       "4xl": "1850px",
       "4xl-max": { max: "1850px" },
+    },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1rem",
+        sm: "3rem",
+      },
+    },
+    animation: {
+      "spin-slow": "spin 40s linear infinite",
+      "bounce-slow": "bounce 3s linear infinite",
     },
   },
   plugins: [],
