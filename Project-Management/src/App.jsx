@@ -11,6 +11,7 @@ import Hero from "./components/Hero/Hero";
 import Footer from "./pages/Home/Footer/Footer";
 import Navbar from "./pages/Home/Navbar/Navbar";
 import Services from "./pages/Home/Services/Services";
+import OrderHistory from "./components/Order/OrderHistory";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -49,6 +50,16 @@ function App() {
               <Hero />
               <Services />
               <Banner />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/order-history"
+          element={
+            <>
+              <Navbar />
+              <OrderHistory />
               <Footer />
             </>
           }
