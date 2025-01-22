@@ -8,10 +8,10 @@ import LoginPage from "./pages/Login/LoginPage";
 import MembersList from "./pages/Admin/MembersList/MembersList";
 import Banner from "./components/Banner/Banner";
 import Hero from "./components/Hero/Hero";
-import Footer from "./pages/Home/Footer/Footer";
-import Navbar from "./pages/Home/Navbar/Navbar";
 import Services from "./pages/Home/Services/Services";
 import OrderHistory from "./components/Order/OrderHistory";
+import ProductDetails from "./pages/ProductDetails/ProductDetails";
+import Layout from "./components/Layout/Layout";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -46,11 +46,11 @@ function App() {
           path="/home"
           element={
             <>
-              <Navbar />
-              <Hero />
-              <Services />
-              <Banner />
-              <Footer />
+              <Layout>
+                <Hero />
+                <Services />
+                <Banner />
+              </Layout>
             </>
           }
         />
@@ -58,9 +58,19 @@ function App() {
           path="/order-history"
           element={
             <>
-              <Navbar />
-              <OrderHistory />
-              <Footer />
+              <Layout>
+                <OrderHistory />
+              </Layout>
+            </>
+          }
+        />
+        <Route
+          path="/product"
+          element={
+            <>
+              <Layout>
+                <ProductDetails />
+              </Layout>
             </>
           }
         />

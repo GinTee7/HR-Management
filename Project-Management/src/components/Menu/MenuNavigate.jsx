@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo } from "react";
-import "./MenuNavigate.css";
+import "./MenuNavigate.scss";
 import Icon, {
   AppstoreOutlined,
   AuditOutlined,

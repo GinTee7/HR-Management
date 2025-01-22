@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Input, Button, Space } from "antd";
 import { FolderAddOutlined } from "@ant-design/icons";
 import { Row, Col, Form, message } from "antd";
-import "./AddNewIntern.css";
+import "./AddNewIntern.scss";
 import { useTranslation } from "react-i18next";
 
 const EditPopup = ({ onClose, openPopup }) => {

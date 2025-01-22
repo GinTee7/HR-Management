@@ -1,5 +1,5 @@
 import React from "react";
-import "./GroupButton.css";
+import "./GroupButton.scss";
 import { Button, message } from "antd"; // Import message from antd for displaying messages
 
 import { useTranslation } from "react-i18next";

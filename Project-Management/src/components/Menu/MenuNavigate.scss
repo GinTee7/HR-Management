@@ -12,7 +12,7 @@
     min-height: 100vh;
 }
 
-.ant-menu-title-content{
+.ant-menu-title-content {
     font-family: 'Quicksand', sans-serif;
 }
 
@@ -23,24 +23,26 @@
     padding: 24.82px;
 }
 
-.smaller-logo{
+.smaller-logo {
     width: auto;
 }
 
-.menu .button-collapsed {
-    position: absolute;
-    width: 16px;
-    height: 70px;
-    right: -13px;
-    top: 50%;
-    background-color: #FFFFFF;
-    z-index: 10;
-    border-radius: 0 45px 45px 0;
-    display: flex;
-}
+.menu {
+    .button-collapsed {
+        position: absolute;
+        width: 16px;
+        height: 70px;
+        right: -13px;
+        top: 50%;
+        background-color: #FFFFFF;
+        z-index: 10;
+        border-radius: 0 45px 45px 0;
+        display: flex;
 
-.menu .button-collapsed:hover {
-    cursor: pointer;
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
 
 .change-language-navigation {

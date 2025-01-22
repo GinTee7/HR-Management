@@ -3,7 +3,7 @@ import { Modal, Select, Input, Button } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import { Typography, Row, Col, Form, message } from "antd";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import "./SendMailButton.css";
+import "./SendMailButton.scss";
 import { useTranslation } from "react-i18next";
 
 const { Option } = Select;

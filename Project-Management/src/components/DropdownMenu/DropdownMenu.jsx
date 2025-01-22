@@ -3,7 +3,7 @@ import { SettingOutlined,RightOutlined, UserOutlined, GlobalOutlined, LogoutOutl
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // import LanguageSelector from "../LanguageSelector/LanguageSelector";
-import "./DropdownMenu.css";
+import "./DropdownMenu.scss";
 
 const DropdownMenu = () => {
   const { t } = useTranslation();

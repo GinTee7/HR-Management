@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./Navigation.css";
+import "./Navigation.scss";
 import GroupButton from "../GroupButton/GroupButton";
 import { Input, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";

@@ -50,7 +50,7 @@ const Banner = () => {
                 </div>
                 <div data-aos="fade-up" data-aos-delay="500">
                   <button className="px-4 py-2 text-white rounded-full shadow-xl bg-gradient-to-r from-primary to-secondary hover:shadow-md">
-                    Giao hàng ngay
+                    Xem chi tiết
                   </button>
                 </div>
               </div>
