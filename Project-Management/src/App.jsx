@@ -12,6 +12,9 @@ import Services from "./pages/Home/Services/Services";
 import OrderHistory from "./components/Order/OrderHistory";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Layout from "./components/Layout/Layout";
+import Cart from "./pages/Cart/Cart";
+import Shop from "./pages/Shop/Shop";
+import HeaderBottom from "./pages/Home/Header/HeaderBottom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -47,6 +50,7 @@ function App() {
           element={
             <>
               <Layout>
+                <HeaderBottom />
                 <Hero />
                 <Services />
                 <Banner />
@@ -69,7 +73,30 @@ function App() {
           element={
             <>
               <Layout>
+                <HeaderBottom />
                 <ProductDetails />
+              </Layout>
+            </>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <>
+              <Layout>
+                <HeaderBottom />
+                <Cart />
+              </Layout>
+            </>
+          }
+        />
+        <Route
+          path="/shop"
+          element={
+            <>
+              <Layout>
+                <HeaderBottom />
+                <Shop />
               </Layout>
             </>
           }

@@ -15,7 +15,7 @@ const Menu = [
   {
     id: 3,
     name: "Sản phẩm",
-    link: "/#services",
+    link: "/shop",
   },
   {
     id: 4,
@@ -50,30 +50,6 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                   </li>
                 ))}
               </ul>
-
-              {/* Cart Section */}
-              <a
-                href="/cart"
-                className="relative flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full hover:bg-gray-300"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-6 h-6 text-gray-700"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2 6h14m-9-6V6m0 0h6m-6 0L9 3m3 3l1 3"
-                  />
-                </svg>
-                <span className="absolute px-2 py-1 text-xs font-bold text-white bg-red-500 rounded-full -top-1 -right-1">
-                  3
-                </span>
-              </a>
 
               {/* Login/Logout Section */}
               {isLoggedIn ? (
