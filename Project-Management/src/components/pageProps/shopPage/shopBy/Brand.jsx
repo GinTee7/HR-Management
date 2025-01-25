@@ -7,23 +7,23 @@ const Brand = () => {
   const brands = [
     {
       _id: 9006,
-      title: "Apple",
+      title: "Bảo vệ thực vật Việt Nam",
     },
     {
       _id: 9007,
-      title: "Ultron",
+      title: "Lâm Thao Fertilizers",
     },
     {
       _id: 9008,
-      title: "Unknown",
+      title: "Bình Điền Fertilizers",
     },
     {
       _id: 9009,
-      title: "Shoppers Home",
+      title: "Phân bón Cà Mau",
     },
     {
       _id: 9010,
-      title: "Hoichoi",
+      title: "Thuốc trừ sâu Sài Gòn",
     },
   ];
 
@@ -33,7 +33,7 @@ const Brand = () => {
         onClick={() => setShowBrands(!showBrands)}
         className="cursor-pointer"
       >
-        <NavTitle title="Shop by Brand" icons={true} />
+        <NavTitle title="Danh sách thương hiệu" icons={true} />
       </div>
       {showBrands && (
         <motion.div

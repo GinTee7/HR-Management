@@ -24,7 +24,7 @@ const Product = (props) => {
 
   return (
     <div className="relative w-full group">
-      <div className="relative overflow-y-hidden max-w-80 max-h-80">
+      <div className="relative overflow-hidden max-w-80 max-h-80">
         <div>
           <img
             src={props.img}
@@ -39,26 +39,24 @@ const Product = (props) => {
           <ul className="flex flex-col items-center justify-center w-full gap-2 p-4 border border-gray-200 rounded-md shadow-md">
             <li className="flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-primary hover:border-primary">
               <FaShoppingCart />
-              <span>Add to Cart</span>
+              <span>Thêm vào giỏ hàng</span>
             </li>
             <li className="flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-primary hover:border-primary">
-              <Link
-                to="/product"
-                className="flex items-center gap-2"
-              >
+              <Link to="/product" className="flex items-center gap-2">
                 <MdOutlineLabelImportant />
-                <span>View Details</span>
+                <span>Xem chi tiết</span>
               </Link>
             </li>
           </ul>
         </div>
       </div>
-      <div className="max-w-80 py-6 flex flex-col gap-1 border-[1px] border-t-0 px-4">
+      <div className="max-w-80 py-6 flex flex-col justify-between gap-1 border-[1px] border-t-0 px-4 min-h-[180px]">
         <div className="flex items-center justify-between font-titleFont">
+          {/* Loại bỏ truncate ở đây */}
           <h2 className="text-lg font-bold text-primeColor">
             {props.productName}
           </h2>
-          <p className="text-[#767676] text-[14px]">${props.price}</p>
+          <p className="text-[#767676] text-[14px]">{props.price} VND</p>
         </div>
         <div>
           <p className="text-[#767676] text-[14px]">{props.color}</p>

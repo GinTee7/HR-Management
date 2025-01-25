@@ -31,7 +31,7 @@ const HeaderBottom = () => {
   };
 
   return (
-    <div className="w-full bg-[#F5F5F3] relative">
+    <div className="w-full bg-[#F2F8FC] relative pt-24">
       <div className="mx-auto max-w-container">
         <Flex className="flex flex-col items-start justify-between w-full h-full px-4 pb-4 lg:flex-row lg:items-center lg:pb-0 lg:h-24">
           <div
@@ -40,7 +40,7 @@ const HeaderBottom = () => {
             className="flex items-center gap-2 cursor-pointer h-14 text-primeColor"
           >
             <HiOutlineMenuAlt4 className="w-5 h-5" />
-            <p className="text-[14px] font-normal">Shop by Category</p>
+            <p className="text-[14px] font-normal">Mua hàng</p>
 
             {/* {show && (
               <motion.ul
@@ -76,7 +76,7 @@ const HeaderBottom = () => {
               type="text"
               onChange={handleSearch}
               value={searchQuery}
-              placeholder="Search your products here"
+              placeholder="Tìm kiếm sản phẩm ở đây"
             />
             <FaSearch className="w-5 h-5" />
             {/* Uncomment and implement search results if needed */}

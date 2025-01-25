@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { FaPlus } from "react-icons/fa";
 import { ImPlus } from "react-icons/im";
 import NavTitle from "./NavTitle";
 
@@ -8,30 +7,30 @@ const Category = () => {
   const items = [
     {
       _id: 990,
-      title: "New Arrivals",
+      title: "Thuốc trừ sâu",
       icons: true,
     },
     {
       _id: 991,
-      title: "Gudgets",
+      title: "Thuốc trừ bệnh",
     },
     {
       _id: 992,
-      title: "Accessories",
+      title: "Thuốc diệt cỏ",
       icons: true,
     },
     {
       _id: 993,
-      title: "Electronics",
+      title: "Phân bón",
     },
     {
       _id: 994,
-      title: "Others",
+      title: "Các loại khác",
     },
   ];
   return (
     <div className="w-full">
-      <NavTitle title="Shop by Category" icons={false} />
+      <NavTitle title="Danh mục sản phẩm" icons={false} />
       <div>
         <ul className="flex flex-col gap-4 text-sm lg:text-base text-[#767676]">
           {items.map(({ _id, title, icons }) => (

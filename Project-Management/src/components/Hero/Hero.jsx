@@ -11,7 +11,7 @@ const Hero = () => {
   const containerRef = useRef(null);
   const startX = useRef(0);
   const isDragging = useRef(false);
-  const threshold = 50; // Số pixel để xác định kéo thành công
+  const threshold = 50;
 
   useEffect(() => {
     const interval = setInterval(() => {

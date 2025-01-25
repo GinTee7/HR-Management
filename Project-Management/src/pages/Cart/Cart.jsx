@@ -53,10 +53,10 @@ const Cart = () => {
   }, [totalAmt]);
 
   return (
-    <div className="px-4 mx-auto max-w-container">
-      <Breadcrumbs title="Cart" />
+    <div className="w-full bg-[#F2F8FC]">
+      <Breadcrumbs title="Giỏ hàng" />
       {products.length > 0 ? (
-        <div className="pb-20">
+        <div className="px-4 mx-auto max-w-container">
           <div className="w-full h-20 bg-[#F5F7F7] text-primeColor lgl:grid grid-cols-5 place-content-center px-6 text-lg font-titleFont font-semibold">
             <h2 className="col-span-2">Product</h2>
             <h2>Price</h2>
@@ -95,7 +95,7 @@ const Cart = () => {
               </div>
               <div className="flex justify-end">
                 <Link to="/paymentgateway">
-                  <button className="h-10 text-white duration-300 w-52 bg-primeColor hover:bg-black">
+                  <button className="h-10 mb-4 text-white duration-300 w-52 bg-primeColor hover:bg-black">
                     Proceed to Checkout
                   </button>
                 </Link>

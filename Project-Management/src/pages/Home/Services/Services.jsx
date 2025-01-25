@@ -20,16 +20,16 @@ const Services = () => {
       );
       setServicesData(response.data);
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Lỗi khi làm mới dữ liệu:", error);
     }
   };
 
   useEffect(() => {
     refreshServices();
     AOS.init({
-      duration: 1000, // Thời gian animation (ms)
-      easing: "ease-in-out", // Kiểu easing
-      once: true, // Chỉ chạy animation một lần
+      duration: 1000,
+      easing: "ease-in-out",
+      once: true,
     });
   }, []);
 
@@ -77,7 +77,7 @@ const Services = () => {
   };
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-[#F2F8FC]">
       <div className="py-12 lg:py-20">
         <div className="container">
           <HeaderTitle
@@ -100,13 +100,13 @@ const Services = () => {
                         <img
                           className="w-full h-full"
                           src={service.img || "https://via.placeholder.com/150"}
-                          alt={service.name || "Placeholder"}
+                          alt={service.name || "Hình ảnh sản phẩm"}
                         />
                       </div>
                       <div className="absolute top-6 left-8">
                         {service.badge && (
                           <span className="px-2 py-1 text-white bg-red-500 rounded">
-                            New
+                            Mới
                           </span>
                         )}
                       </div>
@@ -114,7 +114,7 @@ const Services = () => {
                         <ul className="flex flex-col items-center justify-center w-full gap-2 p-4 border border-gray-200 rounded-md shadow-md">
                           <li className="flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-primary hover:border-primary">
                             <FaShoppingCart />
-                            <span>Add to Cart</span>
+                            <span>Thêm vào giỏ hàng</span>
                           </li>
                           <li className="flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-primary hover:border-primary">
                             <Link
@@ -122,7 +122,7 @@ const Services = () => {
                               className="flex items-center gap-2"
                             >
                               <MdOutlineLabelImportant />
-                              <span>View Details</span>
+                              <span>Xem chi tiết</span>
                             </Link>
                           </li>
                         </ul>
@@ -134,12 +134,14 @@ const Services = () => {
                           {service.name}
                         </h2>
                         <p className="text-[#767676] text-[14px]">
-                          ${service.price || "0.00"}
+                          {service.price
+                            ? `${service.price.toLocaleString()} VNĐ`
+                            : "0 VNĐ"}
                         </p>
                       </div>
                       <div>
                         <p className="text-[#767676] text-[14px]">
-                          {service.color || "No color specified"}
+                          {service.color || "Không có màu"}
                         </p>
                       </div>
                     </div>

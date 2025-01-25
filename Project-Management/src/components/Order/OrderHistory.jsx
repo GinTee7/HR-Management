@@ -21,8 +21,8 @@ const OrderHistory = () => {
     filter === "all" ? cartItems : cartItems.filter((item) => item.status === filter);
 
   return (
-    <div className="container py-10 mx-auto">
-      <h1 className="mb-6 text-2xl font-bold">Giỏ Hàng</h1>
+    <div className="container py-10 w-full bg-[#F2F8FC] max-w-none pt-32">
+      <h1 className="mb-6 text-2xl font-bold">Lịch sử mua hàng</h1>
 
       {/* Filter Buttons */}
       <div className="flex gap-4 mb-6">
@@ -63,7 +63,7 @@ const OrderHistory = () => {
         {filteredItems.map((item) => (
           <div
             key={item.id}
-            className="p-4 duration-200 bg-white border rounded shadow-sm hover:shadow-md"
+            className="p-4 duration-200 bg-[#F2F8FC] border rounded shadow-sm hover:shadow-md"
             data-aos="fade-up"
           >
             {/* Product Image */}

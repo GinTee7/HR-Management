@@ -11,19 +11,18 @@ const Shop = () => {
   };
 
   return (
-    <div className="px-4 mx-auto max-w-container">
-      <Breadcrumbs title="Products" />
-      {/* ================= Products Start here =================== */}
+    <div className="px-4 mx-auto bg-[#F2F8FC] min-h-screen">
+      <Breadcrumbs title="Sản phẩm" />
       <div className="flex w-full h-full gap-10 pb-20">
-        <div className="w-[20%] lgl:w-[25%] hidden mdl:inline-flex h-full">
+        <div className="w-[20%] lgl:w-[25%] hidden mdl:inline-flex h-full sticky top-0">
           <ShopSideNav />
         </div>
+
         <div className="w-full mdl:w-[80%] lgl:w-[75%] h-full flex flex-col gap-10">
           <ProductBanner itemsPerPageFromBanner={itemsPerPageFromBanner} />
           <Pagination itemsPerPage={itemsPerPage} />
         </div>
       </div>
-      {/* ================= Products End here ===================== */}
     </div>
   );
 };

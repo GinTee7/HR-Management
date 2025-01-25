@@ -10,7 +10,7 @@ const Breadcrumbs = ({ prevLocation, title }) => {
   }, [location]);
 
   return (
-    <div className="flex flex-col w-full gap-3 py-10 xl:py-10">
+    <div className="flex flex-col w-full gap-3 py-10 pl-10 xl:py-10">
       <h1 className="text-5xl font-bold text-primeColor font-titleFont">
         {title}
       </h1>

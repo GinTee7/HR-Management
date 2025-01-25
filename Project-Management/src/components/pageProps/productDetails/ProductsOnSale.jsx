@@ -31,7 +31,7 @@ const ProductsOnSale = () => {
   return (
     <div>
       <h3 className="font-titleFont text-xl font-semibold mb-6 underline underline-offset-4 decoration-[1px]">
-        Products on sale
+        Sản phẩm đang giảm giá
       </h3>
       <div className="flex flex-col gap-2">
         {products.map((item) => (
@@ -44,7 +44,7 @@ const ProductsOnSale = () => {
             </div>
             <div className="flex flex-col gap-2 font-titleFont">
               <p className="text-base font-medium">{item.name}</p>
-              <p className="text-sm font-semibold">${item.price}</p>
+              <p className="text-sm font-semibold">{item.price}₫</p>
             </div>
           </div>
         ))}
