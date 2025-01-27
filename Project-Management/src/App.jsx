@@ -15,6 +15,7 @@ import Layout from "./components/Layout/Layout";
 import Cart from "./pages/Cart/Cart";
 import Shop from "./pages/Shop/Shop";
 import HeaderBottom from "./pages/Home/Header/HeaderBottom";
+import AboutUs from "./pages/Home/AboutUs/AboutUs";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -97,6 +98,16 @@ function App() {
               <Layout>
                 <HeaderBottom />
                 <Shop />
+              </Layout>
+            </>
+          }
+        />
+        <Route
+          path="/aboutus"
+          element={
+            <>
+              <Layout>
+                <AboutUs/>
               </Layout>
             </>
           }

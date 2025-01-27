@@ -19,8 +19,7 @@ export default {
         ),
       },
       fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
-        dm: ["DM Sans", "sans-serif"],
+        sans: ["Poppins", "DM Sans", "sans-serif"],
       },
       boxShadow: {
         custom: "14px 17px 40px 4px rgba(0, 0, 0, 0.1)",
