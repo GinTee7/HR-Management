@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Button,
   Table,
@@ -28,28 +29,66 @@ const ProductManager = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [form] = Form.useForm();
 
+  const fetchProducts = () => {
+    axios
+      .get("https://67890c382c874e66b7d76465.mockapi.io/products")
+      .then((response) => {
+        const fetchedProducts = response.data.map((product) => ({
+          ...product,
+          key: product.id,
+        }));
+        setProducts(fetchedProducts);
+        setFilteredProducts(fetchedProducts);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+        toast.error("Không thể tải sản phẩm từ API!");
+      });
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   const handleAddProduct = (values) => {
     if (editingProduct) {
-      setProducts(
-        products.map((p) =>
-          p.key === editingProduct.key
-            ? { ...values, key: editingProduct.key }
-            : p
+      const updatedValues = {
+        ...values,
+        image: values.image ? values.image : editingProduct.image,
+      };
+
+      axios
+        .put(
+          `https://67890c382c874e66b7d76465.mockapi.io/products/${editingProduct.id}`,
+          updatedValues
         )
-      );
-      toast.success("Sản phẩm đã được cập nhật!");
-      setEditingProduct(null);
+        .then(() => {
+          toast.success("Sản phẩm đã được cập nhật!");
+          fetchProducts();
+          setShowList(true);
+          setShowForm(false);
+          form.resetFields();
+          setEditingProduct(null);
+        })
+        .catch((error) => {
+          console.error("Error updating product:", error);
+          toast.error("Lỗi cập nhật sản phẩm!");
+        });
     } else {
-      setProducts([...products, { ...values, key: Date.now().toString() }]);
-      toast.success("Sản phẩm đã được thêm!");
+      axios
+        .post("https://67890c382c874e66b7d76465.mockapi.io/products", values)
+        .then(() => {
+          toast.success("Sản phẩm đã được thêm!");
+          fetchProducts();
+          setShowList(true);
+          setShowForm(false);
+          form.resetFields();
+        })
+        .catch((error) => {
+          console.error("Error adding product:", error);
+          toast.error("Lỗi thêm sản phẩm!");
+        });
     }
-    setFilteredProducts([
-      ...products,
-      { ...values, key: Date.now().toString() },
-    ]);
-    setShowList(true);
-    setShowForm(false);
-    form.resetFields();
   };
 
   const handleDelete = (key) => {
@@ -60,17 +99,26 @@ const ProductManager = () => {
       cancelText: "Hủy",
       okType: "danger",
       onOk: () => {
-        const updatedProducts = products.filter((item) => item.key !== key);
-        setProducts(updatedProducts);
-        setFilteredProducts(updatedProducts);
-        toast.error("Sản phẩm đã bị xóa!");
+        axios
+          .delete(`https://67890c382c874e66b7d76465.mockapi.io/products/${key}`)
+          .then(() => {
+            toast.error("Sản phẩm đã bị xóa!");
+            fetchProducts();
+          })
+          .catch((error) => {
+            console.error("Error deleting product:", error);
+            toast.error("Lỗi xóa sản phẩm!");
+          });
       },
     });
   };
 
   const handleEdit = (record) => {
     setEditingProduct(record);
-    form.setFieldsValue(record);
+    form.setFieldsValue({
+      ...record,
+      image: record.image,
+    });
     setShowForm(true);
     setShowList(false);
   };
@@ -82,11 +130,11 @@ const ProductManager = () => {
         product.name.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredProducts(filtered);
-      if (filtered.length > 0) {
-        setSearchOptions(filtered.map((product) => ({ value: product.name })));
-      } else {
-        setSearchOptions([]);
-      }
+      setSearchOptions(
+        filtered.length > 0
+          ? filtered.map((product) => ({ value: product.name }))
+          : []
+      );
     } else {
       setFilteredProducts(products);
       setSearchOptions([]);
@@ -102,8 +150,8 @@ const ProductManager = () => {
   const columns = [
     {
       title: "Hình Ảnh",
-      dataIndex: "image",
-      key: "image",
+      dataIndex: "img",
+      key: "img",
       render: (src) => (
         <img
           src={src}
@@ -117,7 +165,7 @@ const ProductManager = () => {
       title: "Giá (VNĐ)",
       dataIndex: "price",
       key: "price",
-      render: (price) => `${price.toLocaleString()} đ`,
+      render: (price) => `${Number(price).toLocaleString()} đ`,
     },
     {
       title: "Mô Tả",
@@ -167,10 +215,10 @@ const ProductManager = () => {
           value={searchText}
         >
           <Input
-            prefix={<SearchOutlined className="mr-2 text-gray-500" />} 
+            prefix={<SearchOutlined className="mr-2 text-gray-500" />}
             allowClear
             placeholder="Tìm kiếm sản phẩm..."
-            style={{ paddingLeft: "12px", textAlign: "left" }} 
+            style={{ paddingLeft: "12px", textAlign: "left" }}
             onChange={(e) => handleSearch(e.target.value)}
           />
         </AutoComplete>
@@ -221,6 +269,60 @@ const ProductManager = () => {
             className="w-full"
           />
         </div>
+      )}
+
+      {showForm && (
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleAddProduct}
+          className="mt-5"
+        >
+          <Form.Item
+            name="image"
+            label="Hình Ảnh"
+            rules={[
+              { required: true, message: "Vui lòng nhập URL hình ảnh!" },
+            ]}
+          >
+            <Input placeholder="URL hình ảnh" />
+          </Form.Item>
+          <Form.Item
+            name="name"
+            label="Tên Sản Phẩm"
+            rules={[
+              { required: true, message: "Vui lòng nhập tên sản phẩm!" },
+            ]}
+          >
+            <Input placeholder="Tên sản phẩm" />
+          </Form.Item>
+          <Form.Item
+            name="price"
+            label="Giá (VNĐ)"
+            rules={[
+              { required: true, message: "Vui lòng nhập giá sản phẩm!" },
+            ]}
+          >
+            <InputNumber
+              style={{ width: "100%" }}
+              placeholder="Giá sản phẩm"
+            />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            label="Mô Tả"
+            rules={[
+              { required: true, message: "Vui lòng nhập mô tả sản phẩm!" },
+            ]}
+          >
+            <Input.TextArea placeholder="Mô tả sản phẩm" />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {editingProduct ? "Cập Nhật" : "Thêm Sản Phẩm"}
+            </Button>
+          </Form.Item>
+        </Form>
       )}
     </div>
   );
