@@ -11,91 +11,93 @@ const Hero = () => {
   const containerRef = useRef(null);
   const startX = useRef(0);
   const isDragging = useRef(false);
-  const threshold = 50;
+  const translateX = useRef(0);
+  const [offsetX, setOffsetX] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentBgIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
+      nextSlide();
     }, 5000);
-
     return () => clearInterval(interval);
-  }, [backgrounds.length]);
+  }, []);
 
-  const bgImage = {
-    backgroundImage: `url(${backgrounds[currentBgIndex]})`,
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    height: "100%",
-    width: "100%",
-  };
-
-  const handleNext = () => {
+  const nextSlide = () => {
     setCurrentBgIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
   };
 
-  const handlePrev = () => {
+  const prevSlide = () => {
     setCurrentBgIndex((prevIndex) => (prevIndex - 1 + backgrounds.length) % backgrounds.length);
   };
 
   const handleMouseDown = (e) => {
     isDragging.current = true;
     startX.current = e.clientX;
+    translateX.current = 0;
   };
 
   const handleTouchStart = (e) => {
     isDragging.current = true;
     startX.current = e.touches[0].clientX;
+    translateX.current = 0;
   };
 
   const handleMouseMove = (e) => {
     if (!isDragging.current) return;
     const diff = e.clientX - startX.current;
-    if (Math.abs(diff) > threshold) {
-      isDragging.current = false;
-      diff > 0 ? handlePrev() : handleNext();
-    }
+    setOffsetX(diff);
   };
 
   const handleTouchMove = (e) => {
     if (!isDragging.current) return;
     const diff = e.touches[0].clientX - startX.current;
-    if (Math.abs(diff) > threshold) {
-      isDragging.current = false;
-      diff > 0 ? handlePrev() : handleNext();
+    setOffsetX(diff);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+
+    if (offsetX > 50) {
+      prevSlide();
+    } else if (offsetX < -50) {
+      nextSlide();
     }
-  };
-
-  const handleMouseUp = () => {
-    isDragging.current = false;
-  };
-
-  const handleTouchEnd = () => {
-    isDragging.current = false;
+    setOffsetX(0);
   };
 
   return (
-    <div
-      className="min-h-[700px] bg-gray-100 relative"
-      style={bgImage}
-      ref={containerRef}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
+    <div className="relative w-full h-[500px] overflow-hidden">
+      <div
+        className="flex w-full h-full transition-transform duration-500 ease-in-out"
+        style={{
+          transform: `translateX(calc(-${currentBgIndex * 100}% + ${offsetX}px))`,
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleEnd}
+        onMouseLeave={handleEnd}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleEnd}
+      >
+        {backgrounds.map((bg, index) => (
+          <div
+            key={index}
+            className="flex-shrink-0 w-full h-full bg-center bg-cover"
+            style={{ backgroundImage: `url(${bg})` }}
+          ></div>
+        ))}
+      </div>
+
       <button
         className="absolute p-3 text-white transform -translate-y-1/2 bg-gray-800 rounded-full left-4 top-1/2"
-        onClick={handlePrev}
+        onClick={prevSlide}
       >
         <FaArrowLeft size={20} />
       </button>
       <button
         className="absolute p-3 text-white transform -translate-y-1/2 bg-gray-800 rounded-full right-4 top-1/2"
-        onClick={handleNext}
+        onClick={nextSlide}
       >
         <FaArrowRight size={20} />
       </button>

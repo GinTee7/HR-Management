@@ -12,11 +12,13 @@ import Services from "./pages/Home/Services/Services";
 import OrderHistory from "./components/Order/OrderHistory";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Layout from "./components/Layout/Layout";
+import Footer from "./pages/Home/Footer/Footer";
 import Cart from "./pages/Cart/Cart";
 import Shop from "./pages/Shop/Shop";
 import HeaderBottom from "./pages/Home/Header/HeaderBottom";
 import AboutUs from "./pages/Home/AboutUs/AboutUs";
 import ProductManager from "./pages/Manager/ProductManager";
+import ManagerLayout from "./pages/Manager/ManagerLayout";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -108,22 +110,18 @@ function App() {
           element={
             <>
               <Layout>
-                <AboutUs/>
+                <AboutUs />
               </Layout>
             </>
           }
         />
-        <Route
-          path="/product-manager"
-          element={
-            <>
-              <Layout>
-              <Hero />
-                <ProductManager/>
-              </Layout>
-            </>
-          }
-        />
+         <Route path="/manager" element={<ManagerLayout />}>
+          <Route path="work-plan" element={<h1>Kế hoạch công tác</h1>} />
+          <Route path="debt-report" element={<h1>Báo cáo công nợ</h1>} />
+          <Route path="product-manager" element={<ProductManager />} />
+          <Route path="material-request" element={<h1>Đề nghị vật tư</h1>} />
+          <Route path="order-approval" element={<h1>Xét duyệt đơn hàng</h1>} />
+        </Route>
       </Routes>
     </Router>
   );

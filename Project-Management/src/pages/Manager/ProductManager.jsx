@@ -242,7 +242,7 @@ const ProductManager = () => {
           >
             Danh Sách Sản Phẩm
           </Button>
-          <Button
+          {/* <Button
             type="primary"
             icon={<CalendarOutlined />}
             style={{
@@ -253,7 +253,7 @@ const ProductManager = () => {
             onMouseLeave={(e) => (e.target.style.backgroundColor = "#22c55e")}
           >
             Kế Hoạch Công Việc
-          </Button>
+          </Button> */}
         </div>
       </div>
 

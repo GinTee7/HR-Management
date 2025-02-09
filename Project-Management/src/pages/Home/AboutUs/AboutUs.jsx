@@ -56,7 +56,7 @@ const AboutUs = () => {
       >
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="container relative px-6 mx-auto text-center">
-          <h2 className="mb-6 text-5xl font-bold">Our Commitment</h2>
+          <h2 className="mb-6 text-5xl font-bold">Cam kết của chúng tôi</h2>
           <p className="mt-4 text-xl">
             Chúng tôi cam kết cung cấp các giải pháp nông nghiệp chất lượng cao, mang lại hiệu quả kinh tế cho nông dân.
           </p>
