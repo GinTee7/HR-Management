@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import Bg from "../../assets/hero.png";
-import Bg2 from "../../assets/hero2.png";
-import Bg3 from "../../assets/hero3.png";
+import Bg from "@assets/hero.png";
+import Bg2 from "@assets/hero2.png";
+import Bg3 from "@assets/hero3.png";
 
 const Hero = () => {
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
@@ -66,7 +66,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-[500px] overflow-hidden">
+    <div className="relative w-full h-[700px] overflow-hidden">
       <div
         className="flex w-full h-full transition-transform duration-500 ease-in-out"
         style={{

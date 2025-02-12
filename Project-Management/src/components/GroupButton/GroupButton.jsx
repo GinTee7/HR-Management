@@ -3,7 +3,7 @@ import "./GroupButton.scss";
 import { Button, message } from "antd"; // Import message from antd for displaying messages
 
 import { useTranslation } from "react-i18next";
-import useViewport from "../../hooks/useViewport";
+import useViewport from "@hooks/useViewport";
 
 const GroupButton = ({
   groupButton,

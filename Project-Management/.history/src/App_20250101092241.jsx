@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./components/Login/LoginPage";
+import Login from "@components/Login/LoginPage";
 
-import ForgotPassword from "./components/Login/ForgotPassword";
-import Header from "./components/Login/Header";
+import ForgotPassword from "@components/Login/ForgotPassword";
+import Header from "@components/Login/Header";
 
 function App() {
   return (

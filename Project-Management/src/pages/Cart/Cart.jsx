@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
+import Breadcrumbs from "@components/pageProps/Breadcrumbs";
 import ItemCard from "./ItemCard";
 
 const Cart = () => {

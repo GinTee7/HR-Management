@@ -18,8 +18,8 @@ import {
   FolderAddOutlined,
   SendOutlined,
 } from "@ant-design/icons";
-import Navigation from "../../../components/Navigation/Navigation";
-import useViewport from "../../../hooks/useViewport";
+import Navigation from "@components/Navigation/Navigation";
+import useViewport from "@hooks/useViewport";
 import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;

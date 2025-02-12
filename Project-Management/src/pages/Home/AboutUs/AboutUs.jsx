@@ -1,7 +1,7 @@
 import React from "react";
-import TeamImage from "../../../assets/aboutus.png";
-import Image from "../../../assets/image.png";
-import CallToActionImage from "../../../assets/aboutus2.jpg";
+import TeamImage from "@assets/aboutus.png";
+import Image from "@assets/image.png";
+import CallToActionImage from "@assets/aboutus2.jpg";
 import { motion } from "framer-motion";
 
 const AboutUs = () => {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
-import ProductInfo from "../../components/pageProps/productDetails/ProductInfo";
-import ProductsOnSale from "../../components/pageProps/productDetails/ProductsOnSale";
+import Breadcrumbs from "@components/pageProps/Breadcrumbs";
+import ProductInfo from "@components/pageProps/productDetails/ProductInfo";
+import ProductsOnSale from "@components/pageProps/productDetails/ProductsOnSale";
 
 const ProductDetails = () => {
   const location = useLocation();

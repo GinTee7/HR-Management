@@ -2,12 +2,12 @@ import React, { useState, useMemo } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { Table, Select, Button, Checkbox, Row, Col } from "antd";
 import { MailOutlined, ExportOutlined } from "@ant-design/icons";
-import SendMailButton from "../../../components/SendMailButton/SendMailButton.jsx";
+import SendMailButton from "@components/SendMailButton/SendMailButton.jsx";
 import DataMembersList from "../../../data/MembersList.json";
 import "./MembersList.scss";
-import useViewport from "../../../hooks/useViewport.jsx";
+import useViewport from "@hooks/useViewport.jsx";
 import { useTranslation } from "react-i18next";
-import Navigation from "../../../components/Navigation/Navigation.jsx";
+import Navigation from "@components/Navigation/Navigation.jsx";
 
 const generateOptions = (key, data) => {
   return useMemo(() => {

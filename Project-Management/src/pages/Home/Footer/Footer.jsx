@@ -5,7 +5,7 @@ import {
   FaLocationArrow,
   FaMobileAlt,
 } from "react-icons/fa";
-import footerLogo from "../../../assets/logo.png";
+import footerLogo from "@assets/logo.png";
 
 const Footer = () => {
   return (

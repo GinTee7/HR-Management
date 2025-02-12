@@ -1,5 +1,4 @@
-import React from "react";
-import Img from "../../assets/Avatar.jpg";
+import Img from "@assets/Avatar.jpg";
 import { GrSecure } from "react-icons/gr";
 import { IoFastFood } from "react-icons/io5";
 import { GiFoodTruck } from "react-icons/gi";

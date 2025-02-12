@@ -3,10 +3,10 @@ import React from "react";
 const HeaderTitle = ({ title, subtitle, description }) => {
   return (
     <>
-      <div className="text-center mb-20 max-w-[400px] mx-auto">
+      <div className="text-center mb-10 max-w-[400px] mx-auto">
         <p
           data-aos="fade-up"
-          className="text-sm bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary "
+          className="text-sm text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary "
         >
           {subtitle}
         </p>

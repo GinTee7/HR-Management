@@ -19,7 +19,7 @@ export default {
         ),
       },
       fontFamily: {
-        sans: ["Poppins", "DM Sans", "sans-serif"],
+        sans: ["Roboto Mono", "monospace"],
       },
       boxShadow: {
         custom: "14px 17px 40px 4px rgba(0, 0, 0, 0.1)",
@@ -81,6 +81,12 @@ export default {
         },
       },
     },
+    keyframes: {
+        subtleBounce: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
+        },
+      },
     screens: {
       // sm: "576px",
       // "sm-max": { max: "576px" },
@@ -96,14 +102,14 @@ export default {
       // "3xl-max": { max: "1600px" },
       // "4xl": "1850px",
       // "4xl-max": { max: "1850px" },
-        xs: "320px",
-        sm: "375px",
-        sml: "500px",
-        md: "667px",
-        mdl: "768px",
-        lg: "960px",
-        lgl: "1024px",
-        xl: "1280px",
+      xs: "320px",
+      sm: "375px",
+      sml: "500px",
+      md: "667px",
+      mdl: "768px",
+      lg: "960px",
+      lgl: "1024px",
+      xl: "1280px",
     },
     container: {
       center: true,
@@ -113,11 +119,12 @@ export default {
       },
     },
     boxShadow: {
-        testShadow: "0px 0px 54px -13px rgba(0,0,0,0.7)",
-      },
+      testShadow: "0px 0px 54px -13px rgba(0,0,0,0.7)",
+    },
     animation: {
       "spin-slow": "spin 40s linear infinite",
       "bounce-slow": "bounce 3s linear infinite",
+      "custom-bounce": "subtleBounce 1.5s infinite ease-in-out",
     },
   },
   plugins: [],
