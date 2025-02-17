@@ -23,9 +23,6 @@ const ProductBanner = ({ itemsPerPageFromBanner }) => {
 
   return (
     <div className="flex flex-col justify-between w-full md:flex-row md:items-center">
-      {/* =========================================================
-                            Left Part Start here
-        ======================================================== */}
       <div className="flex items-center gap-4">
         <span
           className={`${
@@ -46,12 +43,6 @@ const ProductBanner = ({ itemsPerPageFromBanner }) => {
           <ImList />
         </span>
       </div>
-      {/* =========================================================
-                            Left Part End here
-        ======================================================== */}
-      {/* =========================================================
-                            Right Part Start here
-        ======================================================== */}
       <div className="flex items-center gap-2 mt-4 md:gap-6 md:mt-0">
         <div className="flex items-center gap-2 text-base text-[#767676] relative">
           <label className="block">Sắp xếp theo:</label>
@@ -85,9 +76,6 @@ const ProductBanner = ({ itemsPerPageFromBanner }) => {
           </span>
         </div>
       </div>
-      {/* =========================================================
-                            Right Part End here
-        ======================================================== */}
     </div>
   );
 };

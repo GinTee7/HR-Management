@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import NavTitle from "./NavTitle";
 
@@ -40,6 +40,7 @@ const Brand = () => {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
+          className="cursor-pointer"
         >
           <ul className="flex flex-col gap-4 text-sm lg:text-base text-[#767676]">
             {brands.map((item) => (

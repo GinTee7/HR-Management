@@ -1,4 +1,3 @@
-import React from "react";
 import Brand from "./shopBy/Brand";
 import Category from "./shopBy/Category";
 import Price from "./shopBy/Price";

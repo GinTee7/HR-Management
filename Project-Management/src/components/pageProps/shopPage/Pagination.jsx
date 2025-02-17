@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
-import Product from "../../Products/Product";
+import { Link } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import { MdOutlineLabelImportant } from "react-icons/md";
 
 const paginationItems = [
   {
@@ -132,18 +134,41 @@ function Items({ currentItems }) {
     <>
       {currentItems &&
         currentItems.map((item) => (
-          <div
-            key={item._id}
-            className="w-full"
-          >
-            <Product
-              _id={item._id}
-              img={item.img}
-              productName={item.productName}
-              price={`${item.price.toLocaleString()} VND`}
-              color={item.color}
-              des={item.des}
-            />
+          <div key={item._id} className="relative w-full bg-[#D3D4D8] group rounded-2xl overflow-hidden max-w-60">
+            <div className="relative overflow-hidden max-w-60 h-[280px] flex flex-col justify-between">
+              <div>
+                <img
+                  className="object-cover w-full h-48"
+                  src={item.img || "https://via.placeholder.com/150"}
+                  alt={item.productName || "Hình ảnh sản phẩm"}
+                />
+              </div>
+              <div className="flex flex-col p-3">
+                <h2 className="text-sm font-bold truncate text-[#31473A] leading-tight">
+                  {item.productName.length > 20 ? `${item.productName.substring(0, 20)}...` : item.productName}
+                </h2>
+                <p className="text-[#767676] text-[14px] font-semibold mt-0 leading-tight">
+                  {item.price ? `${item.price.toLocaleString()} VNĐ` : "0 VNĐ"}
+                </p>
+                <p className="text-[#767676] text-[12px] leading-tight">
+                  {item.category || "Chưa phân loại"}
+                </p>
+              </div>
+              <div className="w-full absolute bg-white bottom-[-70px] group-hover:bottom-0 group-hover:translate-y-[-70px] translate-y-full duration-700 ease-in-out">
+                <ul className="flex flex-col items-center justify-center w-full gap-2 p-2 border border-gray-200 rounded-md shadow-md">
+                  <li className="flex items-center justify-end w-full gap-2 pb-1 text-xs font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-[#31473A] hover:border-[#31473A]">
+                    <FaShoppingCart />
+                    <span>Thêm vào giỏ hàng</span>
+                  </li>
+                  <li className="flex items-center justify-end w-full gap-2 pb-1 text-xs font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-[#31473A] hover:border-[#31473A]">
+                    <Link to="/product" className="flex items-center gap-2">
+                      <MdOutlineLabelImportant />
+                      <span>Xem chi tiết</span>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         ))}
     </>
@@ -166,7 +191,7 @@ const Pagination = ({ itemsPerPage }) => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 mdl:gap-4 lg:gap-10">
+      <div className="grid grid-cols-1 gap-6 p-3 md:grid-cols-2 xl:grid-cols-3 mdl:gap-3 lg:gap-10">
         <Items currentItems={currentItems} />
       </div>
       <div className="flex flex-col items-center justify-center mdl:flex-row mdl:justify-between">

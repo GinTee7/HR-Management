@@ -78,13 +78,6 @@ const Services = () => {
                           alt={service.name || "Hình ảnh sản phẩm"}
                         />
                       </div>
-                      {/* <div className="absolute top-6 left-8">
-                        {service.badge && (
-                          <span className="px-2 py-1 text-white bg-red-500 rounded">
-                            Mới
-                          </span>
-                        )}
-                      </div> */}
                       <div className="flex flex-col p-4">
                         <h2 className="text-lg font-bold truncate text-[#31473A] leading-tight">
                           {service.name.length > 20

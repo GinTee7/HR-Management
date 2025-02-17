@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Table, Button, Modal, Form, Input, InputNumber, Select } from "antd";
+import { useState } from "react";
+import { Table, Button, Modal, Form, Input, InputNumber } from "antd";
 
 const WarehouseManager = () => {
   const [visible, setVisible] = useState(false);
@@ -56,7 +56,15 @@ const WarehouseManager = () => {
       key: "actions",
       render: (_, record) => (
         <>
-          <Button type="primary" onClick={() => setVisible(true)}>
+          <Button
+            type="primary"
+            onClick={() => setVisible(true)}
+            style={{
+              backgroundColor: "#D3D4D8",
+              color: "#31473A",
+              borderColor: "#D3D4D8",
+            }}
+          >
             Nhập/Xuất Kho
           </Button>
         </>
@@ -73,6 +81,13 @@ const WarehouseManager = () => {
         open={visible}
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
+        okButtonProps={{
+          style: {
+            backgroundColor: "#D3D4D8",
+            color: "#31473A",
+            borderColor: "#D3D4D8",
+          },
+        }}
       >
         <Form form={form} layout="vertical">
           <Form.Item

@@ -94,7 +94,7 @@ const Cart = () => {
                 </p>
               </div>
               <div className="flex justify-end">
-                <Link to="/paymentgateway">
+                <Link to="/order">
                   <button className="h-10 mb-4 text-white duration-300 w-52 bg-primeColor hover:bg-black">
                     Proceed to Checkout
                   </button>

@@ -20,6 +20,7 @@ import ProductManager from "@pages/Manager/ProductManager";
 import WarehouseManager from "@pages/Manager/WarehouseManager";
 import ManagerLayout from "@pages/Manager/ManagerLayout";
 import Profile from "./pages/Home/Profile/Profile";
+import Order from "./components/Order/Order";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -96,6 +97,17 @@ function App() {
           }
         />
         <Route
+          path="/order"
+          element={
+            <>
+              <Layout>
+                <HeaderBottom />
+                <Order />
+              </Layout>
+            </>
+          }
+        />
+        <Route
           path="/shop"
           element={
             <>
@@ -126,6 +138,7 @@ function App() {
         />
          <Route path="/manager" element={<ManagerLayout />}>
           <Route path="debt-history" element={<h1>Lịch sử công nợ</h1>} />
+          <Route path="dashboard" element={<h1>Trang chủ</h1>} />
           <Route path="debt-report" element={<h1>Báo cáo công nợ</h1>} />
           <Route path="product-manager" element={<ProductManager />} />
           <Route path="material-request" element={<h1>Đề nghị vật tư</h1>} />
