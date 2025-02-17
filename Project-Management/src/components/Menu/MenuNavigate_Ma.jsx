@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, memo } from "react";
 import Icon, {
   AppstoreOutlined,
   AuditOutlined,
@@ -9,8 +9,10 @@ import Icon, {
   ShopOutlined,
   ShoppingCartOutlined,
   FileDoneOutlined,
+  EditOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
-import { Menu } from "antd";
+import { Menu, Modal, Input, Button } from "antd";
 import logo from "@assets/Avatar.jpg";
 import { useNavigate } from "react-router-dom";
 import useViewport from "@hooks/useViewport";
@@ -23,10 +25,14 @@ const MenuNavigate_Mana = ({ buttonClick }) => {
   const isMobile = viewPort.width <= 1024;
 
   const [collapsed, setCollapsed] = useState(false);
+  const [managerName, setManagerName] = useState("Minh Long Manager");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const onClick = (value) => {
     if (value.key === "vi" || value.key === "en") {
       i18n.changeLanguage(value.key);
+    } else if (value.key === "logout") {
+      navigate("/");
     } else {
       navigate("/manager/" + value.key);
     }
@@ -37,41 +43,61 @@ const MenuNavigate_Mana = ({ buttonClick }) => {
     if (buttonClick) buttonClick();
   };
 
+  const handleEditClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   const items = [
     {
       key: "dashboard",
       label: t("Dashboard"),
-      icon: <AppstoreOutlined />,
+      icon: <AppstoreOutlined />, 
     },
     {
       key: "debt-history",
       label: t("Lịch sử công nợ"),
-      icon: <TeamOutlined />,
+      icon: <TeamOutlined />, 
     },
     {
       key: "debt-report",
       label: t("Báo cáo công nợ"),
-      icon: <ProjectOutlined />,
+      icon: <ProjectOutlined />, 
     },
     {
       key: "warehouse-manager",
       label: t("Quản lý kho hàng"),
-      icon: <ShopOutlined />,
+      icon: <ShopOutlined />, 
     },
     {
       key: "product-manager",
       label: t("Quản lý sản phẩm"),
-      icon: <ShoppingCartOutlined />,
+      icon: <ShoppingCartOutlined />, 
     },
     {
       key: "material-request",
       label: t("Yêu cầu vật tư"),
-      icon: <FileDoneOutlined />,
+      icon: <FileDoneOutlined />, 
     },
     {
       key: "order-approval",
       label: t("Xét duyệt đơn hàng"),
-      icon: <AuditOutlined />,
+      icon: <AuditOutlined />, 
+    },
+    {
+      key: "logout",
+      label: (
+        <div style={{color: "#D9534F", borderRadius: "4px", textAlign: "center", width: "100%", paddingRight: "16px", fontWeight: "bold"}}>
+          <LogoutOutlined style={{ marginRight: "8px" }} /> {t("Logout")}
+        </div>
+      ),
     },
   ];
 
@@ -80,16 +106,12 @@ const MenuNavigate_Mana = ({ buttonClick }) => {
       {!isMobile ? (
         <div>
           <div className="flex flex-col items-center mb-4" hidden={collapsed}>
-            <p className="text-lg font-semibold text-gray-800">
-              Minh Long Manager
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-lg font-semibold text-gray-800">{managerName}</p>
+              <EditOutlined className="text-[#31473A] cursor-pointer" onClick={handleEditClick} />
+            </div>
             <p className="text-sm text-[#31473A]">Manager</p>
-            <img
-              src={logo}
-              alt="Logo"
-              className="logo-amazing"
-              hidden={collapsed}
-            />
+            <img src={logo} alt="Logo" className="logo-amazing" hidden={collapsed} />
           </div>
           <Menu
             onClick={onClick}
@@ -111,6 +133,28 @@ const MenuNavigate_Mana = ({ buttonClick }) => {
           inlineCollapsed
         />
       )}
+
+      <Modal
+        title={t("Chỉnh sửa tên")}
+        open={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="cancel" onClick={handleCancel}>
+            {t("Hủy")}
+          </Button>,
+          <Button key="ok" type="primary" onClick={handleOk}
+          style={{ backgroundColor: "#D3D4D8", color: "#31473A" }}>
+            {t("Lưu")}
+          </Button>,
+        ]}
+      >
+        <Input
+          value={managerName}
+          onChange={(e) => setManagerName(e.target.value)}
+          placeholder={t("Nhập tên mới")}
+        />
+      </Modal>
     </div>
   );
 };
