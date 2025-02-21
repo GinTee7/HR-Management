@@ -125,6 +125,37 @@ const WarehouseImport = () => {
         ),
     },
   ];
+  const handleAddProduct = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        const newProduct = {
+          key: (data.length + 1).toString(),
+          productCode: values.productCode,
+          productName: values.productName,
+          quantity: values.quantity,
+          purchasePrice: values.purchasePrice,
+          importDate: values.importDate.format("YYYY-MM-DD"),
+          expirationDate: values.expirationDate.format("YYYY-MM-DD"),
+        };
+
+        setData([...data, newProduct]);
+
+        // Expiration check message
+        if (checkExpiration(newProduct.expirationDate)) {
+          message.error(`Sản phẩm ${newProduct.productName} đã hết hạn!`);
+        } else {
+          message.success("Sản phẩm đã được nhập kho thành công!");
+        }
+        
+
+        setVisible(false);
+        form.resetFields();
+      })
+      .catch((error) => {
+        console.error("Validation Failed:", error);
+      });
+  };
 
   return (
     <div>
@@ -160,6 +191,35 @@ const WarehouseImport = () => {
           checkExpiration(record.expirationDate) ? "expired-row" : ""
         }
       />
+      {/* Modal for Adding New Products */}
+      <Modal
+        title="Nhập Kho"
+        open={visible}
+        onOk={handleAddProduct}
+        onCancel={() => setVisible(false)}
+        okButtonProps={{ style: { backgroundColor: "#D3D4D8", color: "#31473A" } }}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item name="productCode" label="Mã sản phẩm" rules={[{ required: true, message: "Vui lòng nhập mã sản phẩm!" }]}>
+            <Input placeholder="Nhập mã sản phẩm" />
+          </Form.Item>
+          <Form.Item name="productName" label="Tên sản phẩm" rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm!" }]}>
+            <Input placeholder="Nhập tên sản phẩm" />
+          </Form.Item>
+          <Form.Item name="quantity" label="Số lượng nhập" rules={[{ required: true, message: "Vui lòng nhập số lượng nhập!" }]}>
+            <InputNumber min={1} style={{ width: "100%" }} />
+          </Form.Item>
+          <Form.Item name="purchasePrice" label="Giá nhập" rules={[{ required: true, message: "Vui lòng nhập giá nhập!" }]}>
+            <InputNumber min={0} style={{ width: "100%" }} />
+          </Form.Item>
+          <Form.Item name="importDate" label="Ngày nhập" rules={[{ required: true, message: "Vui lòng chọn ngày nhập!" }]}>
+            <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
+          </Form.Item>
+          <Form.Item name="expirationDate" label="Hạn sử dụng" rules={[{ required: true, message: "Vui lòng chọn hạn sử dụng!" }]}>
+            <DatePicker format="YYYY-MM-DD" style={{ width: "100%" }} />
+          </Form.Item>
+        </Form>
+      </Modal>
 
       <style>{`
         .expired-row td {

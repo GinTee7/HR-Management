@@ -65,14 +65,14 @@ const MenuNavigate_WarehouseMana = ({ buttonClick }) => {
       icon: <ShopOutlined />,
       children: [
         {
-          key: "export",
-          label: t("Xuất kho"),
-          icon: <UploadOutlined />,
-        },
-        {
           key: "import",
           label: t("Nhập kho"),
           icon: <DownloadOutlined />,
+        },
+        {
+          key: "export",
+          label: t("Xuất kho"),
+          icon: <UploadOutlined />,
         },
       ],
     },
