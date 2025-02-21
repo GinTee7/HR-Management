@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Col, Row } from "antd";
 // import MenuNavigate from "../../components/Menu/MenuNavigate";
-import MenuNavigate_Ma from "../../components/Menu/MenuNavigate_Ma";
+import MenuNavigate_WarehouseMa from "../../components/Menu/MenuNavigate_WarehouseMa";
 
-const ManagerLayout = () => {
+const WarehouseManagerLayout = () => {
   const [spanLayout, setSpanLayout] = useState([3, 21]);
 
   const handleButtonChangeSpanLayout = () => {
@@ -15,7 +15,7 @@ const ManagerLayout = () => {
     <Row>
       {/* Sidebar */}
       <Col style={{ transition: "0.5s" }} span={spanLayout[0]}>
-        <MenuNavigate_Ma buttonClick={handleButtonChangeSpanLayout} />
+        <MenuNavigate_WarehouseMa buttonClick={handleButtonChangeSpanLayout} />
       </Col>
 
       {/* Main Content */}
@@ -26,4 +26,4 @@ const ManagerLayout = () => {
   );
 };
 
-export default ManagerLayout;
+export default WarehouseManagerLayout;

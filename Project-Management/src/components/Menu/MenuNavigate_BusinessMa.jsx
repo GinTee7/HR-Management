@@ -6,9 +6,6 @@ import Icon, {
   ProjectOutlined,
   LeftOutlined,
   RightOutlined,
-  ShopOutlined,
-  ShoppingCartOutlined,
-  FileDoneOutlined,
   EditOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
@@ -18,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import useViewport from "@hooks/useViewport";
 import { useTranslation } from "react-i18next";
 
-const MenuNavigate_Mana = ({ buttonClick }) => {
+const MenuNavigate_BusinessMana = ({ buttonClick }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const viewPort = useViewport();
@@ -34,7 +31,7 @@ const MenuNavigate_Mana = ({ buttonClick }) => {
     } else if (value.key === "logout") {
       navigate("/");
     } else {
-      navigate("/manager/" + value.key);
+      navigate("/business-manager/" + value.key);
     }
   };
 
@@ -59,42 +56,36 @@ const MenuNavigate_Mana = ({ buttonClick }) => {
     {
       key: "dashboard",
       label: t("Dashboard"),
-      icon: <AppstoreOutlined />, 
+      icon: <AppstoreOutlined />,
     },
     {
       key: "debt-history",
       label: t("Lịch sử công nợ"),
-      icon: <TeamOutlined />, 
+      icon: <TeamOutlined />,
     },
     {
       key: "debt-report",
       label: t("Báo cáo công nợ"),
-      icon: <ProjectOutlined />, 
-    },
-    {
-      key: "warehouse-manager",
-      label: t("Quản lý kho hàng"),
-      icon: <ShopOutlined />, 
-    },
-    {
-      key: "product-manager",
-      label: t("Quản lý sản phẩm"),
-      icon: <ShoppingCartOutlined />, 
-    },
-    {
-      key: "material-request",
-      label: t("Yêu cầu vật tư"),
-      icon: <FileDoneOutlined />, 
+      icon: <ProjectOutlined />,
     },
     {
       key: "order-approval",
       label: t("Xét duyệt đơn hàng"),
-      icon: <AuditOutlined />, 
+      icon: <AuditOutlined />,
     },
     {
       key: "logout",
       label: (
-        <div style={{color: "#D9534F", borderRadius: "4px", textAlign: "center", width: "100%", paddingRight: "16px", fontWeight: "bold"}}>
+        <div
+          style={{
+            color: "#D9534F",
+            borderRadius: "4px",
+            textAlign: "center",
+            width: "100%",
+            paddingRight: "16px",
+            fontWeight: "bold",
+          }}
+        >
           <LogoutOutlined style={{ marginRight: "8px" }} /> {t("Logout")}
         </div>
       ),
@@ -107,11 +98,21 @@ const MenuNavigate_Mana = ({ buttonClick }) => {
         <div>
           <div className="flex flex-col items-center mb-4" hidden={collapsed}>
             <div className="flex items-center gap-2">
-              <p className="text-lg font-semibold text-gray-800">{managerName}</p>
-              <EditOutlined className="text-[#31473A] cursor-pointer" onClick={handleEditClick} />
+              <p className="text-lg font-semibold text-gray-800">
+                {managerName}
+              </p>
+              <EditOutlined
+                className="text-[#31473A] cursor-pointer"
+                onClick={handleEditClick}
+              />
             </div>
             <p className="text-sm text-[#31473A]">Manager</p>
-            <img src={logo} alt="Logo" className="logo-amazing" hidden={collapsed} />
+            <img
+              src={logo}
+              alt="Logo"
+              className="logo-amazing"
+              hidden={collapsed}
+            />
           </div>
           <Menu
             onClick={onClick}
@@ -143,8 +144,12 @@ const MenuNavigate_Mana = ({ buttonClick }) => {
           <Button key="cancel" onClick={handleCancel}>
             {t("Hủy")}
           </Button>,
-          <Button key="ok" type="primary" onClick={handleOk}
-          style={{ backgroundColor: "#D3D4D8", color: "#31473A" }}>
+          <Button
+            key="ok"
+            type="primary"
+            onClick={handleOk}
+            style={{ backgroundColor: "#D3D4D8", color: "#31473A" }}
+          >
             {t("Lưu")}
           </Button>,
         ]}
@@ -159,4 +164,4 @@ const MenuNavigate_Mana = ({ buttonClick }) => {
   );
 };
 
-export default memo(MenuNavigate_Mana);
+export default memo(MenuNavigate_BusinessMana);

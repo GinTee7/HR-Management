@@ -18,7 +18,10 @@ import HeaderBottom from "@pages/Home/Header/HeaderBottom";
 import AboutUs from "@pages/Home/AboutUs/AboutUs";
 import ProductManager from "@pages/Manager/ProductManager";
 import WarehouseManager from "@pages/Manager/WarehouseManager";
-import ManagerLayout from "@pages/Manager/ManagerLayout";
+import WarehouseManagerLayout from "./pages/Manager/WarehouseManagerLayout copy";
+import BusinessManagerLayout from "./pages/Manager/BusinessManagerLayout";
+import WarehouseImport from "./components/Warehouse/WarehouseImport";
+import WarehouseExport from "./components/Warehouse/WarehouseExport";
 import Profile from "./pages/Home/Profile/Profile";
 import Order from "./components/Order/Order";
 import AOS from "aos";
@@ -136,14 +139,17 @@ function App() {
             </>
           }
         />
-         <Route path="/manager" element={<ManagerLayout />}>
-          <Route path="debt-history" element={<h1>Lịch sử công nợ</h1>} />
+         <Route path="/warehouse-manager" element={<WarehouseManagerLayout />}>
           <Route path="dashboard" element={<h1>Trang chủ</h1>} />
-          <Route path="debt-report" element={<h1>Báo cáo công nợ</h1>} />
           <Route path="product-manager" element={<ProductManager />} />
-          <Route path="material-request" element={<h1>Đề nghị vật tư</h1>} />
+          <Route path="export" element={<WarehouseExport/>} />
+          <Route path="import" element={<WarehouseImport/>} />
+        </Route>
+        <Route path="/business-manager" element={<BusinessManagerLayout />}>
+          <Route path="dashboard" element={<h1>Trang chủ</h1>} />
+          <Route path="debt-history" element={<h1>Lịch sử công nợ</h1>} />
+          <Route path="debt-report" element={<h1>Báo cáo công nợ</h1>} />
           <Route path="order-approval" element={<h1>Xét duyệt đơn hàng</h1>} />
-          <Route path="warehouse-manager" element={<WarehouseManager/>} />
         </Route>
       </Routes>
     </Router>
