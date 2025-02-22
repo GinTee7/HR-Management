@@ -1,0 +1,88 @@
+/ @type {import('tailwindcss').Config} */;
+export default {
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+  theme: {
+    extend: {
+      width: {
+        ...Array.from({ length: 100 }, (_, i) => i + 1).reduce(
+          (acc, val) => ({ ...acc, [`${val}p`]: `${val}%` }),
+          {}
+        ),
+      },
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+        dm: ["DM Sans", "sans-serif"],
+      },
+      boxShadow: {
+        custom: "14px 17px 40px 4px rgba(0, 0, 0, 0.1)",
+        inset: "inset 0px 18px 22px rgba(0, 0, 0, 0.1)",
+        darkinset: "0px 4px 4px inset rgba(0, 0, 0, 0.1)",
+      },
+      borderRadius: {
+        custom: "20px",
+      },
+      colors: {
+        white: "#ffffff",
+        lightPrimary: "#F4F7FE",
+        blueSecondary: "#4318FF",
+        brandLinear: "#868CFF",
+        bloom: "#e5b7bd",
+        hemp: "#a37a78",
+        green: "rgb(45, 79, 80)",
+        gray: {
+          50: "#f8f9fa",
+          100: "#edf2f7",
+          200: "#e9ecef",
+          300: "#cbd5e0",
+          400: "#a0aec0",
+          500: "#adb5bd",
+          600: "#a3aed0",
+          700: "#707eae",
+          800: "#252f40",
+          900: "#1b2559",
+        },
+        navy: {
+          50: "#d0dcfb",
+          100: "#aac0fe",
+          200: "#a3b9f8",
+          300: "#728fea",
+          400: "#3652ba",
+          500: "#1b3bbb",
+          600: "#24388a",
+          700: "#1B254B",
+          800: "#111c44",
+          900: "#0b1437",
+        },
+        red: {
+          50: "#ee5d501a",
+          100: "#fee2e2",
+          200: "#fecaca",
+          300: "#fca5a5",
+          400: "#f87171",
+          500: "#f53939",
+          600: "#ea0606",
+          700: "#b91c1c",
+          800: "#991b1b",
+          900: "#7f1d1d",
+        },
+      },
+    },
+    screens: {
+      sm: "576px",
+      "sm-max": { max: "576px" },
+      md: "768px",
+      "md-max": { max: "768px" },
+      lg: "992px",
+      "lg-max": { max: "992px" },
+      xl: "1200px",
+      "xl-max": { max: "1200px" },
+      "2xl": "1320px",
+      "2xl-max": { max: "1320px" },
+      "3xl": "1600px",
+      "3xl-max": { max: "1600px" },
+      "4xl": "1850px",
+      "4xl-max": { max: "1850px" },
+    },
+  },
+  plugins: [],
+};
