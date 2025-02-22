@@ -104,14 +104,30 @@ const MenuNavigate_WarehouseMana = ({ buttonClick }) => {
     <div className="h-screen p-4 bg-gray-100 shadow-lg menu">
       {!isMobile ? (
         <div>
-          <div className="flex flex-col items-center mb-4" hidden={collapsed}>
-            <div className="flex items-center gap-2">
-              <p className="text-lg font-semibold text-gray-800">{managerName}</p>
-              <EditOutlined className="text-[#31473A] cursor-pointer" onClick={handleEditClick} />
-            </div>
-            <p className="text-sm text-[#31473A]">Manager</p>
-            <img src={logo} alt="Logo" className="logo-amazing" hidden={collapsed} />
+          <div className="flex flex-col items-center mb-4">
+            <img
+              src={logo}
+              alt="Logo"
+              className={`transition-all duration-300 ${
+                collapsed ? "w-18 h-18" : "w-24 h-24"
+              }`}
+            />
+            {!collapsed && (
+              <div className="flex flex-col items-center mt-2">
+                <div className="flex items-center gap-2">
+                  <p className="text-lg font-semibold text-gray-800">
+                    {managerName}
+                  </p>
+                  <EditOutlined
+                    className="text-[#31473A] cursor-pointer"
+                    onClick={handleEditClick}
+                  />
+                </div>
+                <p className="text-sm text-[#31473A]">Manager</p>
+              </div>
+            )}
           </div>
+
           <Menu
             onClick={onClick}
             className="w-full"
@@ -119,12 +135,19 @@ const MenuNavigate_WarehouseMana = ({ buttonClick }) => {
             items={items}
             inlineCollapsed={collapsed}
           />
+
           <div onClick={toggleCollapsed} className="button-collapsed">
             {collapsed ? <RightOutlined /> : <LeftOutlined />}
           </div>
         </div>
       ) : (
-        <Menu onClick={onClick} className="w-full" mode="inline" items={items} inlineCollapsed />
+        <Menu
+          onClick={onClick}
+          className="w-full"
+          mode="inline"
+          items={items}
+          inlineCollapsed
+        />
       )}
 
       <Modal
