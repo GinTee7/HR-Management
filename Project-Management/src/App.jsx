@@ -5,6 +5,7 @@ import ForgotPassword from "@pages/Login/ForgotPassword";
 import MainLayout from "./MainLayout/MainLayout";
 import Dashboard from "@pages/Admin/Dashboard/Dashboard";
 import LoginPage from "@pages/Login/LoginPage";
+import SignUpPage from "./pages/Login/Signup";
 import MembersList from "@pages/Admin/MembersList/MembersList";
 import Banner from "@components/Banner/Banner";
 import Hero from "@components/Hero/Hero";
@@ -45,6 +46,15 @@ function App() {
             <>
               <Header />
               <LoginPage />
+            </>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <>
+              <Header />
+              <SignUpPage />
             </>
           }
         />

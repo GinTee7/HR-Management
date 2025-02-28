@@ -1,13 +1,49 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../api/ApiService";
 import logo from "@assets/logo.png";
 
 const LoginPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const changeLanguage = (lang) => {
     i18n.changeLanguage(lang);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await login({ username, password });
+      console.log("Login successful:", response);
+
+      const { token, role } = response;
+
+      if (token) {
+        localStorage.setItem("token", token);
+      }
+
+      if (role === 1) {
+        navigate("/admin");
+      } else if (role === 2) {
+        navigate("/home");
+      } 
+      else if (role === 3) {
+        navigate("/warehouse-manager");
+      }else {
+        setError("Unauthorized access");
+      }
+    } catch (err) {
+      console.error("Login Error:", err.response?.data || err.message);
+      setError("Invalid username or password");
+    }
   };
 
   return (
@@ -22,30 +58,17 @@ const LoginPage = () => {
         </div>
 
         <div className="flex flex-col justify-center w-1/2 p-10 bg-white rounded-r-lg">
-          {/* Language Selector */}
-          {/* <div className="flex justify-end mb-4 space-x-4">
-            <button
-              onClick={() => changeLanguage("en")}
-              className="px-3 py-2 text-sm font-medium bg-gray-200 rounded-md hover:bg-gray-300"
-            >
-              English
-            </button>
-            <button
-              onClick={() => changeLanguage("vi")}
-              className="px-3 py-2 text-sm font-medium bg-gray-200 rounded-md hover:bg-gray-300"
-            >
-              Tiếng Việt
-            </button>
-          </div> */}
-
           <h2 className="mb-6 font-sans text-4xl font-extrabold text-center text-gray-800">
             {t("Welcome Back")}
           </h2>
-          <form className="flex flex-col w-full gap-5">
+          <form className="flex flex-col w-full gap-5" onSubmit={handleSubmit}>
             <input
               className="w-full px-5 py-4 text-lg text-gray-900 placeholder-gray-400 bg-gray-100 border border-[#2E4F4F] rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#2E4F4F]"
               type="text"
               placeholder={t("Username")}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
             />
 
             <div className="relative flex items-center">
@@ -53,6 +76,9 @@ const LoginPage = () => {
                 className="w-full px-5 py-4 text-lg text-gray-900 placeholder-gray-400 bg-gray-100 border border-[#2E4F4F] rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#2E4F4F]"
                 type={passwordVisible ? "text" : "password"}
                 placeholder={t("Password")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
               <button
                 type="button"
@@ -62,6 +88,8 @@ const LoginPage = () => {
                 {passwordVisible ? t("Hide") : t("Show")}
               </button>
             </div>
+
+            {error && <p className="text-center text-red-600">{error}</p>}
 
             <button
               type="submit"
@@ -77,6 +105,17 @@ const LoginPage = () => {
               >
                 {t("Forgot your password?")}
               </a>
+            </div>
+            
+            <div className="mt-4 text-center">
+              <p className="text-gray-700">{t("Don't have an account?")}</p>
+              <button
+                type="button"
+                onClick={() => navigate("/signup")}
+                className="font-medium text-teal-700 hover:underline"
+              >
+                {t("Create an account")}
+              </button>
             </div>
           </form>
         </div>
