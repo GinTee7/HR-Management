@@ -21,6 +21,7 @@ import ProductManager from "@pages/Manager/ProductManager";
 import WarehouseManager from "@pages/Manager/WarehouseManager";
 import WarehouseManagerLayout from "./pages/Manager/WarehouseManagerLayout copy";
 import BusinessManagerLayout from "./pages/Manager/BusinessManagerLayout";
+import WarehouseDashboard from "./pages/Manager/WarehouseDashbard";
 import WarehouseImport from "./components/Warehouse/WarehouseImport";
 import WarehouseExport from "./components/Warehouse/WarehouseExport";
 import Profile from "./pages/Home/Profile/Profile";
@@ -150,7 +151,7 @@ function App() {
           }
         />
          <Route path="/warehouse-manager" element={<WarehouseManagerLayout />}>
-          <Route path="dashboard" element={<h1>Trang chủ</h1>} />
+          <Route path="dashboard" element={<WarehouseDashboard/>} />
           <Route path="product-manager" element={<ProductManager />} />
           <Route path="export" element={<WarehouseExport/>} />
           <Route path="import" element={<WarehouseImport/>} />

@@ -19,32 +19,37 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
     try {
       const response = await login({ username, password });
       console.log("Login successful:", response);
 
-      const { token, role } = response;
-
+      const { token } = response;
+      const roleName = token.roleName;
+  
       if (token) {
-        localStorage.setItem("token", token);
+        localStorage.setItem("token", token.token);
       }
-
-      if (role === 1) {
-        navigate("/admin");
-      } else if (role === 2) {
-        navigate("/home");
-      } 
-      else if (role === 3) {
-        navigate("/warehouse-manager");
-      }else {
-        setError("Unauthorized access");
+  
+      switch (roleName) {
+        case "ADMIN":
+          navigate("/admin");
+          break;
+        case "AGENCY":
+          navigate("/home");
+          break;
+        case "WAREHOUSE MANAGER":
+          navigate("/warehouse-manager");
+          break;
+        default:
+          setError("Unauthorized access");
       }
     } catch (err) {
       console.error("Login Error:", err.response?.data || err.message);
       setError("Invalid username or password");
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center bg-gradient-to-br from-[#E7F0FD] to-[#D6E4F0]">
@@ -106,7 +111,7 @@ const LoginPage = () => {
                 {t("Forgot your password?")}
               </a>
             </div>
-            
+
             <div className="mt-4 text-center">
               <p className="text-gray-700">{t("Don't have an account?")}</p>
               <button
