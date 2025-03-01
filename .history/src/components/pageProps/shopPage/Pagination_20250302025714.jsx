@@ -129,72 +129,53 @@ const paginationItems = [
 
 function Items({ currentItems }) {
     return (
-        <>
-            {currentItems &&
-                currentItems.map(item => (
-                    <div
-                        key={item._id}
-                        className='relative w-full bg-[#D3D4D8] group rounded-2xl overflow-hidden max-w-60'
-                    >
-                        <div className='relative overflow-hidden max-w-60 h-[280px] flex flex-col justify-between'>
-                            <div>
-                                <img
-                                    className='object-cover w-full h-48'
-                                    src={
-                                        item.img ||
-                                        'https://via.placeholder.com/150'
-                                    }
-                                    alt={
-                                        item.productName || 'Hình ảnh sản phẩm'
-                                    }
-                                />
-                            </div>
-                            <div className='flex flex-col p-3'>
-                                <h2 className='text-sm font-bold truncate text-[#31473A] leading-tight'>
-                                    {item.productName.length > 20
-                                        ? `${item.productName.substring(
-                                              0,
-                                              20
-                                          )}...`
-                                        : item.productName}
-                                </h2>
-                                <p className='text-[#767676] text-[14px] font-semibold mt-0 leading-tight'>
-                                    {item.price
-                                        ? `${item.price.toLocaleString()} VNĐ`
-                                        : '0 VNĐ'}
-                                </p>
-                                <p className='text-[#767676] text-[12px] leading-tight'>
-                                    {item.category || 'Chưa phân loại'}
-                                </p>
-                            </div>
-                            <div className='w-full absolute bg-white bottom-[-70px] group-hover:bottom-0 group-hover:translate-y-[-70px] translate-y-full duration-700 ease-in-out'>
-                                <ul className='flex flex-col items-center justify-center w-full gap-2 p-2 border border-gray-200 rounded-md shadow-md'>
-                                    <li className='flex items-center justify-end w-full gap-2 pb-1 text-xs font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-[#31473A] hover:border-[#31473A]'>
-                                        <FaShoppingCart />
-                                        <span>Thêm vào giỏ hàng</span>
-                                    </li>
-                                    <li className='flex items-center justify-end w-full gap-2 pb-1 text-xs font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-[#31473A] hover:border-[#31473A]'>
-                                        <Link
-                                            to='/product'
-                                            className='flex items-center gap-2'
-                                        >
-                                            <MdOutlineLabelImportant />
-                                            <span>Xem chi tiết</span>
-                                        </Link>
-                                    </li>
-                                </ul>
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 mdl:gap-4 lg:gap-6'>
+            {currentItems.map(item => (
+                <div
+                    key={item._id}
+                    className='relative w-full overflow-hidden transition-transform transform bg-white shadow-md rounded-xl hover:scale-105'
+                >
+                    <div className='relative w-full h-[300px] flex flex-col justify-between'>
+                        <img
+                            className='object-cover w-full h-48 rounded-t-xl'
+                            src={item.img || 'https://via.placeholder.com/150'}
+                            alt={item.productName}
+                        />
+                        <div className='p-4'>
+                            <h2 className='text-lg font-semibold text-gray-800 truncate'>
+                                {item.productName.length > 25
+                                    ? `${item.productName.substring(0, 25)}...`
+                                    : item.productName}
+                            </h2>
+                            <p className='mt-1 text-sm font-medium text-gray-600'>
+                                {item.price.toLocaleString()} VNĐ
+                            </p>
+                            <p className='mt-1 text-xs text-gray-500'>
+                                {item.category || 'Chưa phân loại'}
+                            </p>
+                        </div>
+                        <div className='absolute bottom-0 left-0 w-full py-2 transition-opacity duration-500 bg-white opacity-0 group-hover:opacity-100'>
+                            <div className='flex items-center justify-between px-4'>
+                                <button className='flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-green-700'>
+                                    <FaShoppingCart /> Thêm vào giỏ hàng
+                                </button>
+                                <Link
+                                    to='/product'
+                                    className='flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600'
+                                >
+                                    <MdOutlineLabelImportant /> Xem chi tiết
+                                </Link>
                             </div>
                         </div>
                     </div>
-                ))}
-        </>
+                </div>
+            ))}
+        </div>
     );
 }
 
 const Pagination = ({ itemsPerPage }) => {
     const [itemOffset, setItemOffset] = useState(0);
-    const [itemStart, setItemStart] = useState(1);
-
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = paginationItems.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(paginationItems.length / itemsPerPage);
@@ -203,15 +184,12 @@ const Pagination = ({ itemsPerPage }) => {
         const newOffset =
             (event.selected * itemsPerPage) % paginationItems.length;
         setItemOffset(newOffset);
-        setItemStart(newOffset + 1);
     };
 
     return (
-        <div>
-            <div className='grid grid-cols-1 gap-6 p-3 md:grid-cols-2 xl:grid-cols-3 mdl:gap-3 lg:gap-10'>
-                <Items currentItems={currentItems} />
-            </div>
-            <div className='flex flex-col items-center justify-center mdl:flex-row mdl:justify-between'>
+        <div className='w-full p-4'>
+            <Items currentItems={currentItems} />
+            <div className='flex flex-col items-center justify-center mt-6'>
                 <ReactPaginate
                     nextLabel='>'
                     previousLabel='<'
@@ -219,19 +197,22 @@ const Pagination = ({ itemsPerPage }) => {
                     pageRangeDisplayed={3}
                     marginPagesDisplayed={2}
                     pageCount={pageCount}
-                    pageLinkClassName='w-9 h-9 border-[1px] border-lightColor hover:border-gray-500 duration-300 flex justify-center items-center'
-                    pageClassName='mr-6'
-                    previousClassName='mr-4'
-                    previousLinkClassName='flex items-center justify-center w-9 h-9 border border-lightColor hover:border-gray-500 duration-300'
-                    nextClassName='ml-4'
-                    nextLinkClassName='flex items-center justify-center w-9 h-9 border border-lightColor hover:border-gray-500 duration-300'
-                    containerClassName='flex text-base font-semibold font-titleFont py-10'
-                    activeClassName='bg-black text-white'
+                    containerClassName='flex space-x-2 text-sm font-medium'
+                    pageClassName=''
+                    pageLinkClassName='w-9 h-9 flex items-center justify-center border rounded-lg text-gray-700 hover:bg-gray-100'
+                    previousClassName=''
+                    previousLinkClassName='w-9 h-9 flex items-center justify-center border rounded-lg text-gray-700 hover:bg-gray-100'
+                    nextClassName=''
+                    nextLinkClassName='w-9 h-9 flex items-center justify-center border rounded-lg text-gray-700 hover:bg-gray-100'
+                    activeClassName='bg-green-600 text-white'
                 />
-
-                <p className='text-base font-normal text-lightText'>
-                    Sản phẩm từ {itemStart} đến {endOffset} trên tổng số{' '}
-                    {paginationItems.length} sản phẩm
+                <p className='mt-2 text-sm text-gray-600'>
+                    Hiển thị {itemOffset + 1} -{' '}
+                    {Math.min(
+                        itemOffset + itemsPerPage,
+                        paginationItems.length
+                    )}{' '}
+                    trên tổng số {paginationItems.length} sản phẩm
                 </p>
             </div>
         </div>

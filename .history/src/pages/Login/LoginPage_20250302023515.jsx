@@ -11,8 +11,9 @@ const LoginPage = () => {
     };
 
     return (
-        <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-[#E7F0FD] to-[#D6E4F0] p-6'>
+        <div className='flex items-center justify-center min-h-screen  from-[#E7F0FD] to-[#D6E4F0] p-6'>
             <div className='flex flex-col w-full overflow-hidden bg-white border border-gray-300 rounded-lg shadow-xl max-w-7xl md:flex-row'>
+                {/* Left Section - Logo */}
                 <div className='hidden md:flex items-center justify-center w-1/2 bg-gradient-to-b from-[#2E4F4F] to-[#3A6565] p-6'>
                     <img
                         src={logo}
@@ -21,6 +22,7 @@ const LoginPage = () => {
                     />
                 </div>
 
+                {/* Right Section - Login Form */}
                 <div className='flex flex-col justify-center w-full p-8 bg-white md:w-1/2'>
                     {/* Language Selector */}
                     <div className='flex justify-end mb-4 space-x-2'>
