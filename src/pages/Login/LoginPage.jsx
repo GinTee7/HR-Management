@@ -84,7 +84,7 @@ const LoginPage = () => {
             {t("Welcome Back")}
           </h2>
 
-          <form className="flex flex-col w-full gap-4" onClick={handleSubmit}>
+          <form className="flex flex-col w-full gap-4" onSubmit={handleSubmit}>
             <input
               className="w-full px-4 py-3 text-lg text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#2E4F4F] focus:bg-white"
               type="text"
