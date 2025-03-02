@@ -27,24 +27,26 @@ const ProductDetails = () => {
   }, [location]);
 
   return (
-    <div className="w-full mx-auto border-b-[1px] border-b-gray-300">
-      <div className="px-4 mx-auto max-w-container">
-        <div className="xl:-mt-10 -mt-7">
-          <Breadcrumbs title="" prevLocation={prevLocation} />
-        </div>
-        <div className="grid w-full h-full grid-cols-1 gap-4 p-4 pb-10 -mt-5 bg-gray-100 md:grid-cols-2 xl:grid-cols-6 xl:-mt-8">
-          <div className="h-full">
-            <ProductsOnSale />
+    <div className="w-full min-h-screen mt-32 bg-gray-100">
+      <div className="w-full mx-auto border-b-[1px] border-b-gray-300">
+        <div className="w-full px-4 mx-auto">
+          <div className="xl:-mt-10 -mt-7">
+            <Breadcrumbs title="" prevLocation={prevLocation} />
           </div>
-          <div className="h-full xl:col-span-2">
-            <img
-              className="object-cover w-full h-full"
-              src={productInfo.img}
-              alt={productInfo.productName}
-            />
-          </div>
-          <div className="flex flex-col justify-center w-full h-full gap-6 md:col-span-2 xl:col-span-3 xl:p-14">
-            <ProductInfo productInfo={productInfo} />
+          <div className="grid w-full h-full grid-cols-1 gap-4 p-4 pb-10 -mt-5 md:grid-cols-2 xl:grid-cols-6 xl:-mt-8">
+            <div className="h-full">
+              <ProductsOnSale />
+            </div>
+            <div className="h-full xl:col-span-2">
+              <img
+                className="object-cover w-full h-full rounded-lg"
+                src={productInfo.img}
+                alt={productInfo.productName}
+              />
+            </div>
+            <div className="flex flex-col justify-center w-full h-full gap-6 md:col-span-2 xl:col-span-3 xl:p-14">
+              <ProductInfo productInfo={productInfo} />
+            </div>
           </div>
         </div>
       </div>

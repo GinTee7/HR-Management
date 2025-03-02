@@ -8,6 +8,7 @@ import Icon, {
   RightOutlined,
   EditOutlined,
   LogoutOutlined,
+  ShoppingCartOutlined
 } from "@ant-design/icons";
 import { Menu, Modal, Input, Button } from "antd";
 import logo from "@assets/Avatar.jpg";
@@ -57,6 +58,11 @@ const MenuNavigate_BusinessMana = ({ buttonClick }) => {
       key: "dashboard",
       label: t("Dashboard"),
       icon: <AppstoreOutlined />,
+    },
+    {
+      key: "product-manager",
+      label: t("Quản lý sản phẩm"),
+      icon: <ShoppingCartOutlined />,
     },
     {
       key: "debt-history",

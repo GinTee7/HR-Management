@@ -4,7 +4,6 @@ import {
   LeftOutlined,
   RightOutlined,
   ShopOutlined,
-  ShoppingCartOutlined,
   EditOutlined,
   LogoutOutlined,
   ExportOutlined,
@@ -75,11 +74,6 @@ const MenuNavigate_WarehouseMana = ({ buttonClick }) => {
           icon: <ExportOutlined  />,
         },
       ],
-    },
-    {
-      key: "product-manager",
-      label: t("Quản lý sản phẩm"),
-      icon: <ShoppingCartOutlined />,
     },
     {
       key: "logout",
