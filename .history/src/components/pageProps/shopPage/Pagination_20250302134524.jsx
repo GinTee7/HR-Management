@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaTag } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
 import { MdOutlineLabelImportant } from 'react-icons/md';
 
 const paginationItems = [
@@ -144,12 +144,12 @@ const Items = ({ currentItems }) => {
                         <h2 className='text-lg font-semibold text-gray-800 truncate'>
                             {item.productName}
                         </h2>
-                        <p className='flex items-center gap-1 font-medium text-green-600'>
-                            <FaTag /> {item.price.toLocaleString()} VNĐ
+                        <p className='font-medium text-green-600'>
+                            {item.price.toLocaleString()} VNĐ
                         </p>
                     </div>
                     <div className='flex items-center justify-between mt-2'>
-                        <button className='flex items-center gap-2 px-3 py-1 text-sm text-black transition-transform bg-green-500 rounded-md hover:bg-green-700 hover:scale-105'>
+                        <button className='flex items-center gap-2 px-3 py-1 text-sm text-white bg-green-500 rounded-md hover:bg-green-700'>
                             <FaShoppingCart /> Thêm vào giỏ hàng
                         </button>
                         <Link

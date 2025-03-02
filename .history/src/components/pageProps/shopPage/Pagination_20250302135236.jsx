@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaTag } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
 import { MdOutlineLabelImportant } from 'react-icons/md';
 
 const paginationItems = [
@@ -149,7 +149,7 @@ const Items = ({ currentItems }) => {
                         </p>
                     </div>
                     <div className='flex items-center justify-between mt-2'>
-                        <button className='flex items-center gap-2 px-3 py-1 text-sm text-black transition-transform bg-green-500 rounded-md hover:bg-green-700 hover:scale-105'>
+                        <button className='flex items-center gap-2 px-3 py-1 text-sm text-white transition-transform bg-green-500 rounded-md hover:bg-green-700 hover:scale-105'>
                             <FaShoppingCart /> Thêm vào giỏ hàng
                         </button>
                         <Link

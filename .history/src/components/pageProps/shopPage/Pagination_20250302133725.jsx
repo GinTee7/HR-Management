@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaTag } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
 import { MdOutlineLabelImportant } from 'react-icons/md';
 
 const paginationItems = [
@@ -129,35 +129,55 @@ const paginationItems = [
 
 const Items = ({ currentItems }) => {
     return (
-        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3'>
-            {currentItems.map(item => (
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 mdl:gap-3 lg:gap-10'>
+            {currentItems?.map(item => (
                 <div
                     key={item._id}
-                    className='relative p-4 transition-transform bg-gray-100 rounded-lg shadow-lg hover:scale-105'
+                    className='relative w-full overflow-hidden bg-gray-300 max-w-60 rounded-2xl group'
                 >
-                    <img
-                        className='object-cover w-full h-48 rounded-md'
-                        src={item.img || 'https://via.placeholder.com/150'}
-                        alt={item.productName || 'Hình ảnh sản phẩm'}
-                    />
-                    <div className='mt-4'>
-                        <h2 className='text-lg font-semibold text-gray-800 truncate'>
-                            {item.productName}
-                        </h2>
-                        <p className='flex items-center gap-1 font-medium text-green-600'>
-                            <FaTag /> {item.price.toLocaleString()} VNĐ
-                        </p>
-                    </div>
-                    <div className='flex items-center justify-between mt-2'>
-                        <button className='flex items-center gap-2 px-3 py-1 text-sm text-black transition-transform bg-green-500 rounded-md hover:bg-green-700 hover:scale-105'>
-                            <FaShoppingCart /> Thêm vào giỏ hàng
-                        </button>
-                        <Link
-                            to='/product'
-                            className='flex items-center gap-2 px-3 py-1 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-700'
-                        >
-                            <MdOutlineLabelImportant /> Xem chi tiết
-                        </Link>
+                    <div className='relative h-[280px] flex flex-col justify-between'>
+                        {/* Image */}
+                        <img
+                            className='object-cover w-full h-48'
+                            src={item.img || 'https://via.placeholder.com/150'}
+                            alt={item.productName || 'Hình ảnh sản phẩm'}
+                        />
+
+                        {/* Product Info */}
+                        <div className='flex flex-col p-3'>
+                            <h2 className='text-sm font-bold truncate text-[#31473A] leading-tight'>
+                                {item.productName.length > 20
+                                    ? `${item.productName.substring(0, 20)}...`
+                                    : item.productName}
+                            </h2>
+                            <p className='text-[#767676] text-[14px] font-semibold mt-0 leading-tight'>
+                                {item.price
+                                    ? `${item.price.toLocaleString()} VNĐ`
+                                    : '0 VNĐ'}
+                            </p>
+                            <p className='text-[#767676] text-[12px] leading-tight'>
+                                {item.category || 'Chưa phân loại'}
+                            </p>
+                        </div>
+
+                        {/* Hover Actions */}
+                        <div className='absolute bottom-[-70px] w-full bg-white transition-all duration-500 ease-in-out group-hover:bottom-0 group-hover:translate-y-[-70px]'>
+                            <ul className='flex flex-col items-center justify-center w-full gap-2 p-2 border border-gray-200 rounded-md shadow-md'>
+                                <li className='flex items-center justify-end w-full gap-2 pb-1 text-xs font-medium text-gray-600 transition duration-300 border-b border-gray-200 cursor-pointer hover:text-[#31473A] hover:border-[#31473A]'>
+                                    <FaShoppingCart />
+                                    <span>Thêm vào giỏ hàng</span>
+                                </li>
+                                <li className='flex items-center justify-end w-full gap-2 pb-1 text-xs font-medium text-gray-600 transition duration-300 border-b border-gray-200 cursor-pointer hover:text-[#31473A] hover:border-[#31473A]'>
+                                    <Link
+                                        to='/product'
+                                        className='flex items-center gap-2'
+                                    >
+                                        <MdOutlineLabelImportant />
+                                        <span>Xem chi tiết</span>
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             ))}
@@ -165,8 +185,10 @@ const Items = ({ currentItems }) => {
     );
 };
 
-const Pagination = ({ itemsPerPage = 3 }) => {
+const Pagination = ({ itemsPerPage, paginationItems }) => {
     const [itemOffset, setItemOffset] = useState(0);
+    const [itemStart, setItemStart] = useState(1);
+
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = paginationItems.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(paginationItems.length / itemsPerPage);
@@ -175,27 +197,31 @@ const Pagination = ({ itemsPerPage = 3 }) => {
         const newOffset =
             (event.selected * itemsPerPage) % paginationItems.length;
         setItemOffset(newOffset);
+        setItemStart(newOffset + 1);
     };
 
     return (
-        <div className='container p-6 mx-auto'>
+        <div className='p-3'>
             <Items currentItems={currentItems} />
-            <div className='flex flex-col items-center mt-6'>
+            <div className='flex flex-col items-center justify-center mt-6 mdl:flex-row mdl:justify-between'>
                 <ReactPaginate
                     nextLabel='>'
                     previousLabel='<'
                     onPageChange={handlePageClick}
                     pageRangeDisplayed={3}
-                    marginPagesDisplayed={1}
+                    marginPagesDisplayed={2}
                     pageCount={pageCount}
-                    containerClassName='flex space-x-2 text-lg font-semibold'
-                    pageLinkClassName='px-3 py-1 border rounded-md hover:bg-gray-300'
-                    previousLinkClassName='px-3 py-1 border rounded-md hover:bg-gray-300'
-                    nextLinkClassName='px-3 py-1 border rounded-md hover:bg-gray-300'
-                    activeClassName='bg-blue-500 text-white'
+                    pageLinkClassName='w-9 h-9 border-[1px] border-gray-300 hover:border-gray-500 flex justify-center items-center transition duration-300'
+                    pageClassName='mr-6'
+                    previousClassName='mr-4'
+                    previousLinkClassName='flex items-center justify-center w-9 h-9 border border-gray-300 hover:border-gray-500 transition duration-300'
+                    nextClassName='ml-4'
+                    nextLinkClassName='flex items-center justify-center w-9 h-9 border border-gray-300 hover:border-gray-500 transition duration-300'
+                    containerClassName='flex text-base font-semibold py-5'
+                    activeClassName='bg-black text-white'
                 />
-                <p className='mt-4 text-gray-700'>
-                    Hiển thị từ {itemOffset + 1} đến {endOffset} trên tổng số{' '}
+                <p className='text-base font-normal text-gray-500'>
+                    Sản phẩm từ {itemStart} đến {endOffset} trên tổng số{' '}
                     {paginationItems.length} sản phẩm
                 </p>
             </div>

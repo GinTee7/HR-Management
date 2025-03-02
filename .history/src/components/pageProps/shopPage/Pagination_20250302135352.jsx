@@ -149,7 +149,7 @@ const Items = ({ currentItems }) => {
                         </p>
                     </div>
                     <div className='flex items-center justify-between mt-2'>
-                        <button className='flex items-center gap-2 px-3 py-1 text-sm text-black transition-transform bg-green-500 rounded-md hover:bg-green-700 hover:scale-105'>
+                        <button className='flex items-center gap-2 px-3 py-1 text-sm text-white transition-transform bg-green-500 rounded-md hover:bg-green-700 hover:scale-105'>
                             <FaShoppingCart /> Thêm vào giỏ hàng
                         </button>
                         <Link
