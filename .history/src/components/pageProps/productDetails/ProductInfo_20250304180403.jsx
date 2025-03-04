@@ -6,9 +6,20 @@ import {
     FaTag,
     FaTags
 } from 'react-icons/fa';
+import { MdOutlineRequestQuote } from 'react-icons/md';
 
 const ProductInfo = ({ productInfo }) => {
     const [quantity, setQuantity] = useState(1);
+
+    const handleIncrease = () => {
+        setQuantity(prev => prev + 1);
+    };
+
+    const handleDecrease = () => {
+        if (quantity > 1) {
+            setQuantity(prev => prev - 1);
+        }
+    };
 
     return (
         <div className='flex flex-col gap-6 p-8 bg-white border border-gray-200 shadow-lg rounded-xl'>

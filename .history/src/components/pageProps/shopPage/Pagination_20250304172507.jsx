@@ -129,33 +129,35 @@ const paginationItems = [
 
 const Items = ({ currentItems }) => {
     return (
-        <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3'>
             {currentItems.map(item => (
                 <div
                     key={item._id}
-                    className='overflow-hidden transition-transform transform bg-white shadow-lg rounded-2xl hover:scale-105 hover:shadow-xl'
+                    className='relative p-4 transition-transform bg-gray-100 rounded-lg shadow-lg hover:scale-105'
                 >
                     <img
-                        className='object-cover w-full h-56'
+                        className='object-cover w-full h-48 rounded-md'
                         src={item.img || 'https://via.placeholder.com/150'}
                         alt={item.productName || 'Hình ảnh sản phẩm'}
                     />
-                    <div className='p-4'>
-                        <h2 className='text-xl font-semibold text-gray-800 truncate'>
+                    <div className='mt-4'>
+                        <h2 className='text-lg font-semibold text-gray-800 truncate'>
                             {item.productName}
                         </h2>
-                        <p className='mt-2 text-sm text-gray-600'>{item.des}</p>
-                        <div className='flex items-center justify-between mt-4'>
-                            <span className='text-lg font-bold text-red-500'>
-                                {item.price.toLocaleString()} VNĐ
-                            </span>
-                            <Link
-                                to='/product'
-                                className='flex items-center gap-2 px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-700'
-                            >
-                                <MdOutlineLabelImportant /> Xem chi tiết
-                            </Link>
-                        </div>
+                        <p className='flex items-center gap-1 font-medium text-green-600'>
+                            <FaTag /> {item.price.toLocaleString()} VNĐ
+                        </p>
+                    </div>
+                    <div className='flex items-center justify-between mt-2'>
+                        {/* <button className='flex items-center gap-2 px-3 py-1 text-sm text-black transition-transform bg-green-500 rounded-md hover:bg-green-700 hover:scale-105'>
+                            <FaShoppingCart /> Thêm vào giỏ hàng
+                        </button> */}
+                        <Link
+                            to='/product'
+                            className='flex items-center gap-2 px-3 py-1 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-700'
+                        >
+                            <MdOutlineLabelImportant /> Xem chi tiết
+                        </Link>
                     </div>
                 </div>
             ))}
@@ -176,7 +178,7 @@ const Pagination = ({ itemsPerPage = 3 }) => {
     };
 
     return (
-        <div className='container p-6 mx-auto bg-gray-100 rounded-lg'>
+        <div className='container p-6 mx-auto'>
             <Items currentItems={currentItems} />
             <div className='flex flex-col items-center mt-6'>
                 <ReactPaginate
@@ -186,11 +188,11 @@ const Pagination = ({ itemsPerPage = 3 }) => {
                     pageRangeDisplayed={3}
                     marginPagesDisplayed={1}
                     pageCount={pageCount}
-                    containerClassName='flex space-x-2 text-lg font-semibold bg-white p-2 rounded-lg shadow-md'
-                    pageLinkClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
-                    previousLinkClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
-                    nextLinkClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
-                    activeClassName='bg-blue-500 text-white rounded-md'
+                    containerClassName='flex space-x-2 text-lg font-semibold'
+                    pageLinkClassName='px-3 py-1 border rounded-md hover:bg-gray-300'
+                    previousLinkClassName='px-3 py-1 border rounded-md hover:bg-gray-300'
+                    nextLinkClassName='px-3 py-1 border rounded-md hover:bg-gray-300'
+                    activeClassName='bg-blue-500 text-white'
                 />
                 <p className='mt-4 text-gray-700'>
                     Hiển thị từ {itemOffset + 1} đến {endOffset} trên tổng số{' '}

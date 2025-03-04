@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
-import {
-    FaPhoneAlt,
-    FaEnvelope,
-    FaShoppingCart,
-    FaTag,
-    FaTags
-} from 'react-icons/fa';
+import { FaPhoneAlt, FaEnvelope, FaShoppingCart, FaTag } from 'react-icons/fa';
+import { MdOutlineRequestQuote } from 'react-icons/md';
 
 const ProductInfo = ({ productInfo }) => {
     const [quantity, setQuantity] = useState(1);
 
+    const handleIncrease = () => {
+        setQuantity(prev => prev + 1);
+    };
+
+    const handleDecrease = () => {
+        if (quantity > 1) {
+            setQuantity(prev => prev - 1);
+        }
+    };
+
     return (
         <div className='flex flex-col gap-6 p-8 bg-white border border-gray-200 shadow-lg rounded-xl'>
-            <h2 className='text-4xl font-bold tracking-wide text-gray-900'>
+            {/* <h2 className='text-4xl font-bold tracking-wide text-gray-900'>
                 {productInfo.productName}
-            </h2>
+            </h2> */}
 
             <p className='pb-2 text-2xl font-semibold text-gray-800 border-b'>
                 Mô tả sản phẩm
@@ -44,10 +49,6 @@ const ProductInfo = ({ productInfo }) => {
                 {productInfo.specifications}
             </p>
 
-            <p className='mt-4 text-sm italic text-gray-500'>
-                Hãy là người đầu tiên để lại đánh giá.
-            </p>
-
             <div className='grid grid-cols-2 gap-4 mt-4 text-lg text-gray-700'>
                 <p>
                     <FaTag className='inline text-gray-900' />{' '}
@@ -62,9 +63,11 @@ const ProductInfo = ({ productInfo }) => {
                     {productInfo.sku}
                 </p>
                 <p className='col-span-2'>
-                    <FaTags className='inline text-gray-900' />{' '}
                     <span className='font-medium text-gray-900'>Thẻ:</span>{' '}
                     {productInfo.tags.join(', ')}
+                </p>
+                <p className='mt-4 text-sm italic text-gray-500'>
+                    Hãy là người đầu tiên để lại đánh giá.
                 </p>
             </div>
 

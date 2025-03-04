@@ -37,19 +37,16 @@ const Product = props => {
                 </div>
                 <div className='w-full absolute bg-white bottom-[-130px] group-hover:bottom-0 duration-700'>
                     <ul className='flex flex-col items-center justify-center w-full gap-2 p-4 border border-gray-200 rounded-md shadow-md'>
-                        <li className='flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-primary hover:border-primary'>
-                            <FaShoppingCart />
-                            <span>Thêm vào giỏ hàng</span>
-                        </li>
-                        <li className='flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-primary hover:border-primary'>
-                            <Link
-                                to='/product'
-                                className='flex items-center gap-2'
-                            >
-                                <MdOutlineLabelImportant />
-                                <span>Xem chi tiết</span>
-                            </Link>
-                        </li>
+                        {/* <li className="flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-primary hover:border-primary">
+              <FaShoppingCart />
+              <span>Thêm vào giỏ hàng</span>
+            </li> */}
+                        {/* <li className="flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-primary hover:border-primary">
+              <Link to="/product" className="flex items-center gap-2">
+                <MdOutlineLabelImportant />
+                <span>Xem chi tiết</span>
+              </Link>
+            </li> */}
                     </ul>
                 </div>
             </div>

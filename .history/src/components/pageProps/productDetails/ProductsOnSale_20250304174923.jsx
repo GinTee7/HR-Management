@@ -13,22 +13,19 @@ const ProductsOnSale = () => {
             id: 2,
             img: 'https://nongnghiepdep.com/wp-content/uploads/2023/12/thuoc-tru-sau-bestkill.jpg',
             name: 'Thuốc trừ sâu B',
-            price: 180.0,
-            features: 'Thuốc dưỡng'
+            price: 180.0
         },
         {
             id: 3,
             img: 'https://karimonvn.com/wp-content/uploads/2024/01/Carbo-max-1-1.png',
             name: 'Thuốc trừ sâu C',
-            price: 200.0,
-            features: 'Thuốc dưỡng'
+            price: 200.0
         },
         {
             id: 4,
             img: 'https://nongnghiepdep.com/wp-content/uploads/2023/12/thuoc-tru-sau-bestkill.jpg',
             name: 'Thuốc trừ sâu D',
-            price: 220.0,
-            features: 'Thuốc dưỡng'
+            price: 220.0
         }
     ]);
 

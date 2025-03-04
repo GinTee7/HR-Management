@@ -6,9 +6,20 @@ import {
     FaTag,
     FaTags
 } from 'react-icons/fa';
+import { MdOutlineRequestQuote } from 'react-icons/md';
 
 const ProductInfo = ({ productInfo }) => {
     const [quantity, setQuantity] = useState(1);
+
+    const handleIncrease = () => {
+        setQuantity(prev => prev + 1);
+    };
+
+    const handleDecrease = () => {
+        if (quantity > 1) {
+            setQuantity(prev => prev - 1);
+        }
+    };
 
     return (
         <div className='flex flex-col gap-6 p-8 bg-white border border-gray-200 shadow-lg rounded-xl'>
@@ -72,7 +83,9 @@ const ProductInfo = ({ productInfo }) => {
                 <button className='flex items-center gap-3 px-8 py-4 text-lg text-white transition-all bg-blue-600 rounded-lg shadow-md hover:bg-blue-700'>
                     <FaPhoneAlt /> Liên hệ đặt hàng
                 </button>
-
+                {/* <button className='flex items-center gap-3 px-8 py-4 text-lg text-blue-600 transition-all border border-blue-600 rounded-lg hover:bg-blue-50'>
+                    <MdOutlineRequestQuote /> Yêu cầu báo giá
+                </button> */}
                 <button className='flex items-center gap-3 px-8 py-4 text-lg text-green-600 transition-all border border-green-600 rounded-lg hover:bg-green-50'>
                     <FaEnvelope /> Gửi email tư vấn
                 </button>

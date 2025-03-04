@@ -6,6 +6,7 @@ import {
     FaTag,
     FaTags
 } from 'react-icons/fa';
+import Logo from '@assets/hero3.png';
 
 const ProductInfo = ({ productInfo }) => {
     const [quantity, setQuantity] = useState(1);

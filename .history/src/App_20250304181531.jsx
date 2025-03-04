@@ -148,7 +148,7 @@ function App() {
                     }
                 />
                 <Route
-                    path='/contact'
+                    path='/product'
                     element={
                         <>
                             <Layout>

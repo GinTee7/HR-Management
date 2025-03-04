@@ -10,6 +10,16 @@ import {
 const ProductInfo = ({ productInfo }) => {
     const [quantity, setQuantity] = useState(1);
 
+    // const handleIncrease = () => {
+    //     setQuantity(prev => prev + 1);
+    // };
+
+    // const handleDecrease = () => {
+    //     if (quantity > 1) {
+    //         setQuantity(prev => prev - 1);
+    //     }
+    // };
+
     return (
         <div className='flex flex-col gap-6 p-8 bg-white border border-gray-200 shadow-lg rounded-xl'>
             <h2 className='text-4xl font-bold tracking-wide text-gray-900'>
