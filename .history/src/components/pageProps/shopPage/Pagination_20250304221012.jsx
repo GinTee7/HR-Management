@@ -127,49 +127,59 @@ const paginationItems = [
     }
 ];
 
-const Items = ({ currentItems }) => {
+const Items = ({ currentItems = [] }) => {
     return (
-        <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-3'>
-            {currentItems.map(item => (
-                <div
-                    key={item._id}
-                    className='overflow-hidden transition-transform transform bg-white shadow-lg rounded-2xl hover:scale-105 hover:shadow-xl'
-                >
-                    <img
-                        className='object-cover w-full h-56'
-                        src={item.img || 'https://via.placeholder.com/150'}
-                        alt={item.productName || 'Hình ảnh sản phẩm'}
-                    />
-                    <div className='p-4'>
-                        <h2 className='text-xl font-semibold text-gray-800 truncate'>
-                            {item.productName}
-                        </h2>
-                        <p className='mt-2 text-sm text-gray-600'>{item.des}</p>
-                        <div className='flex items-center justify-between mt-4'>
-                            {/*  */}
-                            <Link
-                                to='/product'
-                                className='flex items-center gap-2 px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-700'
-                            >
-                                <MdOutlineLabelImportant /> Xem chi tiết
-                            </Link>
+        <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-2'>
+            {currentItems.length > 0 ? (
+                currentItems.map(item => (
+                    <div
+                        key={item._id}
+                        className='flex overflow-hidden transition-transform transform bg-white shadow-lg rounded-2xl hover:scale-105 hover:shadow-xl'
+                    >
+                        <img
+                            className='object-cover w-1/3 h-64'
+                            src={item.img || 'https://via.placeholder.com/150'}
+                            alt={item.productName || 'Hình ảnh sản phẩm'}
+                        />
+                        <div className='flex flex-col justify-between w-2/3 p-6'>
+                            <h2 className='text-2xl font-bold text-gray-800 truncate'>
+                                {item.productName}
+                            </h2>
+                            <p className='mt-2 text-lg text-gray-600'>
+                                {item.des}
+                            </p>
+                            <div className='flex items-center justify-between mt-4'>
+                                <span className='text-xl font-semibold text-blue-500'>
+                                    {item.price.toLocaleString()} đ
+                                </span>
+                                <Link
+                                    to='/product'
+                                    className='flex items-center gap-2 px-6 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-700'
+                                >
+                                    <MdOutlineLabelImportant /> Xem chi tiết
+                                </Link>
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))
+            ) : (
+                <p className='text-center text-gray-500'>
+                    Không có sản phẩm nào.
+                </p>
+            )}
         </div>
     );
 };
 
-const Pagination = ({ itemsPerPage = 3 }) => {
+const Pagination = ({ itemsPerPage = 4 }) => {
     const [itemOffset, setItemOffset] = useState(0);
     const endOffset = itemOffset + itemsPerPage;
-    const currentItems = paginationItems.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(paginationItems.length / itemsPerPage);
+    const currentItems = paginationItems?.slice(itemOffset, endOffset) || [];
+    const pageCount = Math.ceil((paginationItems?.length || 0) / itemsPerPage);
 
     const handlePageClick = event => {
         const newOffset =
-            (event.selected * itemsPerPage) % paginationItems.length;
+            (event.selected * itemsPerPage) % (paginationItems?.length || 1);
         setItemOffset(newOffset);
     };
 
@@ -192,7 +202,7 @@ const Pagination = ({ itemsPerPage = 3 }) => {
                 />
                 <p className='mt-4 text-gray-700'>
                     Hiển thị từ {itemOffset + 1} đến {endOffset} trên tổng số{' '}
-                    {paginationItems.length} sản phẩm
+                    {paginationItems?.length || 0} sản phẩm
                 </p>
             </div>
         </div>

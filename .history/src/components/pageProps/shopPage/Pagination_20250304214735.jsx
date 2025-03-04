@@ -146,12 +146,11 @@ const Items = ({ currentItems }) => {
                         </h2>
                         <p className='mt-2 text-sm text-gray-600'>{item.des}</p>
                         <div className='flex items-center justify-between mt-4'>
-                            {/*  */}
                             <Link
                                 to='/product'
                                 className='flex items-center gap-2 px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-700'
                             >
-                                <MdOutlineLabelImportant /> Xem chi tiết
+                                {/* <MdOutlineLabelImportant /> Xem chi tiết */}
                             </Link>
                         </div>
                     </div>

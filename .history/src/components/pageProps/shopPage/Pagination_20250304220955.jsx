@@ -11,7 +11,8 @@ const paginationItems = [
         productName: 'Thuốc trừ sâu BestKill',
         price: 120000,
         color: 'Xanh',
-        des: 'Thuốc trừ sâu hiệu quả cao, bảo vệ mùa màng khỏi các loại sâu bệnh.'
+        des: 'Thuốc trừ sâu hiệu quả cao, bảo vệ mùa màng khỏi các loại sâu bệnh.',
+        category: 'Thuốc trừ sâu'
     },
     {
         _id: '2',
@@ -19,7 +20,8 @@ const paginationItems = [
         productName: 'Thuốc diệt cỏ WeedAway',
         price: 150000,
         color: 'Vàng',
-        des: 'Giải pháp diệt cỏ tận gốc, an toàn cho đất và cây trồng.'
+        des: 'Giải pháp diệt cỏ tận gốc, an toàn cho đất và cây trồng.',
+        category: 'Thuốc trừ sâu'
     },
     {
         _id: '3',
@@ -27,7 +29,8 @@ const paginationItems = [
         productName: 'Phân bón Carbo Max',
         price: 200000,
         color: 'Đỏ',
-        des: 'Phân bón cung cấp dinh dưỡng tối ưu cho cây trồng, giúp cây phát triển khỏe mạnh.'
+        des: 'Phân bón cung cấp dinh dưỡng tối ưu cho cây trồng, giúp cây phát triển khỏe mạnh.',
+        category: 'Thuốc trừ sâu'
     },
     {
         _id: '4',
@@ -35,7 +38,8 @@ const paginationItems = [
         productName: 'Thuốc trừ bệnh FungicidePro',
         price: 180000,
         color: 'Trắng',
-        des: 'Ngăn chặn hiệu quả các loại bệnh hại trên cây trồng.'
+        des: 'Ngăn chặn hiệu quả các loại bệnh hại trên cây trồng.',
+        category: 'Phân bón'
     },
     {
         _id: '5',
@@ -43,7 +47,8 @@ const paginationItems = [
         productName: 'Phân vi lượng GrowBetter',
         price: 100000,
         color: 'Xanh lá',
-        des: 'Cải thiện chất lượng đất và tăng năng suất mùa màng.'
+        des: 'Cải thiện chất lượng đất và tăng năng suất mùa màng.',
+        category: 'Phân bón'
     },
     {
         _id: '6',
@@ -51,7 +56,8 @@ const paginationItems = [
         productName: 'Thuốc bảo vệ thực vật ShieldCrop',
         price: 175000,
         color: 'Cam',
-        des: 'Giúp cây trồng phát triển khỏe mạnh, tăng năng suất và bảo vệ mùa màng.'
+        des: 'Giúp cây trồng phát triển khỏe mạnh, tăng năng suất và bảo vệ mùa màng.',
+        category: 'Phân bón'
     },
     {
         _id: '7',
@@ -59,7 +65,8 @@ const paginationItems = [
         productName: 'Thuốc diệt nấm AntiFungi',
         price: 140000,
         color: 'Tím',
-        des: 'Chống lại các loại nấm gây hại cho cây trồng.'
+        des: 'Chống lại các loại nấm gây hại cho cây trồng.',
+        category: 'Phân bón'
     },
     {
         _id: '8',
@@ -67,7 +74,8 @@ const paginationItems = [
         productName: 'Phân bón hữu cơ GreenLife',
         price: 160000,
         color: 'Xanh lá cây',
-        des: 'Phân hữu cơ tự nhiên, bảo vệ đất và tăng năng suất cây trồng.'
+        des: 'Phân hữu cơ tự nhiên, bảo vệ đất và tăng năng suất cây trồng.',
+        category: 'Thuốc trừ ốc'
     },
     {
         _id: '9',
@@ -75,7 +83,8 @@ const paginationItems = [
         productName: 'Thuốc trừ cỏ QuickWeed',
         price: 125000,
         color: 'Xám',
-        des: 'Diệt cỏ nhanh chóng, không ảnh hưởng đến cây trồng.'
+        des: 'Diệt cỏ nhanh chóng, không ảnh hưởng đến cây trồng.',
+        category: 'Thuốc trừ ốc'
     },
     {
         _id: '10',
@@ -83,7 +92,8 @@ const paginationItems = [
         productName: 'Phân bón cao cấp SuperGrow',
         price: 230000,
         color: 'Nâu',
-        des: 'Phân bón chuyên dụng giúp cây phát triển mạnh và cho năng suất cao.'
+        des: 'Phân bón chuyên dụng giúp cây phát triển mạnh và cho năng suất cao.',
+        category: 'Thuốc trừ ốc'
     },
     {
         _id: '11',
@@ -91,7 +101,8 @@ const paginationItems = [
         productName: 'Thuốc diệt sâu HighProtect',
         price: 145000,
         color: 'Hồng',
-        des: 'Thuốc hiệu quả cao trong việc bảo vệ cây trồng khỏi sâu hại.'
+        des: 'Thuốc hiệu quả cao trong việc bảo vệ cây trồng khỏi sâu hại.',
+        category: 'Thuốc trừ ốc'
     },
     {
         _id: '12',
@@ -99,7 +110,8 @@ const paginationItems = [
         productName: 'Phân bón chuyên dụng PowerMax',
         price: 190000,
         color: 'Xanh ngọc',
-        des: 'Phân bón giúp cải thiện chất lượng đất và tăng cường sinh trưởng cây trồng.'
+        des: 'Phân bón giúp cải thiện chất lượng đất và tăng cường sinh trưởng cây trồng.',
+        category: 'Thuốc trừ ốc'
     },
     {
         _id: '13',
@@ -107,7 +119,8 @@ const paginationItems = [
         productName: 'Thuốc trừ sâu EcoKill',
         price: 155000,
         color: 'Xanh lam',
-        des: 'Thuốc trừ sâu an toàn, thân thiện với môi trường.'
+        des: 'Thuốc trừ sâu an toàn, thân thiện với môi trường.',
+        category: 'Thuốc trừ ốc'
     },
     {
         _id: '14',
@@ -115,7 +128,8 @@ const paginationItems = [
         productName: 'Phân bón lá LeafBoost',
         price: 120000,
         color: 'Vàng',
-        des: 'Phân bón dạng lá giúp cây hấp thụ nhanh chóng và hiệu quả.'
+        des: 'Phân bón dạng lá giúp cây hấp thụ nhanh chóng và hiệu quả.',
+        category: 'Thuốc trừ ốc'
     },
     {
         _id: '15',
@@ -127,49 +141,59 @@ const paginationItems = [
     }
 ];
 
-const Items = ({ currentItems }) => {
+const Items = ({ currentItems = [] }) => {
     return (
-        <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-3'>
-            {currentItems.map(item => (
-                <div
-                    key={item._id}
-                    className='overflow-hidden transition-transform transform bg-white shadow-lg rounded-2xl hover:scale-105 hover:shadow-xl'
-                >
-                    <img
-                        className='object-cover w-full h-56'
-                        src={item.img || 'https://via.placeholder.com/150'}
-                        alt={item.productName || 'Hình ảnh sản phẩm'}
-                    />
-                    <div className='p-4'>
-                        <h2 className='text-xl font-semibold text-gray-800 truncate'>
-                            {item.productName}
-                        </h2>
-                        <p className='mt-2 text-sm text-gray-600'>{item.des}</p>
-                        <div className='flex items-center justify-between mt-4'>
-                            {/*  */}
-                            <Link
-                                to='/product'
-                                className='flex items-center gap-2 px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-700'
-                            >
-                                <MdOutlineLabelImportant /> Xem chi tiết
-                            </Link>
+        <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-2'>
+            {currentItems.length > 0 ? (
+                currentItems.map(item => (
+                    <div
+                        key={item._id}
+                        className='flex overflow-hidden transition-transform transform bg-white shadow-lg rounded-2xl hover:scale-105 hover:shadow-xl'
+                    >
+                        <img
+                            className='object-cover w-1/3 h-64'
+                            src={item.img || 'https://via.placeholder.com/150'}
+                            alt={item.productName || 'Hình ảnh sản phẩm'}
+                        />
+                        <div className='flex flex-col justify-between w-2/3 p-6'>
+                            <h2 className='text-2xl font-bold text-gray-800 truncate'>
+                                {item.productName}
+                            </h2>
+                            <p className='mt-2 text-lg text-gray-600'>
+                                {item.des}
+                            </p>
+                            <div className='flex items-center justify-between mt-4'>
+                                <span className='text-xl font-semibold text-blue-500'>
+                                    {item.price.toLocaleString()} đ
+                                </span>
+                                <Link
+                                    to='/product'
+                                    className='flex items-center gap-2 px-6 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-700'
+                                >
+                                    <MdOutlineLabelImportant /> Xem chi tiết
+                                </Link>
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))
+            ) : (
+                <p className='text-center text-gray-500'>
+                    Không có sản phẩm nào.
+                </p>
+            )}
         </div>
     );
 };
 
-const Pagination = ({ itemsPerPage = 3 }) => {
+const Pagination = ({ itemsPerPage = 4 }) => {
     const [itemOffset, setItemOffset] = useState(0);
     const endOffset = itemOffset + itemsPerPage;
-    const currentItems = paginationItems.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(paginationItems.length / itemsPerPage);
+    const currentItems = paginationItems?.slice(itemOffset, endOffset) || [];
+    const pageCount = Math.ceil((paginationItems?.length || 0) / itemsPerPage);
 
     const handlePageClick = event => {
         const newOffset =
-            (event.selected * itemsPerPage) % paginationItems.length;
+            (event.selected * itemsPerPage) % (paginationItems?.length || 1);
         setItemOffset(newOffset);
     };
 
@@ -192,7 +216,7 @@ const Pagination = ({ itemsPerPage = 3 }) => {
                 />
                 <p className='mt-4 text-gray-700'>
                     Hiển thị từ {itemOffset + 1} đến {endOffset} trên tổng số{' '}
-                    {paginationItems.length} sản phẩm
+                    {paginationItems?.length || 0} sản phẩm
                 </p>
             </div>
         </div>

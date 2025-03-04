@@ -1,0 +1,132 @@
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import Breadcrumbs from '@components/pageProps/Breadcrumbs';
+import ProductInfo from '@components/pageProps/productDetails/ProductInfo';
+import { Link } from 'react-router-dom';
+import { MdOutlineLabelImportant } from 'react-icons/md';
+
+const ProductDetails = () => {
+    const location = useLocation();
+    const [prevLocation, setPrevLocation] = useState('');
+    const [productInfo, setProductInfo] = useState({
+        id: 1,
+        productName: 'Thuốc trừ sâu A',
+        price: '150.000₫',
+        des: 'Hiệu quả cao trong việc tiêu diệt sâu bọ, bảo vệ cây trồng tối ưu.',
+        features: 'Thuốc dưỡng',
+        usage: 'Vỏ gạo tới cây, hạt to sáng chắc',
+        specifications: 'Chai 500ml',
+        img: 'https://karimonvn.com/wp-content/uploads/2024/01/Carbo-max-1-1.png',
+        badge: 'Sản phẩm mới',
+        categories: 'Thuốc trừ sâu, Nông nghiệp',
+        tags: ['hiệu quả', 'an toàn', 'chất lượng cao'],
+        sku: 'TTS-2024-01'
+    });
+
+    useEffect(() => {
+        if (location.state?.item) {
+            setProductInfo(location.state.item);
+        }
+        setPrevLocation(location.pathname);
+    }, [location]);
+
+    return (
+        <div className='w-full min-h-screen mt-32 bg-gray-100'>
+            <div className='w-full mx-auto border-b-[1px] border-b-gray-300'>
+                <div className='w-full px-4 mx-auto'>
+                    <div className='xl:-mt-10 -mt-7'>
+                        <Breadcrumbs title='' prevLocation={prevLocation} />
+                    </div>
+                    <div className='grid w-full h-full grid-cols-1 gap-4 p-4 pb-10 -mt-5 md:grid-cols-2 xl:grid-cols-6 xl:-mt-8'>
+                        <div className='h-full'>
+                            <FeaturedProductsSection />
+                        </div>
+                        <div className='h-full xl:col-span-2'>
+                            <img
+                                className='object-cover w-full h-full rounded-lg'
+                                src={productInfo.img}
+                                alt={productInfo.productName}
+                            />
+                        </div>
+                        <div className='flex flex-col justify-center w-full h-full gap-6 md:col-span-2 xl:col-span-3 xl:p-14'>
+                            <ProductInfo productInfo={productInfo} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const FeaturedProductsSection = () => {
+    const [products] = useState([
+        {
+            id: 1,
+            img: 'https://karimonvn.com/wp-content/uploads/2024/01/Carbo-max-1-1.png',
+            name: 'Thuốc trừ sâu A',
+            price: '150.000₫',
+            features:
+                'Hiệu quả cao trong việc tiêu diệt sâu bọ, bảo vệ cây trồng tối ưu.',
+            usage: 'Vỏ gạo tới cây, hạt to sáng chắc',
+            packaging: 'Chai 500ml'
+        },
+        {
+            id: 2,
+            img: 'https://nongnghiepdep.com/wp-content/uploads/2023/12/thuoc-tru-sau-bestkill.jpg',
+            name: 'Thuốc trừ sâu B',
+            price: '180.000₫',
+            features: 'Giải pháp diệt sâu an toàn, bảo vệ cây trồng lâu dài.',
+            usage: 'Giảm sâu bệnh trên lá và quả',
+            packaging: 'Chai 1L'
+        }
+    ]);
+
+    return (
+        <div className='container p-10 mx-auto rounded-lg shadow-lg bg-gray-50'>
+            <h2 className='mb-8 text-4xl font-bold text-center text-gray-900'>
+                Sản phẩm nổi bật
+            </h2>
+            <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-3'>
+                {products.map(item => (
+                    <div
+                        key={item.id}
+                        className='flex flex-col overflow-hidden transition-transform transform bg-white shadow-xl rounded-2xl hover:scale-105 hover:shadow-2xl'
+                    >
+                        <img
+                            className='object-cover w-full h-64 rounded-t-2xl'
+                            src={item.img || 'https://via.placeholder.com/150'}
+                            alt={item.name || 'Hình ảnh sản phẩm'}
+                        />
+                        <div className='flex flex-col justify-between p-6'>
+                            <h2 className='text-2xl font-bold text-gray-800 truncate'>
+                                {item.name}
+                            </h2>
+                            <p className='mt-2 text-lg text-gray-600'>
+                                <strong>Mô tả sản phẩm:</strong> {item.features}
+                            </p>
+                            <p className='text-lg text-gray-600'>
+                                <strong>Công dụng:</strong> {item.usage}
+                            </p>
+                            <p className='text-lg text-gray-600'>
+                                <strong>Quy cách:</strong> {item.packaging}
+                            </p>
+                            <p className='mt-2 text-xl font-semibold text-blue-500'>
+                                {item.price}
+                            </p>
+                            <div className='flex items-center justify-between mt-6'>
+                                <Link
+                                    to='/product'
+                                    className='flex items-center gap-2 px-6 py-3 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700'
+                                >
+                                    <MdOutlineLabelImportant /> Xem chi tiết
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default ProductDetails;

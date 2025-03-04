@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Breadcrumbs from '@components/pageProps/Breadcrumbs';
 import ProductInfo from '@components/pageProps/productDetails/ProductInfo';
-import FeaturedProductsSection from '@components/pageProps/productDetails/featuredProducts';
+import ProductsOnSale from '@components/pageProps/productDetails/ProductsOnSale';
 
 const ProductDetails = () => {
     const location = useLocation();
@@ -38,7 +38,7 @@ const ProductDetails = () => {
                     </div>
                     <div className='grid w-full h-full grid-cols-1 gap-4 p-4 pb-10 -mt-5 md:grid-cols-2 xl:grid-cols-6 xl:-mt-8'>
                         <div className='h-full'>
-                            <FeaturedProductsSection />
+                            <ProductsOnSale />
                         </div>
                         <div className='h-full xl:col-span-2'>
                             <img

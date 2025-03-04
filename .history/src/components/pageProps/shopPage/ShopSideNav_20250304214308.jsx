@@ -6,8 +6,8 @@ const ShopSideNav = () => {
     return (
         <aside className='flex flex-col w-full gap-6 p-4 bg-white rounded-lg shadow-md'>
             <Category icons={false} />
-            <Brand />
-            {/* <Price /> */}
+            {/* <Brand /> */}
+            <Price />
         </aside>
     );
 };

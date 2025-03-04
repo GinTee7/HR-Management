@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Breadcrumbs from '@components/pageProps/Breadcrumbs';
 import ProductInfo from '@components/pageProps/productDetails/ProductInfo';
-import FeaturedProductsSection from '@components/pageProps/productDetails/featuredProducts';
+import FeaturedProductsSection from '../../../components/pageProps/productDetails/featuredProducts';
 
 const ProductDetails = () => {
     const location = useLocation();
