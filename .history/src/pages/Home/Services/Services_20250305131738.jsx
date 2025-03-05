@@ -34,31 +34,31 @@ const Services = () => {
         });
     }, []);
 
-    const sliderSettings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        draggable: true,
-        swipe: true,
-        nextArrow: <NextArrow />,
-        prevArrow: <PrevArrow />,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: { slidesToShow: 3, slidesToScroll: 1 }
-            },
-            {
-                breakpoint: 768,
-                settings: { slidesToShow: 2, slidesToScroll: 1 }
-            },
-            {
-                breakpoint: 480,
-                settings: { slidesToShow: 1, slidesToScroll: 1 }
-            }
-        ]
-    };
+    // const sliderSettings = {
+    //     dots: true,
+    //     infinite: true,
+    //     speed: 500,
+    //     slidesToShow: 4,
+    //     slidesToScroll: 1,
+    //     draggable: true,
+    //     swipe: true,
+    //     nextArrow: <NextArrow />,
+    //     prevArrow: <PrevArrow />,
+    //     responsive: [
+    //         {
+    //             breakpoint: 1024,
+    //             settings: { slidesToShow: 3, slidesToScroll: 1 }
+    //         },
+    //         {
+    //             breakpoint: 768,
+    //             settings: { slidesToShow: 2, slidesToScroll: 1 }
+    //         },
+    //         {
+    //             breakpoint: 480,
+    //             settings: { slidesToShow: 1, slidesToScroll: 1 }
+    //         }
+    //     ]
+    // };
 
     return (
         <div className='bg-[#F2F8FC]'>

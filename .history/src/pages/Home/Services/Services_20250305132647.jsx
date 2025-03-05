@@ -78,11 +78,11 @@ const Services = () => {
                                     data-aos='fade-up'
                                     data-aos-delay={index * 100}
                                 >
-                                    <div className='relative w-full bg-[#D3D4D8] group rounded-2xl overflow-hidden '>
-                                        <div className='relative overflow-hidden max-w-80 h-[380px] flex flex-col justify-between'>
-                                            <div>
+                                    <div className='relative overflow-hidden bg-white border border-gray-200 shadow-lg rounded-xl'>
+                                        <div className='overflow-hidden max-w-80 h-[380px] flex flex-col justify-between'>
+                                            <div className='relative h-72'>
                                                 <img
-                                                    className='object-cover w-full h-72'
+                                                    className='object-cover w-full h-full rounded-t-xl'
                                                     src={
                                                         service.img ||
                                                         'https://via.placeholder.com/150'
@@ -93,45 +93,28 @@ const Services = () => {
                                                     }
                                                 />
                                             </div>
-                                            <div className='flex flex-col p-4'>
-                                                <h2 className='text-lg font-bold truncate text-[#31473A] leading-tight'>
-                                                    {service.name.length > 20
-                                                        ? `${service.name.substring(
-                                                              0,
-                                                              20
-                                                          )}...`
-                                                        : service.name}
+                                            <div className='p-4 text-center'>
+                                                <h2 className='text-lg font-bold text-[#31473A] truncate'>
+                                                    {service.name}
                                                 </h2>
-                                                <p className='text-[#767676] text-[16px] font-semibold mt-0 leading-tight'>
+                                                <p className='text-[#767676] text-[16px] font-semibold mt-1'>
                                                     {service.price
                                                         ? `${service.price.toLocaleString()} VNĐ`
                                                         : '0 VNĐ'}
                                                 </p>
-                                                <p className='text-[#767676] text-[14px] leading-tight'>
-                                                    {service.category ||
-                                                        'Chưa phân loại'}
-                                                </p>
                                             </div>
-                                            <div className='w-full absolute bg-white bottom-[-100px] group-hover:bottom-0 group-hover:translate-y-[-80px] translate-y-full duration-700 ease-in-out'>
-                                                <ul className='flex flex-col items-center justify-center w-full gap-2 p-4 border border-gray-200 rounded-md shadow-md'>
-                                                    <li className='flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-[#31473A] hover:border-[#31473A]'>
-                                                        <FaShoppingCart />
-                                                        <span>
-                                                            Thêm vào giỏ hàng
-                                                        </span>
-                                                    </li>
-                                                    <li className='flex items-center justify-end w-full gap-2 pb-1 text-sm font-medium text-gray-600 duration-300 border-b border-gray-200 cursor-pointer hover:text-[#31473A] hover:border-[#31473A]'>
-                                                        <Link
-                                                            to='/product'
-                                                            className='flex items-center gap-2'
-                                                        >
-                                                            <MdOutlineLabelImportant />
-                                                            <span>
-                                                                Xem chi tiết
-                                                            </span>
-                                                        </Link>
-                                                    </li>
-                                                </ul>
+                                            <div className='absolute bottom-0 left-0 flex flex-col items-center w-full gap-2 p-4 bg-green-100 rounded-b-xl'>
+                                                <button className='flex items-center gap-2 px-4 py-2 text-white transition bg-green-500 rounded-lg hover:bg-green-600'>
+                                                    <FaShoppingCart /> Thêm vào
+                                                    giỏ hàng
+                                                </button>
+                                                <Link
+                                                    to='/product'
+                                                    className='flex items-center gap-2 text-green-600 hover:underline'
+                                                >
+                                                    <MdOutlineLabelImportant />{' '}
+                                                    Xem chi tiết
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>

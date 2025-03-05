@@ -42,16 +42,14 @@ const Profile = ({ isLoggedIn }) => {
                         className='object-cover w-full h-48'
                     />
 
-                    <div className='sm:w-[80%] w-[90%] mx-auto flex items-center gap-4 -mt-4'>
-                        <img
-                            src={ProfilePic}
-                            alt='User Profile'
-                            className='w-24 h-24 rounded-md outline outline-2 outline-offset-2 outline-blue-500'
-                        />
-                        <h1 className='font-serif text-2xl text-gray-800 dark:text-white'>
-                            Đại lý
-                        </h1>
-                    </div>
+                    {/* <div className="sm:w-[80%] w-[90%] mx-auto flex items-center gap-4 -mt-4">
+            <img
+              src={ProfilePic}
+              alt="User Profile"
+              className="w-24 h-24 rounded-md outline outline-2 outline-offset-2 outline-blue-500"
+            />
+            <h1 className="font-serif text-2xl text-gray-800 dark:text-white">Đại lý</h1>
+          </div> */}
 
                     <div className='xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] w-[90%] mx-auto flex flex-col gap-4 items-center mt-4'>
                         <p className='text-center text-gray-700 w-fit dark:text-gray-400 text-md'>
