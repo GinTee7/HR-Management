@@ -10,7 +10,7 @@ const Banner = () => {
             className='min-h-[550px] flex justify-center items-center py-12 sm:py-0 relative bg-cover bg-center'
             style={{ backgroundImage: `url(${homePageBanner})` }}
         >
-            <div className='container p-10 bg-white rounded-lg shadow-lg '>
+            <div className='container p-10 bg-white rounded-lg shadow-lg bg-opacity-80'>
                 <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
                     {/* Image section */}
                     <div data-aos='flip-up'>
