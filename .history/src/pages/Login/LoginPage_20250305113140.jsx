@@ -119,12 +119,12 @@ const LoginPage = () => {
                         {error && (
                             <p className='text-center text-red-600'>{error}</p>
                         )}
-                        <button
-                            type='submit'
-                            className='w-full py-3 text-lg font-bold text-white bg-gradient-to-r from-[#2E4F4F] to-[#3A6565] rounded-lg shadow-md hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-[#2E4F4F]'
-                        >
-                            {t('Login')}
-                        </button>
+                        {/* <button
+              type="submit"
+              className="w-full py-3 text-lg font-bold text-white bg-gradient-to-r from-[#2E4F4F] to-[#3A6565] rounded-lg shadow-md hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-[#2E4F4F]"
+            >
+              {t("Login")}
+            </button> */}
 
                         <div className='mt-4 text-center'>
                             <a

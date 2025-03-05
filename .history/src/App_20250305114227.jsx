@@ -46,8 +46,8 @@ function App() {
                     path='/signin'
                     element={
                         <>
-                            {/* <Header /> */}
-                            <LoginPage />
+                            <Header />
+                            {/* <LoginPage /> */}
                         </>
                     }
                 />

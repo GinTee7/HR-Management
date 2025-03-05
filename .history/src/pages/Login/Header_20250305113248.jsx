@@ -46,15 +46,17 @@ const Header = () => {
 
                     {/* Buttons */}
                     <div className='flex items-center mt-4 space-x-6'>
-                        {/* <Link to='/'>
-                            <button
-                                type='button'
-                                className='relative px-6 py-3 text-lg font-medium rounded-full bg-[#E7F0FD] text-gray-700 border border-gray-300 hover:bg-[#2E4F4F] hover:text-white'
-                            >
-                                {t('Login')}
-                            </button>
-                        </Link> */}
+                        {/* Login Button */}
+                        <Link to='/'>
+                            {/* <button
+                type="button"
+                className="relative px-6 py-3 text-lg font-medium rounded-full bg-[#E7F0FD] text-gray-700 border border-gray-300 hover:bg-[#2E4F4F] hover:text-white"
+              >
+                {t("Login")}
+              </button> */}
+                        </Link>
 
+                        {/* Language Dropdown */}
                         <div className='relative'>
                             <button
                                 onClick={toggleDropdown}

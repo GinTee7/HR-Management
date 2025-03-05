@@ -56,11 +56,11 @@ const LoginPage = () => {
         <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-[#E7F0FD] to-[#D6E4F0] p-6'>
             <div className='flex flex-col w-full overflow-hidden bg-white border border-gray-300 rounded-lg shadow-xl max-w-7xl md:flex-row'>
                 <div className='hidden md:flex items-center justify-center w-1/2 bg-gradient-to-b from-[#2E4F4F] to-[#3A6565] p-6'>
-                    <img
+                    {/* <img
                         src={logo}
                         alt={t('Enterprise Logo')}
                         className='object-contain w-[80%] h-auto shadow-xl rounded-lg'
-                    />
+                    /> */}
                 </div>
 
                 <div className='flex flex-col justify-center w-full p-8 bg-white md:w-1/2'>

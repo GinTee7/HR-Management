@@ -43,10 +43,10 @@ function App() {
         <Router>
             <Routes>
                 <Route
-                    path='/signin'
+                    path='/login'
                     element={
                         <>
-                            {/* <Header /> */}
+                            <Header />
                             <LoginPage />
                         </>
                     }
