@@ -7,7 +7,7 @@ import Dashboard from '@pages/Admin/Dashboard/Dashboard';
 import LoginPage from '@pages/Login/LoginPage';
 import SignUpPage from './pages/Login/Signup';
 import MembersList from '@pages/Admin/MembersList/MembersList';
-import Banner from '@components/Banner/Banner';
+// import Banner from '@components/Banner/Banner';
 import Hero from '@components/Hero/Hero';
 import Services from '@pages/Home/Services/Services';
 import OrderHistory from '@components/Order/OrderHistory';
@@ -46,7 +46,7 @@ function App() {
                     path='/signin'
                     element={
                         <>
-                            {/* <Header /> */}
+                            <Header />
                             <LoginPage />
                         </>
                     }
@@ -72,7 +72,7 @@ function App() {
                             <Layout>
                                 <Hero />
                                 <Services />
-                                <Banner />
+                                {/* <Banner /> */}
                             </Layout>
                         </>
                     }

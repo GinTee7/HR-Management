@@ -28,35 +28,35 @@ const FeaturedProductsSection = () => {
     ]);
 
     return (
-        <div className='container p-10 mx-auto rounded-lg shadow-lg bg-gray-50'>
-            <h2 className='mb-8 text-4xl font-bold text-center text-gray-900'>
+        <div className='container max-w-screen-md p-6 mx-auto rounded-lg shadow-lg bg-gray-50'>
+            <h2 className='mb-6 text-3xl font-bold text-center text-gray-900'>
                 Sản phẩm nổi bật
             </h2>
-            <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-3'>
+            <div className='grid grid-cols-1 gap-6 p-4 xl:grid-cols-1'>
                 {products.map(item => (
                     <div
                         key={item.id}
-                        className='flex flex-col overflow-hidden transition-transform transform bg-white shadow-xl rounded-2xl hover:scale-105 hover:shadow-2xl'
+                        className='flex flex-col max-w-full mx-auto overflow-hidden transition-transform transform bg-white shadow-lg rounded-xl hover:scale-105 hover:shadow-2xl w-52'
                     >
                         <img
-                            className='object-cover w-full h-64 rounded-t-2xl'
+                            className='object-cover w-full h-32 rounded-t-xl'
                             src={item.img || 'https://via.placeholder.com/150'}
                             alt={item.name || 'Hình ảnh sản phẩm'}
                         />
-                        <div className='flex flex-col justify-between p-6'>
-                            <h2 className='text-2xl font-bold text-gray-800 truncate'>
+                        <div className='flex flex-col justify-between p-3'>
+                            <h2 className='text-lg font-bold text-gray-800 truncate'>
                                 {item.name}
                             </h2>
-                            <p className='mt-3 text-lg text-gray-600'>
+                            <p className='mt-1 text-sm text-gray-600'>
                                 {item.features}
                             </p>
-                            <p className='mt-2 text-xl font-semibold text-blue-500'>
+                            <p className='mt-1 font-semibold text-blue-500 text-md'>
                                 {item.price}
                             </p>
-                            <div className='flex items-center justify-between mt-6'>
+                            <div className='flex items-center justify-between mt-3'>
                                 <Link
                                     to='/product'
-                                    className='flex items-center gap-2 px-6 py-3 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700'
+                                    className='flex items-center gap-2 px-3 py-2 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700'
                                 >
                                     <MdOutlineLabelImportant /> Xem chi tiết
                                 </Link>

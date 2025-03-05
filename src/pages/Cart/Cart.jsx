@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Modal, Button, Table, Checkbox, InputNumber } from "antd";
+import { Modal, Button, Table, Input, InputNumber } from "antd";
 import Breadcrumbs from "@components/pageProps/Breadcrumbs";
-import ItemCard from "./ItemCard";
 import { motion } from "framer-motion";
 
 const Cart = () => {
@@ -11,42 +10,40 @@ const Cart = () => {
       _id: "1",
       name: "Thuốc trừ sâu",
       code: "P001",
-      image:
-        "https://karimonvn.com/wp-content/uploads/2024/01/Carbo-max-1-1.png",
+      image: "https://karimonvn.com/wp-content/uploads/2024/01/Carbo-max-1-1.png",
       price: 50,
-      quantity: 2,
       stock: 10,
     },
     {
       _id: "2",
       name: "Phân bón hữu cơ",
       code: "P002",
-      image:
-        "https://karimonvn.com/wp-content/uploads/2024/01/Carbo-max-1-1.png",
+      image: "https://karimonvn.com/wp-content/uploads/2024/01/Carbo-max-1-1.png",
       price: 120,
-      quantity: 1,
       stock: 5,
     },
     {
       _id: "3",
       name: "Thuốc diệt cỏ",
       code: "P003",
-      image:
-        "https://karimonvn.com/wp-content/uploads/2024/01/Carbo-max-1-1.png",
+      image: "https://karimonvn.com/wp-content/uploads/2024/01/Carbo-max-1-1.png",
       price: 75,
-      quantity: 3,
       stock: 8,
     },
   ];
 
-  const [products] = useState(sampleProducts);
+  const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [totalAmt, setTotalAmt] = useState(0);
   const [shippingCharge, setShippingCharge] = useState(0);
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenProductModal = () => setIsProductModalOpen(true);
+  const handleCloseProductModal = () => setIsProductModalOpen(false);
+
   const handleQuantityChange = (id, value) => {
     setProducts(
       products.map((product) =>
@@ -54,23 +51,42 @@ const Cart = () => {
       )
     );
   };
-
-  const toggleProductSelection = (id) => {
-    setSelectedProducts((prev) =>
-      prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
-    );
+  const handleRemoveProduct = (id) => {
+    setProducts(products.filter((product) => product._id !== id));
   };
 
-  const columns = [
+  const handleAddProduct = (product) => {
+    if (!products.find((item) => item._id === product._id)) {
+      setProducts([...products, { ...product, quantity: 1 }]);
+    }
+    handleCloseProductModal();
+  };
+
+  useEffect(() => {
+    const price = products.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+    setTotalAmt(price);
+  }, [products]);
+
+  useEffect(() => {
+    setShippingCharge(totalAmt <= 200 ? 30 : totalAmt <= 400 ? 25 : 20);
+  }, [totalAmt]);
+
+  const filteredProducts = sampleProducts.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.code.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const productColumns = [
     {
-      title: "Chọn",
-      dataIndex: "select",
-      key: "select",
-      render: (_, record) => (
-        <Checkbox
-          checked={selectedProducts.includes(record._id)}
-          onChange={() => toggleProductSelection(record._id)}
-        />
+      title: "Hình ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (image) => (
+        <img src={image} alt="Sản phẩm" className="w-12 h-12" />
       ),
     },
     { title: "Tên sản phẩm", dataIndex: "name", key: "name" },
@@ -96,61 +112,59 @@ const Cart = () => {
     },
     { title: "Kho có sẵn", dataIndex: "stock", key: "stock" },
     {
-      title: "Hình ảnh",
-      dataIndex: "image",
-      key: "image",
-      render: (image) => (
-        <img src={image} alt="Sản phẩm" className="w-12 h-12" />
+      title: "Tổng tiền",
+      key: "totalPrice",
+      render: (_, record) => `$${record.price * record.quantity}`,
+    },
+    {
+      title: "Hành động",
+      key: "action",
+      render: (_, record) => (
+        <Button danger onClick={() => handleRemoveProduct(record._id)}>
+          Xóa
+        </Button>
       ),
     },
   ];
 
-  useEffect(() => {
-    const price = products.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-    setTotalAmt(price);
-  }, [products]);
-
-  useEffect(() => {
-    setShippingCharge(totalAmt <= 200 ? 30 : totalAmt <= 400 ? 25 : 20);
-  }, [totalAmt]);
-
   return (
     <div className="w-full bg-[#F2F8FC] min-h-screen py-10">
       <Breadcrumbs title="Giỏ hàng" />
-      {products.length > 0 ? (
-        <div className="px-4 mx-auto mt-6 max-w-container">
-          <div className="flex justify-between mb-4">
-            <h2 className="text-2xl font-bold">Danh sách sản phẩm</h2>
-            <Button
-              type="primary"
-              onClick={handleOpenModal}
-              style={{
-                backgroundColor: "#D3D4D8",
-                color: "#31473A",
-                borderColor: "#D3D4D8",
-              }}
-            >
-              Tạo đơn hàng
-            </Button>
+      <div className="px-4 mx-auto mt-6 max-w-container">
+        <div className="flex justify-between mb-4">
+          <h2 className="text-2xl font-bold">Danh sách sản phẩm</h2>
+          <Button type="primary" onClick={handleOpenModal} style={{ backgroundColor: "#D3D4D8", color: "#31473A" }}>
+            Tạo đơn hàng
+          </Button>
+        </div>
+      </div>
+      <Modal
+        open={isModalOpen}
+        onCancel={handleCloseModal}
+        width={1000}
+        footer={null}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="text-lg font-semibold">Thông tin đại lý</h3>
+            <p><strong>Tên:</strong> Đại lý nông nghiệp</p>
+            <p><strong>SĐT:</strong> 0123-456-789</p>
+            <p><strong>Địa chỉ:</strong> 123 Đường Nguyễn Xiển, Thành phố Thủ Đức</p>
           </div>
-
-          <div className="w-full overflow-hidden bg-white rounded-md shadow-md">
-            <div className="grid items-center w-full h-20 grid-cols-5 px-4 text-lg font-semibold bg-gray-200 border-b border-gray-300 text-primeColor">
-              <h2 className="col-span-2 text-center">Sản phẩm</h2>
-              <h2 className="text-left">Giá</h2>
-              <h2 className="text-left">Số lượng</h2>
-              <h2 className="text-left">Tổng</h2>
-            </div>
-            <div className="p-4 mt-5 space-y-4">
-              {products.map((item) => (
-                <ItemCard key={item._id} item={item} />
-              ))}
-            </div>
-          </div>
-          <div className="flex justify-end mt-6 max-w-7xl">
+        </div>
+        <h3 className="text-lg font-semibold">Chi tiết sản phẩm</h3>
+        <Button type="primary" onClick={handleOpenProductModal} style={{ backgroundColor: "#D3D4D8", color: "#31473A" }}>
+          Chọn sản phẩm
+        </Button>
+        {products.length > 0 && (
+          <Table
+            columns={productColumns}
+            dataSource={products}
+            rowKey="_id"
+            pagination={false}
+          />
+        )}
+        <div className="flex justify-end mt-6 max-w-7xl">
             <div className="flex flex-col gap-4 p-6 bg-white border border-gray-200 rounded-md shadow-lg w-96">
               <h1 className="text-2xl font-semibold text-right text-gray-700">
                 Tổng giỏ hàng
@@ -182,73 +196,42 @@ const Cart = () => {
               </Link>
             </div>
           </div>
-        </div>
-      ) : (
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-col items-center justify-center gap-4 py-10"
-        >
-          <div className="max-w-md p-6 text-center bg-white border border-gray-200 rounded-md shadow-lg">
-            <h1 className="text-xl font-bold text-gray-700 uppercase">
-              Giỏ hàng trống
-            </h1>
-            <p className="mt-2 text-sm text-gray-600">
-              Giỏ hàng của bạn đang chờ được lấp đầy. Hãy bắt đầu mua sắm ngay!
-            </p>
-            <Link to="/shop">
-              <button className="px-6 py-2 mt-4 text-lg font-semibold text-white rounded-md bg-primeColor hover:bg-black">
-                Tiếp tục mua sắm
-              </button>
-            </Link>
-          </div>
-        </motion.div>
-      )}
-
+      </Modal>
       <Modal
-        open={isModalOpen}
-        onCancel={handleCloseModal}
-        width={1000}
-        footer={[
-          <Button key="cancel" onClick={handleCloseModal}>
-            Hủy
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            style={{
-              backgroundColor: "#D3D4D8",
-              color: "#31473A",
-              borderColor: "#D3D4D8",
-            }}
-          >
-            Xác nhận đơn hàng
-          </Button>,
-        ]}
+        open={isProductModalOpen}
+        onCancel={handleCloseProductModal}
+        footer={null}
       >
-        <div>
-          <h3 className="text-lg font-semibold">Thông tin đại lý</h3>
-          <p>
-            <strong>Tên:</strong> Đại lý nông nghiệp 
-          </p>
-          <p>
-            <strong>SĐT:</strong> 0123-456-789
-          </p>
-          <p>
-            <strong>Địa chỉ:</strong> 123 Đường Nguyễn Xiển, Thành phố Thủ Đức
-          </p>
-        </div>
-
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold">Chi tiết sản phẩm</h3>
-          <Table
-            columns={columns}
-            dataSource={products}
-            rowKey="_id"
-            pagination={false}
-          />
-        </div>
+        <Input.Search
+          placeholder="Tìm sản phẩm..."
+          allowClear
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="mb-2"
+        />
+        <Table
+          columns={[
+            {
+              title: "Hình ảnh",
+              dataIndex: "image",
+              key: "image",
+              render: (image) => (
+                <img src={image} alt="Sản phẩm" className="w-12 h-12" />
+              ),
+            },
+            { title: "Tên sản phẩm", dataIndex: "name", key: "name" },
+            { title: "Mã sản phẩm", dataIndex: "code", key: "code" },
+            {
+              title: "Hành động",
+              key: "action",
+              render: (_, record) => (
+                <Button onClick={() => handleAddProduct(record)}>Thêm</Button>
+              ),
+            },
+          ]}
+          dataSource={filteredProducts}
+          rowKey="_id"
+          pagination={{ pageSize: 5 }}
+        />
       </Modal>
     </div>
   );

@@ -124,6 +124,12 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                                 </div>
                             )}
                         </div>
+                        <Link
+                            to='/signin'
+                            className='px-4 py-2 bg-[#555] text-[#E2E2E2] rounded-full'
+                        >
+                            Login
+                        </Link>
                     </div>
                 </div>
             </div>

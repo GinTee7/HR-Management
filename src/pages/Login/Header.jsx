@@ -30,7 +30,7 @@ const Header = () => {
     };
 
     return (
-        <nav className='bg-[#2E4F4F] shadow-md'>
+        <nav className='bg-gradient-to-r from-[#000000] to-[#434343] shadow-md'>
             <div className='h-24 px-6 mx-auto max-w-7xl sm:px-8 lg:px-10'>
                 <div className='relative flex items-center justify-between h-20'>
                     {/* Logo */}
