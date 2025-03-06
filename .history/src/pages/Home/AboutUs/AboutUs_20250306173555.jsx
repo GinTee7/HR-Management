@@ -15,7 +15,11 @@ const AboutUs = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.5 }}
-            ></motion.header>
+            >
+                <h1 className='text-5xl font-bold text-center drop-shadow-lg'>
+                    Về Chúng Tôi
+                </h1>
+            </motion.header>
 
             {/* About Section */}
             <section className='container px-6 py-20 mx-auto'>

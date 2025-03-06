@@ -1,37 +1,40 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Slider from 'react-slick';
-import { FaShoppingCart } from 'react-icons/fa';
-import { GrSecure } from 'react-icons/gr';
-import { IoFastFood } from 'react-icons/io5';
-import { GiFoodTruck } from 'react-icons/gi';
-import { Link } from 'react-router-dom';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import HeaderTitle from '@components/HeaderTitle/HeaderTitle';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import HeaderTitle from '@components/HeaderTitle/HeaderTitle';
+import { FaShoppingCart } from 'react-icons/fa';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import { NextArrow, PrevArrow } from './CustomArrows';
 import Img from '@assets/Avatar.jpg';
 import homePageBanner from '@assets/homePageBanner.png';
+import { GrSecure } from 'react-icons/gr';
+import { IoFastFood } from 'react-icons/io5';
+import { GiFoodTruck } from 'react-icons/gi';
 
 const Services = () => {
     const [servicesData, setServicesData] = useState([]);
 
-    useEffect(() => {
-        const fetchServices = async () => {
-            try {
-                const response = await axios.get(
-                    'https://67890c382c874e66b7d76465.mockapi.io/products'
-                );
-                setServicesData(response.data);
-            } catch (error) {
-                console.error('Error fetching services:', error);
-            }
-        };
+    const refreshServices = async () => {
+        try {
+            const response = await axios.get(
+                'https://67890c382c874e66b7d76465.mockapi.io/products'
+            );
+            setServicesData(response.data);
+        } catch (error) {
+            console.error('Lỗi khi làm mới dữ liệu:', error);
+        }
+    };
 
-        fetchServices();
-        AOS.init({ duration: 1000, easing: 'ease-in-out', once: true });
+    useEffect(() => {
+        refreshServices();
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true
+        });
     }, []);
 
     const sliderSettings = {
@@ -65,6 +68,7 @@ const Services = () => {
             className='bg-[#F2F8FC] py-10'
             style={{ backgroundImage: `url(${homePageBanner})` }}
         >
+            {/* Services*/}
             <div className='container'>
                 <HeaderTitle
                     title='Sản phẩm'
@@ -80,8 +84,8 @@ const Services = () => {
                                 data-aos='fade-up'
                                 data-aos-delay={index * 100}
                             >
-                                <div className='flex flex-col items-center p-6 transition-all bg-white border border-gray-300 shadow-lg rounded-2xl hover:shadow-xl'>
-                                    <div className='flex items-center justify-center h-64'>
+                                <div className='relative flex flex-col items-center p-6 transition-all bg-white border border-gray-300 shadow-lg rounded-2xl hover:shadow-xl'>
+                                    <div className='relative flex items-center justify-center h-64'>
                                         <img
                                             className='object-contain w-auto max-h-full'
                                             src={
@@ -102,7 +106,7 @@ const Services = () => {
                                             {service.name}
                                         </h2>
                                     </div>
-                                    <button className='flex items-center gap-2 px-8 py-3 mt-5 text-lg font-medium text-white bg-green-600 rounded-lg shadow-md hover:bg-green-700 hover:shadow-lg'>
+                                    <button className='flex items-center gap-2 px-8 py-3 mt-5 text-lg font-medium text-white transition bg-green-600 rounded-lg shadow-md hover:bg-green-700 hover:shadow-lg'>
                                         <FaShoppingCart /> Thêm vào giỏ hàng
                                     </button>
                                 </div>
@@ -115,17 +119,19 @@ const Services = () => {
                     </p>
                 )}
             </div>
-            <div className='min-h-[550px] flex justify-center items-center py-12 sm:py-0 bg-cover bg-center mt-10'>
-                <div className='container p-10 rounded-lg shadow-lg'>
+
+            {/* Banner */}
+            <div className='min-h-[550px] flex justify-center items-center py-12 sm:py-0 relative bg-cover bg-center mt-10'>
+                <div className='container p-10 rounded-lg shadow-lg '>
                     <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
                         <div data-aos='flip-up'>
                             <img
                                 src={Img}
                                 alt='biryani img'
-                                className='max-w-[430px] w-full mx-auto drop-shadow-lg'
+                                className='max-w-[430px] w-full mx-auto drop-shadow-[-10px_10px_12px_rgba(0,0,0,1)]'
                             />
                         </div>
-                        <div className='flex flex-col justify-center gap-6'>
+                        <div className='flex flex-col justify-center gap-6 sm:pt-0'>
                             <h1
                                 data-aos='fade-up'
                                 className='text-3xl font-bold sm:text-4xl'
@@ -134,7 +140,7 @@ const Services = () => {
                             </h1>
                             <p
                                 data-aos='fade-up'
-                                className='text-sm leading-5 tracking-wide text-gray-800 sm:text-xl'
+                                className='text-sm leading-5 tracking-wide text-gray-800'
                             >
                                 Công Ty TNHH BVTV Minh Long được xây dựng từ
                                 hoài bão phát triển nông nghiệp của những con
@@ -143,29 +149,26 @@ const Services = () => {
                                 <br />
                                 Thấu hiểu được nỗi vất vả của nhà nông, Công Ty
                                 Minh Long quyết tâm phục vụ vì lợi ích người
-                                nông dân. Các sản phẩm của Minh Long luôn đáp
-                                ứng tiêu chuẩn chất lượng cao, được cơ quan quản
-                                lý công nhận và người dân tin dùng.
+                                nông dân. Các sản phẩm do Công ty Minh Long sản
+                                xuất và phân phối luôn đáp ứng các tiêu chí khắt
+                                khe về chất lượng, được các cơ quan quản lý công
+                                nhận, được người dân tin dùng.
                             </p>
                             <div className='flex gap-6'>
-                                {[GrSecure, IoFastFood, GiFoodTruck].map(
-                                    (Icon, idx) => (
-                                        <div
-                                            key={idx}
-                                            data-aos='fade-up'
-                                            data-aos-delay={idx * 200}
-                                        >
-                                            <Icon className='w-20 h-20 p-5 text-4xl bg-gray-100 rounded-full shadow-md' />
-                                        </div>
-                                    )
-                                )}
+                                <div data-aos='fade-up'>
+                                    <GrSecure className='w-20 h-20 p-5 text-4xl rounded-full shadow-md bg-violet-100' />
+                                </div>
+                                <div data-aos='fade-up' data-aos-delay='200'>
+                                    <IoFastFood className='w-20 h-20 p-5 text-4xl bg-orange-100 rounded-full shadow-md' />
+                                </div>
+                                <div data-aos='fade-up' data-aos-delay='400'>
+                                    <GiFoodTruck className='w-20 h-20 p-5 text-4xl bg-green-100 rounded-full shadow-md' />
+                                </div>
                             </div>
                             <div data-aos='fade-up' data-aos-delay='500'>
-                                <Link to='/aboutus'>
-                                    <button className='px-6 py-3 text-white rounded-full shadow-lg bg-gradient-to-r from-primary to-secondary hover:shadow-md'>
-                                        Xem chi tiết
-                                    </button>
-                                </Link>
+                                <button className='px-6 py-3 text-white transition rounded-full shadow-lg bg-gradient-to-r from-primary to-secondary hover:shadow-md'>
+                                    Xem chi tiết
+                                </button>
                             </div>
                         </div>
                     </div>

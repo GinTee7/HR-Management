@@ -244,6 +244,7 @@ const Pagination = ({ itemsPerPage = 3 }) => {
 
     return (
         <div className='container p-6 mx-auto rounded-lg'>
+            {/* Hiển thị danh mục hiện tại */}
             <div className='mb-6 text-center'>
                 <h2 className='text-2xl font-bold'>
                     {currentCategory?.name || 'Danh mục'}
@@ -251,6 +252,7 @@ const Pagination = ({ itemsPerPage = 3 }) => {
                 <p>{currentCategory?.description || 'Không có mô tả'}</p>
             </div>
 
+            {/* Thanh chọn danh mục */}
             {categories.length > 0 && (
                 <div className='flex justify-center mb-6 overflow-x-auto'>
                     <div className='flex gap-8'>
@@ -279,7 +281,10 @@ const Pagination = ({ itemsPerPage = 3 }) => {
                 </div>
             )}
 
+            {/* Hiển thị sản phẩm */}
             <Items currentItems={currentItems} />
+
+            {/* Phân trang */}
             {pageCount > 0 && (
                 <div className='flex flex-col items-center mt-6'>
                     <ReactPaginate

@@ -245,67 +245,55 @@ const Pagination = ({ itemsPerPage = 3 }) => {
     return (
         <div className='container p-6 mx-auto rounded-lg'>
             <div className='mb-6 text-center'>
-                <h2 className='text-2xl font-bold'>
-                    {currentCategory?.name || 'Danh mục'}
-                </h2>
-                <p>{currentCategory?.description || 'Không có mô tả'}</p>
+                <h2 className='text-2xl font-bold'>{currentCategory.name}</h2>
+                <p>{currentCategory.description}</p>
+            </div>
+            <div className='flex justify-center mb-6 overflow-x-auto'>
+                <div className='flex gap-8'>
+                    {categories.map(cat => (
+                        <div
+                            key={cat.id}
+                            className={`text-center cursor-pointer ${
+                                selectedCategory === cat.id
+                                    ? 'border-b-4 border-blue-500'
+                                    : ''
+                            }`}
+                            onClick={() => {
+                                setSelectedCategory(cat.id);
+                                setItemOffset(0);
+                            }}
+                        >
+                            <img
+                                src={cat.img}
+                                alt={cat.name}
+                                className='object-cover w-32 h-40 mx-auto mb-2 rounded-lg'
+                            />
+                            <p className='text-sm font-bold'>{cat.name}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
 
-            {categories.length > 0 && (
-                <div className='flex justify-center mb-6 overflow-x-auto'>
-                    <div className='flex gap-8'>
-                        {categories.map(cat => (
-                            <div
-                                key={cat.id}
-                                className={`text-center cursor-pointer transition-all duration-300 ${
-                                    selectedCategory === cat.id
-                                        ? 'border-b-4 border-blue-500'
-                                        : 'hover:border-b-4 hover:border-gray-300'
-                                }`}
-                                onClick={() => {
-                                    setSelectedCategory(cat.id);
-                                    setItemOffset(0);
-                                }}
-                            >
-                                <img
-                                    src={cat.img}
-                                    alt={cat.name}
-                                    className='object-cover w-32 h-40 mx-auto mb-2 rounded-lg shadow-md'
-                                />
-                                <p className='text-sm font-bold'>{cat.name}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
             <Items currentItems={currentItems} />
-            {pageCount > 0 && (
-                <div className='flex flex-col items-center mt-6'>
-                    <ReactPaginate
-                        nextLabel='>'
-                        previousLabel='<'
-                        onPageChange={handlePageClick}
-                        pageRangeDisplayed={3}
-                        marginPagesDisplayed={1}
-                        pageCount={pageCount}
-                        containerClassName='flex space-x-2 text-lg font-semibold bg-white p-2 rounded-lg shadow-md'
-                        pageClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
-                        pageLinkClassName='block px-4 py-2'
-                        previousClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
-                        previousLinkClassName='block px-4 py-2'
-                        nextClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
-                        nextLinkClassName='block px-4 py-2'
-                        activeClassName='bg-blue-500 text-white rounded-md'
-                    />
-                    <p className='mt-4 text-gray-700'>
-                        Hiển thị từ{' '}
-                        {paginationItems.length > 0 ? itemOffset + 1 : 0} đến{' '}
-                        {paginationItems.length > 0 ? endOffset : 0} trên tổng
-                        số {paginationItems.length} sản phẩm
-                    </p>
-                </div>
-            )}
+            <div className='flex flex-col items-center mt-6'>
+                <ReactPaginate
+                    nextLabel='>'
+                    previousLabel='<'
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    marginPagesDisplayed={1}
+                    pageCount={pageCount}
+                    containerClassName='flex space-x-2 text-lg font-semibold bg-white p-2 rounded-lg shadow-md'
+                    pageLinkClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
+                    previousLinkClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
+                    nextLinkClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
+                    activeClassName='bg-blue-500 text-white rounded-md'
+                />
+                {/* <p className='text-gray-700 '>
+                    Hiển thị từ {itemOffset + 1} đến {endOffset} trên tổng số{' '}
+                    {paginationItems.length} sản phẩm
+                </p> */}
+            </div>
         </div>
     );
 };
