@@ -189,7 +189,7 @@ const paginationItems = [
 
 const Items = ({ currentItems }) => {
     return (
-        <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-4'>
             {currentItems.map(item => (
                 <div
                     key={item._id}
@@ -243,7 +243,7 @@ const Pagination = ({ itemsPerPage = 3 }) => {
     };
 
     return (
-        <div className='container p-6 mx-auto rounded-lg'>
+        <div className='w-full p-2 px-4 mx-auto rounded-lg max-w-screen-2xl md:px-8 lg:px-16 xl:px-32 2xl:px-48'>
             <div className='mb-6 text-center'>
                 <h2 className='text-2xl font-bold'>
                     {currentCategory?.name || 'Danh mục'}
