@@ -1,8 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 import {
     FaMapMarkerAlt,
     FaClock,
@@ -10,20 +10,6 @@ import {
     FaEnvelope
 } from 'react-icons/fa';
 import hero3 from '@assets/hero3.png';
-
-const schema = yup.object().shape({
-    name: yup.string().required('Tên không được để trống'),
-    email: yup
-        .string()
-        .email('Email không hợp lệ')
-        .required('Email là bắt buộc'),
-    phone: yup
-        .string()
-        .matches(/^[0-9]+$/, 'Số điện thoại không hợp lệ')
-        .min(10, 'Số điện thoại ít nhất 10 số')
-        .required('Số điện thoại là bắt buộc'),
-    message: yup.string().required('Nội dung không được để trống')
-});
 
 const ContactInfo = () => {
     const { t } = useTranslation();
@@ -42,12 +28,11 @@ const ContactInfo = () => {
                     {t('contact.working_hours')}
                 </p>
                 <p className='flex items-center gap-4 text-lg text-gray-700'>
-                    <FaPhoneAlt className='text-xl text-green-500' />{' '}
-                    {t('contact.phone')}
+                    <FaPhoneAlt className='text-xl text-green-500' /> 1900 89 82
                 </p>
                 <p className='flex items-center gap-4 text-lg text-gray-700'>
                     <FaEnvelope className='text-xl text-purple-500' />{' '}
-                    {t('contact.email')}
+                    info@minhlongagro.com
                 </p>
             </div>
         </div>
@@ -56,6 +41,20 @@ const ContactInfo = () => {
 
 const ContactForm = () => {
     const { t } = useTranslation();
+    const schema = yup.object().shape({
+        name: yup.string().required(t('contact.errors.name')),
+        email: yup
+            .string()
+            .email(t('contact.errors.email_invalid'))
+            .required(t('contact.errors.email_required')),
+        phone: yup
+            .string()
+            .matches(/^[0-9]+$/, t('contact.errors.phone_invalid'))
+            .min(10, t('contact.errors.phone_length'))
+            .required(t('contact.errors.phone_required')),
+        message: yup.string().required(t('contact.errors.message'))
+    });
+
     const {
         register,
         handleSubmit,
@@ -80,37 +79,34 @@ const ContactForm = () => {
             >
                 <input
                     {...register('name')}
-                    placeholder={t('contact.placeholder_name')}
-                    className={`${inputField} border-2 border-gray-400`}
+                    placeholder={t('contact.placeholder.name')}
+                    className='w-full p-4 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none'
                 />
                 <input
                     {...register('phone')}
-                    placeholder={t('contact.placeholder_phone')}
-                    className={`${inputField} border-2 border-gray-400`}
+                    placeholder={t('contact.placeholder.phone')}
+                    className='w-full p-4 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none'
                 />
                 <p className='col-span-2 text-red-500'>
                     {errors.name?.message || errors.phone?.message}
                 </p>
-
                 <input
                     {...register('email')}
-                    placeholder={t('contact.placeholder_email')}
-                    className={`${inputField} border-2 border-gray-400 md:col-span-2`}
+                    placeholder={t('contact.placeholder.email')}
+                    className='w-full p-4 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none md:col-span-2'
                 />
                 <p className='col-span-2 text-red-500'>
                     {errors.email?.message}
                 </p>
-
                 <textarea
                     {...register('message')}
-                    placeholder={t('contact.placeholder_message')}
-                    className={`${inputField} border-2 border-gray-400 md:col-span-2`}
+                    placeholder={t('contact.placeholder.message')}
+                    className='w-full p-4 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none md:col-span-2'
                     rows='4'
                 ></textarea>
                 <p className='col-span-2 text-red-500'>
                     {errors.message?.message}
                 </p>
-
                 <button
                     type='submit'
                     className='w-full px-6 py-3 text-white transition-all bg-black rounded-lg hover:bg-gray-800 md:w-auto'
@@ -123,6 +119,7 @@ const ContactForm = () => {
 };
 
 const ContactPage = () => {
+    const { t } = useTranslation();
     return (
         <div className='relative min-h-screen bg-gray-100'>
             <div
@@ -153,6 +150,3 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
-
-const inputField =
-    'w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white';

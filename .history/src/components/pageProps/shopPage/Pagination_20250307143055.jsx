@@ -268,7 +268,7 @@ const Items = ({ currentItems }) => {
                         {/* Nút bấm */}
                         <Link
                             to='/product'
-                            className='flex items-center gap-2 px-5 py-2 mt-4 text-sm font-medium text-white transition-all rounded-lg shadow-md bg-gradient-to-r from-blue-700 to-indigo-800 hover:shadow-lg hover:scale-105'
+                            className='flex items-center gap-2 px-5 py-2 mt-4 text-sm font-medium text-white transition-all rounded-full shadow-md bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-lg hover:scale-105'
                         >
                             <MdOutlineArrowForwardIos className='text-xs' /> Xem
                             chi tiết
@@ -304,7 +304,7 @@ const Pagination = ({ itemsPerPage = 6 }) => {
     };
 
     return (
-        <div className='w-full p-3 px-5 mx-auto rounded-lg max-w-screen-2xl'>
+        <div className='w-full p-2 px-4 mx-auto rounded-lg max-w-screen-2xl'>
             {/* Danh sách sản phẩm */}
             <Items currentItems={currentItems} />
 

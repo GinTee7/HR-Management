@@ -8,14 +8,14 @@ import unitedkingdom from '@assets/united-kingdom.png';
 import AvatarPlaceholder from '@assets/Avatar.jpg';
 
 const Menu = [
-    { id: 1, name: 'navbar.home', link: '/' },
-    { id: 2, name: 'navbar.about_us', link: '/aboutus' },
-    { id: 3, name: 'navbar.products', link: '/shop' }
+    { id: 1, name: 'Trang chủ', link: '/' },
+    { id: 2, name: 'Về chúng tôi', link: '/aboutus' },
+    { id: 3, name: 'Sản phẩm', link: '/shop' }
 ];
 
 const languageData = {
-    en: { code: 'en', name: 'navbar.english', flag: unitedkingdom },
-    vi: { code: 'vi', name: 'navbar.vietnamese', flag: vietnam }
+    en: { code: 'en', name: 'English', flag: unitedkingdom },
+    vi: { code: 'vi', name: 'Tiếng Việt', flag: vietnam }
 };
 
 const Navbar = ({ isLoggedIn, onLogout, user }) => {
@@ -76,6 +76,36 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                                 />
                             </div>
                         </button>
+                        {isLoggedIn && isLogoDropdownOpen && (
+                            <div className='absolute left-0 w-48 mt-2 bg-white rounded shadow-lg'>
+                                <ul>
+                                    <li>
+                                        <Link
+                                            to='/profile'
+                                            className='block px-4 py-2 text-[#555] hover:bg-[#555] hover:text-white'
+                                        >
+                                            Profile
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            to='/cart'
+                                            className='block px-4 py-2 text-[#555] hover:bg-[#555] hover:text-white'
+                                        >
+                                            Tạo đơn hàng
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <button
+                                            onClick={onLogout}
+                                            className='block w-full px-4 py-2 text-left text-[#555] hover:bg-[#555] hover:text-white'
+                                        >
+                                            Logout
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
                     </div>
 
                     <div className='flex items-center gap-4'>
@@ -91,7 +121,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                                                 : 'text-white hover:bg-[#555] hover:text-[#E2E2E2]'
                                         )}
                                     >
-                                        {t(name)}
+                                        {name}
                                     </Link>
                                 </li>
                             ))}
@@ -113,11 +143,9 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                                             : 'text-white hover:bg-[#555] hover:text-[#E2E2E2]'
                                     )}
                                 >
-                                    {t(
-                                        isLoggedIn
-                                            ? 'navbar.order_history'
-                                            : 'navbar.contact'
-                                    )}
+                                    {isLoggedIn
+                                        ? 'Lịch sử mua hàng'
+                                        : 'Liên hệ'}
                                 </Link>
                             </li>
                         </ul>
@@ -130,7 +158,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                             >
                                 <img
                                     src={currentLanguage.flag}
-                                    alt={t(currentLanguage.name)}
+                                    alt={currentLanguage.name}
                                     className='w-5 h-5 mr-2 rounded-full'
                                 />
                                 {t(currentLanguage.name)}
@@ -149,7 +177,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                                                     >
                                                         <img
                                                             src={flag}
-                                                            alt={t(name)}
+                                                            alt={name}
                                                             className='w-5 h-5 mr-2 rounded-full'
                                                         />
                                                         {t(name)}
@@ -179,7 +207,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                                 to='/signin'
                                 className='px-4 py-2 bg-[#555] text-[#E2E2E2] rounded-full'
                             >
-                                {t('navbar.login')}
+                                Login
                             </Link>
                         )}
                     </div>

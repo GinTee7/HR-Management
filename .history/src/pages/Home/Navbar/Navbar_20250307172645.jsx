@@ -14,8 +14,8 @@ const Menu = [
 ];
 
 const languageData = {
-    en: { code: 'en', name: 'navbar.english', flag: unitedkingdom },
-    vi: { code: 'vi', name: 'navbar.vietnamese', flag: vietnam }
+    en: { code: 'en', name: 'English', flag: unitedkingdom },
+    vi: { code: 'vi', name: 'Tiếng Việt', flag: vietnam }
 };
 
 const Navbar = ({ isLoggedIn, onLogout, user }) => {
@@ -95,31 +95,6 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                                     </Link>
                                 </li>
                             ))}
-                            {/* Conditional menu item */}
-                            <li>
-                                <Link
-                                    to={
-                                        isLoggedIn
-                                            ? '/order-history'
-                                            : '/contact'
-                                    }
-                                    className={classNames(
-                                        'inline-block px-4 py-2 rounded duration-300',
-                                        location.pathname ===
-                                            (isLoggedIn
-                                                ? '/order-history'
-                                                : '/contact')
-                                            ? 'bg-[#555] text-[#E2E2E2] font-bold'
-                                            : 'text-white hover:bg-[#555] hover:text-[#E2E2E2]'
-                                    )}
-                                >
-                                    {t(
-                                        isLoggedIn
-                                            ? 'navbar.order_history'
-                                            : 'navbar.contact'
-                                    )}
-                                </Link>
-                            </li>
                         </ul>
 
                         {/* Language Dropdown */}
@@ -130,7 +105,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                             >
                                 <img
                                     src={currentLanguage.flag}
-                                    alt={t(currentLanguage.name)}
+                                    alt={currentLanguage.name}
                                     className='w-5 h-5 mr-2 rounded-full'
                                 />
                                 {t(currentLanguage.name)}
@@ -149,7 +124,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                                                     >
                                                         <img
                                                             src={flag}
-                                                            alt={t(name)}
+                                                            alt={name}
                                                             className='w-5 h-5 mr-2 rounded-full'
                                                         />
                                                         {t(name)}
@@ -161,27 +136,6 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                                 </div>
                             )}
                         </div>
-
-                        {/* User Info */}
-                        {isLoggedIn ? (
-                            <div className='flex items-center gap-2'>
-                                <img
-                                    src={AvatarPlaceholder}
-                                    alt='User Avatar'
-                                    className='w-8 h-8 rounded-full'
-                                />
-                                <span className='text-white'>
-                                    {user.username}
-                                </span>
-                            </div>
-                        ) : (
-                            <Link
-                                to='/signin'
-                                className='px-4 py-2 bg-[#555] text-[#E2E2E2] rounded-full'
-                            >
-                                {t('navbar.login')}
-                            </Link>
-                        )}
                     </div>
                 </div>
             </div>

@@ -310,7 +310,7 @@ const Pagination = ({ itemsPerPage = 6 }) => {
 
             {/* Hiển thị phân trang nếu có nhiều hơn 1 trang */}
             {pageCount > 1 && (
-                <div className='flex flex-col items-center mt-6'>
+                <div className='flex flex-col items-center mt-8'>
                     <ReactPaginate
                         nextLabel='>'
                         previousLabel='<'

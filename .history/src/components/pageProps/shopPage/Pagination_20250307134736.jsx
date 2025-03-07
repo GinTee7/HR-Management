@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
-import { MdOutlineArrowForwardIos } from 'react-icons/md';
+import { MdOutlineLabelImportant } from 'react-icons/md';
+
 const categories = [
     {
         id: 'all',
@@ -186,93 +187,32 @@ const paginationItems = [
 ];
 
 const Items = ({ currentItems }) => {
-    const [dominantColors, setDominantColors] = useState({});
-
-    // Hàm lấy màu chủ đạo từ ảnh
-    const getDominantColor = (imgUrl, id) => {
-        const img = new Image();
-        img.crossOrigin = 'Anonymous';
-        img.src = imgUrl;
-
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-
-            const imageData = ctx.getImageData(
-                0,
-                0,
-                img.width,
-                img.height
-            ).data;
-            let r = 0,
-                g = 0,
-                b = 0,
-                count = 0;
-
-            for (let i = 0; i < imageData.length; i += 4 * 100) {
-                r += imageData[i];
-                g += imageData[i + 1];
-                b += imageData[i + 2];
-                count++;
-            }
-
-            r = Math.floor(r / count);
-            g = Math.floor(g / count);
-            b = Math.floor(b / count);
-
-            const color = `rgb(${r}, ${g}, ${b})`;
-            setDominantColors(prev => ({ ...prev, [id]: color }));
-        };
-    };
-
-    useEffect(() => {
-        currentItems.forEach(item => {
-            if (!dominantColors[item._id]) {
-                getDominantColor(
-                    item.img || 'https://via.placeholder.com/300',
-                    item._id
-                );
-            }
-        });
-    }, [currentItems]);
-
     return (
-        <div className='grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 bg-[#F3F7FC]'>
+        <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 xl:grid-cols-4'>
             {currentItems.map(item => (
                 <div
                     key={item._id}
-                    className='relative flex flex-col items-center overflow-hidden transition-all bg-white border border-gray-300 shadow-lg rounded-2xl hover:scale-105 hover:shadow-2xl w-full max-w-[450px] h-[550px]'
-                    style={{ borderColor: dominantColors[item._id] || '#ddd' }}
+                    className='overflow-hidden transition-transform transform bg-white shadow-lg rounded-2xl hover:scale-105 hover:shadow-xl'
                 >
-                    {/* Ảnh sản phẩm */}
-                    <div className='relative flex items-center justify-center w-full p-4 bg-white h-150'>
-                        <img
-                            className='object-contain  max-w-[90%] max-h-[85%] transition-transform duration-300 hover:scale-110'
-                            src={item.img || 'https://via.placeholder.com/300'}
-                            alt={item.productName || 'Hình ảnh sản phẩm'}
-                        />
-                    </div>
-
-                    {/* Nội dung sản phẩm */}
-                    <div className='flex flex-col items-center text-center'>
-                        <h2 className='w-56 text-lg font-semibold text-gray-900 truncate'>
+                    <img
+                        className='object-cover w-full h-56'
+                        src={item.img || 'https://via.placeholder.com/150'}
+                        alt={item.productName || 'Hình ảnh sản phẩm'}
+                    />
+                    <div className='p-4'>
+                        <h2 className='text-xl font-semibold text-gray-800 truncate'>
                             {item.productName}
                         </h2>
-                        <p className='w-56 mt-2 text-sm text-gray-600 line-clamp-2'>
-                            {item.des}
-                        </p>
-
-                        {/* Nút bấm */}
-                        <Link
-                            to='/product'
-                            className='flex items-center gap-2 px-5 py-2 mt-4 text-sm font-medium text-white transition-all rounded-lg shadow-md bg-gradient-to-r from-blue-700 to-indigo-800 hover:shadow-lg hover:scale-105'
-                        >
-                            <MdOutlineArrowForwardIos className='text-xs' /> Xem
-                            chi tiết
-                        </Link>
+                        <p className='mt-2 text-sm text-gray-600'>{item.des}</p>
+                        <div className='flex items-center justify-between mt-4'>
+                            {/*  */}
+                            <Link
+                                to='/product'
+                                className='flex items-center gap-2 px-4 py-2 text-sm text-white bg-blue-500 rounded-lg hover:bg-blue-700'
+                            >
+                                <MdOutlineLabelImportant /> Xem chi tiết
+                            </Link>
+                        </div>
                     </div>
                 </div>
             ))}
@@ -280,19 +220,17 @@ const Items = ({ currentItems }) => {
     );
 };
 
-// Component Pagination
-const Pagination = ({ itemsPerPage = 6 }) => {
+const Pagination = ({ itemsPerPage = 6, categories, paginationItems }) => {
     const [itemOffset, setItemOffset] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState('all');
 
-    // Lọc danh sách sản phẩm theo danh mục
+    const currentCategory = categories.find(cat => cat.id === selectedCategory);
     const filteredItems =
         selectedCategory === 'all'
             ? paginationItems
             : paginationItems.filter(
                   item => item.category === selectedCategory
               );
-
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = filteredItems.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(filteredItems.length / itemsPerPage);
@@ -304,11 +242,78 @@ const Pagination = ({ itemsPerPage = 6 }) => {
     };
 
     return (
-        <div className='w-full p-3 px-5 mx-auto rounded-lg max-w-screen-2xl'>
-            {/* Danh sách sản phẩm */}
-            <Items currentItems={currentItems} />
+        <div className='w-full p-4 mx-auto max-w-screen-2xl'>
+            <div className='mb-6 text-center'>
+                <h2 className='text-3xl font-bold text-gray-800'>
+                    {currentCategory?.name || 'Danh mục'}
+                </h2>
+                <p className='text-gray-600'>
+                    {currentCategory?.description || 'Không có mô tả'}
+                </p>
+            </div>
 
-            {/* Hiển thị phân trang nếu có nhiều hơn 1 trang */}
+            {categories.length > 0 && (
+                <div className='flex justify-center gap-6 mb-6 overflow-x-auto'>
+                    {categories.map(cat => (
+                        <div
+                            key={cat.id}
+                            className={`text-center cursor-pointer transition-all duration-300 border-b-4 rounded-lg px-2 pb-2 hover:shadow-md ${
+                                selectedCategory === cat.id
+                                    ? 'border-blue-500'
+                                    : 'border-transparent'
+                            }`}
+                            onClick={() => {
+                                setSelectedCategory(cat.id);
+                                setItemOffset(0);
+                            }}
+                        >
+                            <img
+                                src={cat.img}
+                                alt={cat.name}
+                                className='object-cover w-24 h-32 mb-2 transition-transform rounded-lg shadow-md hover:scale-105'
+                            />
+                            <p className='text-sm font-semibold text-gray-700'>
+                                {cat.name}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            <div className='grid grid-cols-1 gap-6 p-4 md:grid-cols-2 xl:grid-cols-3'>
+                {currentItems.map(item => (
+                    <div
+                        key={item._id}
+                        className='overflow-hidden transition-transform transform bg-white shadow-lg rounded-xl hover:shadow-xl hover:scale-105'
+                    >
+                        <img
+                            src={item.img || 'https://via.placeholder.com/150'}
+                            alt={item.productName || 'Sản phẩm'}
+                            className='object-cover w-full h-56'
+                        />
+                        <div className='p-4'>
+                            <h2 className='text-lg font-bold text-gray-800 truncate'>
+                                {item.productName}
+                            </h2>
+                            <p className='mt-2 text-sm text-gray-600'>
+                                {item.des}
+                            </p>
+                            <div className='flex items-center justify-between mt-4'>
+                                <span className='text-lg font-semibold text-blue-500'>
+                                    {item.price.toLocaleString()} đ
+                                </span>
+                                <Link
+                                    to='/product'
+                                    className='flex items-center gap-2 px-4 py-2 text-sm text-white transition-all bg-blue-500 rounded-lg hover:bg-blue-700'
+                                >
+                                    <MdOutlineLabelImportant /> Xem chi tiết
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
             {pageCount > 1 && (
                 <div className='flex flex-col items-center mt-6'>
                     <ReactPaginate
@@ -319,19 +324,18 @@ const Pagination = ({ itemsPerPage = 6 }) => {
                         marginPagesDisplayed={1}
                         pageCount={pageCount}
                         containerClassName='flex space-x-2 text-lg font-semibold bg-white p-2 rounded-lg shadow-md'
-                        pageClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
+                        pageClassName='px-4 py-2 border rounded-md hover:bg-gray-300 transition-all'
                         pageLinkClassName='block px-4 py-2'
-                        previousClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
+                        previousClassName='px-4 py-2 border rounded-md hover:bg-gray-300 transition-all'
                         previousLinkClassName='block px-4 py-2'
-                        nextClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
+                        nextClassName='px-4 py-2 border rounded-md hover:bg-gray-300 transition-all'
                         nextLinkClassName='block px-4 py-2'
                         activeClassName='bg-blue-500 text-white rounded-md'
                     />
                     <p className='mt-4 text-gray-700'>
-                        Hiển thị từ{' '}
-                        {filteredItems.length > 0 ? itemOffset + 1 : 0} đến{' '}
-                        {filteredItems.length > 0 ? endOffset : 0} trên tổng số{' '}
-                        {filteredItems.length} sản phẩm
+                        Hiển thị {itemOffset + 1} -{' '}
+                        {Math.min(endOffset, filteredItems.length)} trong tổng
+                        số {filteredItems.length} sản phẩm
                     </p>
                 </div>
             )}

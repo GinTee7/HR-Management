@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
-import { MdOutlineArrowForwardIos } from 'react-icons/md';
+import { FaShoppingCart, FaTag } from 'react-icons/fa';
+import { MdOutlineLabelImportant } from 'react-icons/md';
+import { useState, useEffect } from 'react';
+
 const categories = [
     {
         id: 'all',
@@ -189,53 +191,55 @@ const Items = ({ currentItems }) => {
     const [dominantColors, setDominantColors] = useState({});
 
     // Hàm lấy màu chủ đạo từ ảnh
-    const getDominantColor = (imgUrl, id) => {
-        const img = new Image();
-        img.crossOrigin = 'Anonymous';
-        img.src = imgUrl;
+    const getDominantColor = async (imgUrl, id) => {
+        try {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = imgUrl;
 
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0, img.width, img.height);
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0, img.width, img.height);
 
-            const imageData = ctx.getImageData(
-                0,
-                0,
-                img.width,
-                img.height
-            ).data;
-            let r = 0,
-                g = 0,
-                b = 0,
-                count = 0;
+                const imageData = ctx.getImageData(
+                    0,
+                    0,
+                    img.width,
+                    img.height
+                ).data;
+                let r = 0,
+                    g = 0,
+                    b = 0,
+                    count = 0;
 
-            for (let i = 0; i < imageData.length; i += 4 * 100) {
-                r += imageData[i];
-                g += imageData[i + 1];
-                b += imageData[i + 2];
-                count++;
-            }
+                for (let i = 0; i < imageData.length; i += 4 * 100) {
+                    r += imageData[i];
+                    g += imageData[i + 1];
+                    b += imageData[i + 2];
+                    count++;
+                }
 
-            r = Math.floor(r / count);
-            g = Math.floor(g / count);
-            b = Math.floor(b / count);
+                r = Math.floor(r / count);
+                g = Math.floor(g / count);
+                b = Math.floor(b / count);
 
-            const color = `rgb(${r}, ${g}, ${b})`;
-            setDominantColors(prev => ({ ...prev, [id]: color }));
-        };
+                const color = `rgb(${r}, ${g}, ${b})`;
+                setDominantColors(prev => ({ ...prev, [id]: color }));
+            };
+        } catch (error) {
+            console.error('Lỗi khi lấy màu từ ảnh:', error);
+        }
     };
 
     useEffect(() => {
         currentItems.forEach(item => {
-            if (!dominantColors[item._id]) {
-                getDominantColor(
-                    item.img || 'https://via.placeholder.com/300',
-                    item._id
-                );
-            }
+            getDominantColor(
+                item.img || 'https://via.placeholder.com/300',
+                item._id
+            );
         });
     }, [currentItems]);
 
@@ -244,20 +248,19 @@ const Items = ({ currentItems }) => {
             {currentItems.map(item => (
                 <div
                     key={item._id}
-                    className='relative flex flex-col items-center overflow-hidden transition-all bg-white border border-gray-300 shadow-lg rounded-2xl hover:scale-105 hover:shadow-2xl w-full max-w-[450px] h-[550px]'
-                    style={{ borderColor: dominantColors[item._id] || '#ddd' }}
+                    className='relative flex flex-col items-center overflow-hidden transition-transform transform bg-white border border-gray-300 shadow-md rounded-xl hover:scale-105'
                 >
                     {/* Ảnh sản phẩm */}
-                    <div className='relative flex items-center justify-center w-full p-4 bg-white h-150'>
+                    <div className='flex items-center justify-center w-full p-6 bg-white h-80'>
                         <img
-                            className='object-contain  max-w-[90%] max-h-[85%] transition-transform duration-300 hover:scale-110'
+                            className='object-contain w-full h-full max-w-[70%] max-h-[70%]'
                             src={item.img || 'https://via.placeholder.com/300'}
                             alt={item.productName || 'Hình ảnh sản phẩm'}
                         />
                     </div>
 
                     {/* Nội dung sản phẩm */}
-                    <div className='flex flex-col items-center text-center'>
+                    <div className='flex flex-col items-center p-5 text-center'>
                         <h2 className='w-56 text-lg font-semibold text-gray-900 truncate'>
                             {item.productName}
                         </h2>
@@ -268,7 +271,7 @@ const Items = ({ currentItems }) => {
                         {/* Nút bấm */}
                         <Link
                             to='/product'
-                            className='flex items-center gap-2 px-5 py-2 mt-4 text-sm font-medium text-white transition-all rounded-lg shadow-md bg-gradient-to-r from-blue-700 to-indigo-800 hover:shadow-lg hover:scale-105'
+                            className='flex items-center gap-2 px-4 py-2 mt-4 text-sm text-white transition-all bg-blue-600 rounded-full hover:bg-blue-500'
                         >
                             <MdOutlineArrowForwardIos className='text-xs' /> Xem
                             chi tiết
@@ -276,65 +279,6 @@ const Items = ({ currentItems }) => {
                     </div>
                 </div>
             ))}
-        </div>
-    );
-};
-
-// Component Pagination
-const Pagination = ({ itemsPerPage = 6 }) => {
-    const [itemOffset, setItemOffset] = useState(0);
-    const [selectedCategory, setSelectedCategory] = useState('all');
-
-    // Lọc danh sách sản phẩm theo danh mục
-    const filteredItems =
-        selectedCategory === 'all'
-            ? paginationItems
-            : paginationItems.filter(
-                  item => item.category === selectedCategory
-              );
-
-    const endOffset = itemOffset + itemsPerPage;
-    const currentItems = filteredItems.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(filteredItems.length / itemsPerPage);
-
-    const handlePageClick = event => {
-        const newOffset =
-            (event.selected * itemsPerPage) % filteredItems.length;
-        setItemOffset(newOffset);
-    };
-
-    return (
-        <div className='w-full p-3 px-5 mx-auto rounded-lg max-w-screen-2xl'>
-            {/* Danh sách sản phẩm */}
-            <Items currentItems={currentItems} />
-
-            {/* Hiển thị phân trang nếu có nhiều hơn 1 trang */}
-            {pageCount > 1 && (
-                <div className='flex flex-col items-center mt-6'>
-                    <ReactPaginate
-                        nextLabel='>'
-                        previousLabel='<'
-                        onPageChange={handlePageClick}
-                        pageRangeDisplayed={3}
-                        marginPagesDisplayed={1}
-                        pageCount={pageCount}
-                        containerClassName='flex space-x-2 text-lg font-semibold bg-white p-2 rounded-lg shadow-md'
-                        pageClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
-                        pageLinkClassName='block px-4 py-2'
-                        previousClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
-                        previousLinkClassName='block px-4 py-2'
-                        nextClassName='px-4 py-2 border rounded-md hover:bg-gray-300'
-                        nextLinkClassName='block px-4 py-2'
-                        activeClassName='bg-blue-500 text-white rounded-md'
-                    />
-                    <p className='mt-4 text-gray-700'>
-                        Hiển thị từ{' '}
-                        {filteredItems.length > 0 ? itemOffset + 1 : 0} đến{' '}
-                        {filteredItems.length > 0 ? endOffset : 0} trên tổng số{' '}
-                        {filteredItems.length} sản phẩm
-                    </p>
-                </div>
-            )}
         </div>
     );
 };

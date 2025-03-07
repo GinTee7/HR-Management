@@ -2,7 +2,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useTranslation } from 'react-i18next';
 import {
     FaMapMarkerAlt,
     FaClock,
@@ -25,37 +24,32 @@ const schema = yup.object().shape({
     message: yup.string().required('Nội dung không được để trống')
 });
 
-const ContactInfo = () => {
-    const { t } = useTranslation();
-    return (
-        <div className='p-8 bg-white rounded-lg shadow-lg'>
-            <h3 className='mb-6 text-2xl font-bold text-gray-900'>
-                {t('contact.info_title')}
-            </h3>
-            <div className='space-y-4'>
-                <p className='flex items-center gap-4 text-lg text-gray-700'>
-                    <FaMapMarkerAlt className='text-xl text-red-500' />{' '}
-                    {t('contact.address')}
-                </p>
-                <p className='flex items-center gap-4 text-lg text-gray-700'>
-                    <FaClock className='text-xl text-blue-500' />{' '}
-                    {t('contact.working_hours')}
-                </p>
-                <p className='flex items-center gap-4 text-lg text-gray-700'>
-                    <FaPhoneAlt className='text-xl text-green-500' />{' '}
-                    {t('contact.phone')}
-                </p>
-                <p className='flex items-center gap-4 text-lg text-gray-700'>
-                    <FaEnvelope className='text-xl text-purple-500' />{' '}
-                    {t('contact.email')}
-                </p>
-            </div>
+const ContactInfo = () => (
+    <div className='p-8 bg-white rounded-lg shadow-lg'>
+        <h3 className='mb-6 text-2xl font-bold text-gray-900'>
+            Thông tin liên hệ
+        </h3>
+        <div className='space-y-4'>
+            <p className='flex items-center gap-4 text-lg text-gray-700'>
+                <FaMapMarkerAlt className='text-xl text-red-500' /> Số 98, Ấp
+                Đông Thành, Xã Thạnh Đông A, Tân Hiệp, Kiên Giang
+            </p>
+            <p className='flex items-center gap-4 text-lg text-gray-700'>
+                <FaClock className='text-xl text-blue-500' /> Thứ 2 đến Thứ 7:
+                7h30 đến 17h
+            </p>
+            <p className='flex items-center gap-4 text-lg text-gray-700'>
+                <FaPhoneAlt className='text-xl text-green-500' /> 1900 89 82
+            </p>
+            <p className='flex items-center gap-4 text-lg text-gray-700'>
+                <FaEnvelope className='text-xl text-purple-500' />{' '}
+                info@minhlongagro.com
+            </p>
         </div>
-    );
-};
+    </div>
+);
 
 const ContactForm = () => {
-    const { t } = useTranslation();
     const {
         register,
         handleSubmit,
@@ -66,13 +60,13 @@ const ContactForm = () => {
 
     const onSubmit = data => {
         console.log('Form Data:', data);
-        alert(t('contact.success_message'));
+        alert('Gửi thông tin thành công!');
     };
 
     return (
         <div className='p-8 bg-white rounded-lg shadow-lg'>
             <h3 className='mb-6 text-2xl font-bold text-gray-900'>
-                {t('contact.form_title')}
+                Gửi thắc mắc cho chúng tôi
             </h3>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -80,12 +74,12 @@ const ContactForm = () => {
             >
                 <input
                     {...register('name')}
-                    placeholder={t('contact.placeholder_name')}
+                    placeholder='Tên của bạn'
                     className={`${inputField} border-2 border-gray-400`}
                 />
                 <input
                     {...register('phone')}
-                    placeholder={t('contact.placeholder_phone')}
+                    placeholder='Số điện thoại của bạn'
                     className={`${inputField} border-2 border-gray-400`}
                 />
                 <p className='col-span-2 text-red-500'>
@@ -94,7 +88,7 @@ const ContactForm = () => {
 
                 <input
                     {...register('email')}
-                    placeholder={t('contact.placeholder_email')}
+                    placeholder='Email của bạn'
                     className={`${inputField} border-2 border-gray-400 md:col-span-2`}
                 />
                 <p className='col-span-2 text-red-500'>
@@ -103,7 +97,7 @@ const ContactForm = () => {
 
                 <textarea
                     {...register('message')}
-                    placeholder={t('contact.placeholder_message')}
+                    placeholder='Nội dung'
                     className={`${inputField} border-2 border-gray-400 md:col-span-2`}
                     rows='4'
                 ></textarea>
@@ -115,7 +109,7 @@ const ContactForm = () => {
                     type='submit'
                     className='w-full px-6 py-3 text-white transition-all bg-black rounded-lg hover:bg-gray-800 md:w-auto'
                 >
-                    {t('contact.submit_button')}
+                    GỬI CHO CHÚNG TÔI
                 </button>
             </form>
         </div>

@@ -52,16 +52,11 @@ i18n.use(initReactI18next).init({
                     loading: 'Loading products...'
                 },
                 about: {
+                    title: 'About Minh Long',
                     description:
-                        'MINH LONG AGRO CO., LTD was built on the ambition of developing agriculture by people who have been attached to it for more than 30 years. Our products always meet strict quality standards, are recognized by regulatory agencies, and are trusted by farmers.',
-                    team_image_alt: 'Our team image',
-                    commitment_title: 'Our Commitment',
-                    commitment_text:
-                        'We are committed to providing high-quality agricultural solutions that bring economic benefits to farmers.',
-                    cta_title: 'Join Us',
-                    cta_text:
-                        'Join us on our journey to bring value to the community.',
-                    contact_button: 'Contact Us'
+                        'Minh Long Agro Co., Ltd. was built from the ambition of agricultural development by people who have been attached to agriculture for more than 30 years. Understanding the hardships of farmers, Minh Long is committed to serving for their benefit. Our products always meet high-quality standards, recognized by regulatory agencies, and trusted by people.',
+                    image_alt: 'Company Image',
+                    read_more: 'See More'
                 }
             }
         },
@@ -113,22 +108,17 @@ i18n.use(initReactI18next).init({
                     loading: 'Đang tải sản phẩm...'
                 },
                 about: {
+                    title: 'Về Minh Long',
                     description:
-                        'CÔNG TY TNHH MINH LONG AGRO được xây dựng từ hoài bão phát triển nông nghiệp của những con người đã có hơn 30 năm gắn bó với nông nghiệp. Các sản phẩm do Công Ty Minh Long sản xuất và phân phối luôn đáp ứng các tiêu chí khắt khe về chất lượng, được các cơ quan quản lý công nhận, được người nông dân tin dùng.',
-                    team_image_alt: 'Hình ảnh đội ngũ của chúng tôi',
-                    commitment_title: 'Cam kết của chúng tôi',
-                    commitment_text:
-                        'Chúng tôi cam kết cung cấp các giải pháp nông nghiệp chất lượng cao, mang lại hiệu quả kinh tế cho nông dân.',
-                    cta_title: 'Hãy Cùng Đồng Hành',
-                    cta_text:
-                        'Tham gia cùng chúng tôi trên hành trình mang lại giá trị cho cộng đồng.',
-                    contact_button: 'Liên Hệ Ngay'
+                        'Công Ty TNHH BVTV Minh Long được xây dựng từ hoài bão phát triển nông nghiệp của những con người đã có hơn 30 năm gắn bó với nông nghiệp. Thấu hiểu được nỗi vất vả của nhà nông, Công Ty Minh Long quyết tâm phục vụ vì lợi ích người nông dân. Các sản phẩm của Minh Long luôn đáp ứng tiêu chuẩn chất lượng cao, được cơ quan quản lý công nhận và người dân tin dùng.',
+                    image_alt: 'Hình ảnh công ty',
+                    read_more: 'Xem chi tiết'
                 }
             }
         }
     },
-    lng: 'vi',
-    fallbackLng: 'en',
+    lng: 'vi', // Ngôn ngữ mặc định
+    fallbackLng: 'en', // Nếu không tìm thấy key, dùng tiếng Anh
     interpolation: {
         escapeValue: false
     }

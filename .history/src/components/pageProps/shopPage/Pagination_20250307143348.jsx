@@ -188,7 +188,6 @@ const paginationItems = [
 const Items = ({ currentItems }) => {
     const [dominantColors, setDominantColors] = useState({});
 
-    // Hàm lấy màu chủ đạo từ ảnh
     const getDominantColor = (imgUrl, id) => {
         const img = new Image();
         img.crossOrigin = 'Anonymous';
@@ -244,34 +243,34 @@ const Items = ({ currentItems }) => {
             {currentItems.map(item => (
                 <div
                     key={item._id}
-                    className='relative flex flex-col items-center overflow-hidden transition-all bg-white border border-gray-300 shadow-lg rounded-2xl hover:scale-105 hover:shadow-2xl w-full max-w-[450px] h-[550px]'
+                    className='relative flex flex-col items-center overflow-hidden transition-all bg-white border border-gray-300 shadow-lg rounded-2xl hover:scale-105 hover:shadow-2xl w-full max-w-[320px] h-[500px]'
                     style={{ borderColor: dominantColors[item._id] || '#ddd' }}
                 >
-                    {/* Ảnh sản phẩm */}
-                    <div className='relative flex items-center justify-center w-full p-4 bg-white h-150'>
+                    <div className='relative flex items-center justify-center w-full p-4 bg-gray-100 h-72'>
                         <img
-                            className='object-contain  max-w-[90%] max-h-[85%] transition-transform duration-300 hover:scale-110'
+                            className='object-contain w-full h-full max-w-[85%] max-h-[85%] transition-transform duration-300 hover:scale-110'
                             src={item.img || 'https://via.placeholder.com/300'}
                             alt={item.productName || 'Hình ảnh sản phẩm'}
                         />
                     </div>
 
-                    {/* Nội dung sản phẩm */}
-                    <div className='flex flex-col items-center text-center'>
+                    <div className='flex flex-col items-center p-4 text-center'>
                         <h2 className='w-56 text-lg font-semibold text-gray-900 truncate'>
                             {item.productName}
                         </h2>
                         <p className='w-56 mt-2 text-sm text-gray-600 line-clamp-2'>
                             {item.des}
                         </p>
+                        <p className='mt-1 text-base font-semibold text-gray-800'>
+                            Giá: {item.price.toLocaleString()} VNĐ
+                        </p>
 
-                        {/* Nút bấm */}
                         <Link
-                            to='/product'
+                            to={`/product/${item._id}`}
                             className='flex items-center gap-2 px-5 py-2 mt-4 text-sm font-medium text-white transition-all rounded-lg shadow-md bg-gradient-to-r from-blue-700 to-indigo-800 hover:shadow-lg hover:scale-105'
                         >
-                            <MdOutlineArrowForwardIos className='text-xs' /> Xem
-                            chi tiết
+                            <MdOutlineArrowForwardIos className='text-xs' />{' '}
+                            Liên hệ báo giá
                         </Link>
                     </div>
                 </div>
@@ -279,7 +278,6 @@ const Items = ({ currentItems }) => {
         </div>
     );
 };
-
 // Component Pagination
 const Pagination = ({ itemsPerPage = 6 }) => {
     const [itemOffset, setItemOffset] = useState(0);
@@ -304,7 +302,7 @@ const Pagination = ({ itemsPerPage = 6 }) => {
     };
 
     return (
-        <div className='w-full p-3 px-5 mx-auto rounded-lg max-w-screen-2xl'>
+        <div className='w-full p-2 px-4 mx-auto rounded-lg max-w-screen-2xl'>
             {/* Danh sách sản phẩm */}
             <Items currentItems={currentItems} />
 

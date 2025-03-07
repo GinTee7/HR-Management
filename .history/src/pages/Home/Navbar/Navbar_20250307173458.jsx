@@ -95,31 +95,6 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                                     </Link>
                                 </li>
                             ))}
-                            {/* Conditional menu item */}
-                            <li>
-                                <Link
-                                    to={
-                                        isLoggedIn
-                                            ? '/order-history'
-                                            : '/contact'
-                                    }
-                                    className={classNames(
-                                        'inline-block px-4 py-2 rounded duration-300',
-                                        location.pathname ===
-                                            (isLoggedIn
-                                                ? '/order-history'
-                                                : '/contact')
-                                            ? 'bg-[#555] text-[#E2E2E2] font-bold'
-                                            : 'text-white hover:bg-[#555] hover:text-[#E2E2E2]'
-                                    )}
-                                >
-                                    {t(
-                                        isLoggedIn
-                                            ? 'navbar.order_history'
-                                            : 'navbar.contact'
-                                    )}
-                                </Link>
-                            </li>
                         </ul>
 
                         {/* Language Dropdown */}

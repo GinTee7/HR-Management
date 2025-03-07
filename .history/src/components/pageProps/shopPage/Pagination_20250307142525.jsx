@@ -248,16 +248,16 @@ const Items = ({ currentItems }) => {
                     style={{ borderColor: dominantColors[item._id] || '#ddd' }}
                 >
                     {/* Ảnh sản phẩm */}
-                    <div className='relative flex items-center justify-center w-full p-4 bg-white h-150'>
+                    <div className='relative flex items-center justify-center w-full p-4 bg-white h-100'>
                         <img
-                            className='object-contain  max-w-[90%] max-h-[85%] transition-transform duration-300 hover:scale-110'
+                            className='object-contain  max-w-[85%] max-h-[85%] transition-transform duration-300 hover:scale-110'
                             src={item.img || 'https://via.placeholder.com/300'}
                             alt={item.productName || 'Hình ảnh sản phẩm'}
                         />
                     </div>
 
                     {/* Nội dung sản phẩm */}
-                    <div className='flex flex-col items-center text-center'>
+                    <div className='flex flex-col items-center p-2 text-center'>
                         <h2 className='w-56 text-lg font-semibold text-gray-900 truncate'>
                             {item.productName}
                         </h2>
@@ -268,7 +268,7 @@ const Items = ({ currentItems }) => {
                         {/* Nút bấm */}
                         <Link
                             to='/product'
-                            className='flex items-center gap-2 px-5 py-2 mt-4 text-sm font-medium text-white transition-all rounded-lg shadow-md bg-gradient-to-r from-blue-700 to-indigo-800 hover:shadow-lg hover:scale-105'
+                            className='flex items-center gap-2 px-5 py-2 mt-4 text-sm font-medium text-white transition-all rounded-full shadow-md bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-lg hover:scale-105'
                         >
                             <MdOutlineArrowForwardIos className='text-xs' /> Xem
                             chi tiết
@@ -304,7 +304,7 @@ const Pagination = ({ itemsPerPage = 6 }) => {
     };
 
     return (
-        <div className='w-full p-3 px-5 mx-auto rounded-lg max-w-screen-2xl'>
+        <div className='w-full p-2 px-4 mx-auto rounded-lg max-w-screen-2xl'>
             {/* Danh sách sản phẩm */}
             <Items currentItems={currentItems} />
 

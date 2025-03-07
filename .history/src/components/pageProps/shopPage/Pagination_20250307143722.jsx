@@ -304,7 +304,7 @@ const Pagination = ({ itemsPerPage = 6 }) => {
     };
 
     return (
-        <div className='w-full p-3 px-5 mx-auto rounded-lg max-w-screen-2xl'>
+        <div className='w-full p-4 px-4 mx-auto rounded-lg max-w-screen-2xl'>
             {/* Danh sách sản phẩm */}
             <Items currentItems={currentItems} />
 

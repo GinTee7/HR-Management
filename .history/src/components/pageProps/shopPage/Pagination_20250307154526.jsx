@@ -186,82 +186,28 @@ const paginationItems = [
 ];
 
 const Items = ({ currentItems }) => {
-    const [dominantColors, setDominantColors] = useState({});
-
-    // Hàm lấy màu chủ đạo từ ảnh
-    const getDominantColor = (imgUrl, id) => {
-        const img = new Image();
-        img.crossOrigin = 'Anonymous';
-        img.src = imgUrl;
-
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-
-            const imageData = ctx.getImageData(
-                0,
-                0,
-                img.width,
-                img.height
-            ).data;
-            let r = 0,
-                g = 0,
-                b = 0,
-                count = 0;
-
-            for (let i = 0; i < imageData.length; i += 4 * 100) {
-                r += imageData[i];
-                g += imageData[i + 1];
-                b += imageData[i + 2];
-                count++;
-            }
-
-            r = Math.floor(r / count);
-            g = Math.floor(g / count);
-            b = Math.floor(b / count);
-
-            const color = `rgb(${r}, ${g}, ${b})`;
-            setDominantColors(prev => ({ ...prev, [id]: color }));
-        };
-    };
-
-    useEffect(() => {
-        currentItems.forEach(item => {
-            if (!dominantColors[item._id]) {
-                getDominantColor(
-                    item.img || 'https://via.placeholder.com/300',
-                    item._id
-                );
-            }
-        });
-    }, [currentItems]);
-
     return (
-        <div className='grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 bg-[#F3F7FC]'>
+        <div className='grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 bg-[#F3F7FC] auto-rows-fr'>
             {currentItems.map(item => (
                 <div
                     key={item._id}
-                    className='relative flex flex-col items-center overflow-hidden transition-all bg-white border border-gray-300 shadow-lg rounded-2xl hover:scale-105 hover:shadow-2xl w-full max-w-[450px] h-[550px]'
-                    style={{ borderColor: dominantColors[item._id] || '#ddd' }}
+                    className='relative flex flex-col items-center overflow-hidden transition-all bg-white border border-gray-300 shadow-lg rounded-2xl hover:scale-105 hover:shadow-2xl w-full max-w-[450px] h-[550px] min-h-[550px]'
                 >
                     {/* Ảnh sản phẩm */}
-                    <div className='relative flex items-center justify-center w-full p-4 bg-white h-150'>
+                    <div className='relative flex items-center justify-center w-full h-48 p-4 bg-white max-h-48'>
                         <img
-                            className='object-contain  max-w-[90%] max-h-[85%] transition-transform duration-300 hover:scale-110'
+                            className='object-contain w-full h-full max-w-[90%] max-h-[85%] transition-transform duration-300 hover:scale-110'
                             src={item.img || 'https://via.placeholder.com/300'}
                             alt={item.productName || 'Hình ảnh sản phẩm'}
                         />
                     </div>
 
                     {/* Nội dung sản phẩm */}
-                    <div className='flex flex-col items-center text-center'>
-                        <h2 className='w-56 text-lg font-semibold text-gray-900 truncate'>
+                    <div className='flex flex-col items-center flex-grow px-4 py-2 text-center'>
+                        <h2 className='w-56 h-10 text-lg font-semibold text-gray-900 truncate'>
                             {item.productName}
                         </h2>
-                        <p className='w-56 mt-2 text-sm text-gray-600 line-clamp-2'>
+                        <p className='w-56 h-12 mt-2 text-sm text-gray-600 line-clamp-2'>
                             {item.des}
                         </p>
 

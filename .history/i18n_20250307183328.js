@@ -113,16 +113,11 @@ i18n.use(initReactI18next).init({
                     loading: 'Đang tải sản phẩm...'
                 },
                 about: {
+                    title: 'Về Minh Long',
                     description:
-                        'CÔNG TY TNHH MINH LONG AGRO được xây dựng từ hoài bão phát triển nông nghiệp của những con người đã có hơn 30 năm gắn bó với nông nghiệp. Các sản phẩm do Công Ty Minh Long sản xuất và phân phối luôn đáp ứng các tiêu chí khắt khe về chất lượng, được các cơ quan quản lý công nhận, được người nông dân tin dùng.',
-                    team_image_alt: 'Hình ảnh đội ngũ của chúng tôi',
-                    commitment_title: 'Cam kết của chúng tôi',
-                    commitment_text:
-                        'Chúng tôi cam kết cung cấp các giải pháp nông nghiệp chất lượng cao, mang lại hiệu quả kinh tế cho nông dân.',
-                    cta_title: 'Hãy Cùng Đồng Hành',
-                    cta_text:
-                        'Tham gia cùng chúng tôi trên hành trình mang lại giá trị cho cộng đồng.',
-                    contact_button: 'Liên Hệ Ngay'
+                        'Công Ty TNHH BVTV Minh Long được xây dựng từ hoài bão phát triển nông nghiệp của những con người đã có hơn 30 năm gắn bó với nông nghiệp. Thấu hiểu được nỗi vất vả của nhà nông, Công Ty Minh Long quyết tâm phục vụ vì lợi ích người nông dân. Các sản phẩm của Minh Long luôn đáp ứng tiêu chuẩn chất lượng cao, được cơ quan quản lý công nhận và người dân tin dùng.',
+                    image_alt: 'Hình ảnh công ty',
+                    read_more: 'Xem chi tiết'
                 }
             }
         }
