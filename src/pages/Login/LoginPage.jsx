@@ -35,7 +35,7 @@ const LoginPage = () => {
                     navigate('/admin');
                     break;
                 case 'AGENCY':
-                    navigate('/home');
+                    navigate('/');
                     break;
                 case 'WAREHOUSE MANAGER':
                     navigate('/warehouse-manager');

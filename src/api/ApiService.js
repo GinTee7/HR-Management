@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://c5a6-2405-4802-9034-2ac0-ad39-544f-19ff-acfa.ngrok-free.app/api';
+const API_BASE_URL = 'https://d1ef-2405-4800-5717-9fd0-20f0-34e8-8635-ac7a.ngrok-free.app/api';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -16,6 +16,7 @@ const attachToken = () => {
   }
 };
 
+// Hàm dùng chung để gọi API
 export const fetchData = async (endpoint) => {
   attachToken();
   try {
@@ -27,6 +28,7 @@ export const fetchData = async (endpoint) => {
   }
 };
 
+// API đăng nhập
 export const login = async ({ username, password }) => {
   try {
     const response = await apiClient.post('/auth/login', { username, password });
@@ -42,6 +44,7 @@ export const login = async ({ username, password }) => {
   }
 };
 
+// API đăng ký
 export const register = async (userData) => {
   try {
     const response = await apiClient.post('/auth/register', userData);
@@ -51,7 +54,10 @@ export const register = async (userData) => {
     throw error;
   }
 };
-// CRUD for Products
+
+// CRUD cho Products
+
+// Lấy danh sách sản phẩm
 export const getProducts = async () => {
   attachToken();
   try {
@@ -63,6 +69,7 @@ export const getProducts = async () => {
   }
 };
 
+// Lấy sản phẩm theo ID
 export const getProductById = async (id) => {
   attachToken();
   try {
@@ -74,6 +81,7 @@ export const getProductById = async (id) => {
   }
 };
 
+// Tạo sản phẩm mới
 export const createProduct = async (productData) => {
   attachToken();
   try {
@@ -85,6 +93,7 @@ export const createProduct = async (productData) => {
   }
 };
 
+// Cập nhật sản phẩm theo ID
 export const updateProduct = async (id, productData) => {
   attachToken();
   try {
@@ -96,6 +105,7 @@ export const updateProduct = async (id, productData) => {
   }
 };
 
+// Xóa sản phẩm theo ID
 export const deleteProduct = async (id) => {
   attachToken();
   try {
