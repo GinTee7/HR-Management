@@ -8,32 +8,33 @@ import {
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import footerLogo from '@assets/logo.png';
-import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
-    const { t, i18n } = useTranslation();
-
     return (
         <div className='bg-gray-100'>
             <section className='max-w-[1200px] mx-auto'>
                 <div className='grid py-5 md:grid-cols-3'>
-                    <div className='px-4 py-8'>
+                    <div className='px-4 py-8 '>
                         <h1 className='flex items-center gap-3 mb-3 text-xl font-bold text-justify sm:text-3xl sm:text-left'>
                             <img src={footerLogo} alt='Logo' className='w-16' />
-                            {t('company_name')}
+                            Minh Long
                         </h1>
-                        <p>{t('about.description')}</p>
+                        <p className=''>
+                            Các sản phẩm của chúng tôi luôn tạo ra những cây
+                            khỏe mạnh hơn, dễ trồng, giúp tăng đáng kể năng suất
+                            và lợi nhuận cho người nông dân Việt Nam.
+                        </p>
                         <br />
                         <div className='flex items-center gap-3'>
                             <FaLocationArrow />
                             <p>
-                                {t('contact.info_title')}:{' '}
-                                {t('contact.address')}
+                                Trụ sở chính: Số 98, Ấp Đông Thành, Xã Thạnh
+                                Đông A, Tân Hiệp, Kiên Giang
                             </p>
                         </div>
                         <div className='flex items-center gap-3 mt-3'>
                             <FaMobileAlt />
-                            <p>{t('contact.phone')}</p>
+                            <p>1900 8982</p>
                         </div>
                         <div className='flex items-center gap-3 mt-6'>
                             <a href='#'>
@@ -49,56 +50,46 @@ const Footer = () => {
                     </div>
                     <div className='grid grid-cols-2 col-span-2 sm:grid-cols-3 md:pl-10 '>
                         <div className=''>
-                            <div className='px-4 py-8'>
+                            <div className='px-4 py-8 '>
                                 <h1 className='mb-3 text-xl font-bold text-justify sm:text-xl sm:text-left'>
-                                    {t('navbar.home')}
+                                    Liên kết quan trọng
                                 </h1>
                                 <ul className='flex flex-col gap-3'>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/'>{t('navbar.home')}</Link>
+                                        <Link to='/home'>Trang chủ</Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/aboutus'>
-                                            {t('navbar.about_us')}
-                                        </Link>
+                                        <Link to='/aboutus'>Giới thiệu</Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/shop'>
-                                            {t('navbar.products')}
-                                        </Link>
+                                        <Link to='/shop'>Sản phẩm</Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/contact'>
-                                            {t('navbar.contact')}
-                                        </Link>
-                                    </li>
-                                    <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/login'>
-                                            {t('navbar.login')}
-                                        </Link>
+                                        <Link to='/'>Đăng nhập</Link>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div className=''>
-                            <div className='px-4 py-8'>
+                            <div className='px-4 py-8 '>
                                 <h1 className='mb-3 text-xl font-bold text-justify sm:text-xl sm:text-left'>
-                                    {t('services.title')}
+                                    Các loại sản phẩm
                                 </h1>
                                 <ul className='flex flex-col gap-3'>
                                     <li className='cursor-pointer hover:text-blue-500'>
+                                        <Link to='/product'>Phân bón</Link>
+                                    </li>
+                                    <li className='cursor-pointer hover:text-blue-500'>
+                                        <Link to='/product'>Thuốc trừ sâu</Link>
+                                    </li>
+                                    <li className='cursor-pointer hover:text-blue-500'>
                                         <Link to='/product'>
-                                            {t('services.product_category')}
+                                            Thuốc trừ bệnh
                                         </Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
                                         <Link to='/product'>
-                                            {t('services.subtitle')}
-                                        </Link>
-                                    </li>
-                                    <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/product'>
-                                            {t('services.add_to_cart')}
+                                            Thuốc bảo vệ thực vật
                                         </Link>
                                     </li>
                                 </ul>
@@ -125,7 +116,7 @@ const Footer = () => {
                 </div>
                 <div>
                     <div className='py-10 text-center border-t-2 border-gray-300/50'>
-                        {t('copyright')}
+                        © 2025 || Hệ thống quản lý Minh Long
                     </div>
                 </div>
             </section>

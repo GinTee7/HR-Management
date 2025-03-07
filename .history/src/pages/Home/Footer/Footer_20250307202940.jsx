@@ -49,13 +49,21 @@ const Footer = () => {
                     </div>
                     <div className='grid grid-cols-2 col-span-2 sm:grid-cols-3 md:pl-10 '>
                         <div className=''>
+                            {/* <div className='px-4 py-8'>
+                                
+                                <div className='flex gap-4'>
+                                   
+                                </div>
+                            </div> */}
                             <div className='px-4 py-8'>
                                 <h1 className='mb-3 text-xl font-bold text-justify sm:text-xl sm:text-left'>
                                     {t('navbar.home')}
                                 </h1>
                                 <ul className='flex flex-col gap-3'>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/'>{t('navbar.home')}</Link>
+                                        <Link to='/home'>
+                                            {t('navbar.home')}
+                                        </Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
                                         <Link to='/aboutus'>

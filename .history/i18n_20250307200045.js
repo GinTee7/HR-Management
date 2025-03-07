@@ -62,7 +62,7 @@ i18n.use(initReactI18next).init({
                     cta_text:
                         'Join us on our journey to bring value to the community.',
                     contact_button: 'Contact Us',
-                    title: 'About Us',
+                    title: 'Về Minh Long',
                     read_more: 'See details'
                 }
             }
@@ -125,16 +125,15 @@ i18n.use(initReactI18next).init({
                     cta_text:
                         'Tham gia cùng chúng tôi trên hành trình mang lại giá trị cho cộng đồng.',
                     contact_button: 'Liên Hệ Ngay',
-                    title: 'Về Minh Long',
                     read_more: 'Xem chi tiết'
                 }
             }
         }
     },
-    lng: 'vi', // Ngôn ngữ mặc định
-    fallbackLng: 'en', // Nếu không tìm thấy ngôn ngữ thì dùng tiếng Anh
+    lng: 'vi',
+    fallbackLng: 'en',
     interpolation: {
-        escapeValue: false // Không cần escape ký tự đặc biệt
+        escapeValue: false
     }
 });
 

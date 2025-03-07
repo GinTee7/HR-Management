@@ -51,11 +51,44 @@ const Footer = () => {
                         <div className=''>
                             <div className='px-4 py-8'>
                                 <h1 className='mb-3 text-xl font-bold text-justify sm:text-xl sm:text-left'>
+                                    {t('navbar.language')}
+                                </h1>
+                                <div className='flex gap-4'>
+                                    {/* <button
+                                        onClick={() =>
+                                            i18n.changeLanguage('en')
+                                        }
+                                        className={`px-3 py-2 rounded ${
+                                            i18n.language === 'en'
+                                                ? 'bg-blue-500 text-white'
+                                                : 'bg-gray-200'
+                                        }`}
+                                    >
+                                        🇬🇧 {t('navbar.english')}
+                                    </button> */}
+                                    {/* <button
+                                        onClick={() =>
+                                            i18n.changeLanguage('vi')
+                                        }
+                                        className={`px-3 py-2 rounded ${
+                                            i18n.language === 'vi'
+                                                ? 'bg-blue-500 text-white'
+                                                : 'bg-gray-200'
+                                        }`}
+                                    >
+                                        🇻🇳 {t('navbar.vietnamese')}
+                                    </button> */}
+                                </div>
+                            </div>
+                            <div className='px-4 py-8'>
+                                <h1 className='mb-3 text-xl font-bold text-justify sm:text-xl sm:text-left'>
                                     {t('navbar.home')}
                                 </h1>
                                 <ul className='flex flex-col gap-3'>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/'>{t('navbar.home')}</Link>
+                                        <Link to='/home'>
+                                            {t('navbar.home')}
+                                        </Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
                                         <Link to='/aboutus'>

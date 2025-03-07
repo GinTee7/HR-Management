@@ -61,9 +61,7 @@ i18n.use(initReactI18next).init({
                     cta_title: 'Join Us',
                     cta_text:
                         'Join us on our journey to bring value to the community.',
-                    contact_button: 'Contact Us',
-                    title: 'About Us',
-                    read_more: 'See details'
+                    contact_button: 'Contact Us'
                 }
             }
         },
@@ -112,7 +110,8 @@ i18n.use(initReactI18next).init({
                     product_image: 'Hình ảnh sản phẩm',
                     product_category: 'Thuốc trừ cỏ',
                     add_to_cart: 'Thêm vào giỏ hàng',
-                    loading: 'Đang tải sản phẩm...'
+                    loading: 'Đang tải sản phẩm...',
+                    read_more: 'Xem chi tiết'
                 },
                 about: {
                     description:
@@ -124,17 +123,15 @@ i18n.use(initReactI18next).init({
                     cta_title: 'Hãy Cùng Đồng Hành',
                     cta_text:
                         'Tham gia cùng chúng tôi trên hành trình mang lại giá trị cho cộng đồng.',
-                    contact_button: 'Liên Hệ Ngay',
-                    title: 'Về Minh Long',
-                    read_more: 'Xem chi tiết'
+                    contact_button: 'Liên Hệ Ngay'
                 }
             }
         }
     },
-    lng: 'vi', // Ngôn ngữ mặc định
-    fallbackLng: 'en', // Nếu không tìm thấy ngôn ngữ thì dùng tiếng Anh
+    lng: 'vi',
+    fallbackLng: 'en',
     interpolation: {
-        escapeValue: false // Không cần escape ký tự đặc biệt
+        escapeValue: false
     }
 });
 

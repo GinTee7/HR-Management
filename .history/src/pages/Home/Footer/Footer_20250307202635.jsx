@@ -17,23 +17,22 @@ const Footer = () => {
         <div className='bg-gray-100'>
             <section className='max-w-[1200px] mx-auto'>
                 <div className='grid py-5 md:grid-cols-3'>
-                    <div className='px-4 py-8'>
+                    <div className='px-4 py-8 '>
                         <h1 className='flex items-center gap-3 mb-3 text-xl font-bold text-justify sm:text-3xl sm:text-left'>
                             <img src={footerLogo} alt='Logo' className='w-16' />
                             {t('company_name')}
                         </h1>
-                        <p>{t('about.description')}</p>
+                        <p>{t('about_us')}</p>
                         <br />
                         <div className='flex items-center gap-3'>
                             <FaLocationArrow />
                             <p>
-                                {t('contact.info_title')}:{' '}
-                                {t('contact.address')}
+                                {t('headquarter')}: {t('address')}
                             </p>
                         </div>
                         <div className='flex items-center gap-3 mt-3'>
                             <FaMobileAlt />
-                            <p>{t('contact.phone')}</p>
+                            <p>{t('phone')}</p>
                         </div>
                         <div className='flex items-center gap-3 mt-6'>
                             <a href='#'>
@@ -49,56 +48,47 @@ const Footer = () => {
                     </div>
                     <div className='grid grid-cols-2 col-span-2 sm:grid-cols-3 md:pl-10 '>
                         <div className=''>
-                            <div className='px-4 py-8'>
+                            <div className='px-4 py-8 '>
                                 <h1 className='mb-3 text-xl font-bold text-justify sm:text-xl sm:text-left'>
-                                    {t('navbar.home')}
+                                    {t('important_links')}
                                 </h1>
                                 <ul className='flex flex-col gap-3'>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/'>{t('navbar.home')}</Link>
+                                        <Link to='/home'>{t('about_us')}</Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/aboutus'>
-                                            {t('navbar.about_us')}
-                                        </Link>
+                                        <Link to='/shop'>{t('products')}</Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/shop'>
-                                            {t('navbar.products')}
-                                        </Link>
-                                    </li>
-                                    <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/contact'>
-                                            {t('navbar.contact')}
-                                        </Link>
-                                    </li>
-                                    <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/login'>
-                                            {t('navbar.login')}
-                                        </Link>
+                                        <Link to='/'>{t('login')}</Link>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div className=''>
-                            <div className='px-4 py-8'>
+                            <div className='px-4 py-8 '>
                                 <h1 className='mb-3 text-xl font-bold text-justify sm:text-xl sm:text-left'>
-                                    {t('services.title')}
+                                    {t('products')}
                                 </h1>
                                 <ul className='flex flex-col gap-3'>
                                     <li className='cursor-pointer hover:text-blue-500'>
                                         <Link to='/product'>
-                                            {t('services.product_category')}
+                                            {t('fertilizer')}
                                         </Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
                                         <Link to='/product'>
-                                            {t('services.subtitle')}
+                                            {t('pesticide')}
                                         </Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
                                         <Link to='/product'>
-                                            {t('services.add_to_cart')}
+                                            {t('fungicide')}
+                                        </Link>
+                                    </li>
+                                    <li className='cursor-pointer hover:text-blue-500'>
+                                        <Link to='/product'>
+                                            {t('plant_protection')}
                                         </Link>
                                     </li>
                                 </ul>

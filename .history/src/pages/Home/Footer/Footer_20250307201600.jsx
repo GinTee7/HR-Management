@@ -7,8 +7,8 @@ import {
     FaMobileAlt
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import footerLogo from '@assets/logo.png';
 import { useTranslation } from 'react-i18next';
+import footerLogo from '@assets/logo.png';
 
 const Footer = () => {
     const { t, i18n } = useTranslation();
@@ -17,23 +17,20 @@ const Footer = () => {
         <div className='bg-gray-100'>
             <section className='max-w-[1200px] mx-auto'>
                 <div className='grid py-5 md:grid-cols-3'>
-                    <div className='px-4 py-8'>
+                    <div className='px-4 py-8 '>
                         <h1 className='flex items-center gap-3 mb-3 text-xl font-bold text-justify sm:text-3xl sm:text-left'>
                             <img src={footerLogo} alt='Logo' className='w-16' />
-                            {t('company_name')}
+                            Minh Long
                         </h1>
                         <p>{t('about.description')}</p>
                         <br />
                         <div className='flex items-center gap-3'>
                             <FaLocationArrow />
-                            <p>
-                                {t('contact.info_title')}:{' '}
-                                {t('contact.address')}
-                            </p>
+                            <p>{t('contact.address')}</p>
                         </div>
                         <div className='flex items-center gap-3 mt-3'>
                             <FaMobileAlt />
-                            <p>{t('contact.phone')}</p>
+                            <p>1900 8982</p>
                         </div>
                         <div className='flex items-center gap-3 mt-6'>
                             <a href='#'>
@@ -49,13 +46,15 @@ const Footer = () => {
                     </div>
                     <div className='grid grid-cols-2 col-span-2 sm:grid-cols-3 md:pl-10 '>
                         <div className=''>
-                            <div className='px-4 py-8'>
+                            <div className='px-4 py-8 '>
                                 <h1 className='mb-3 text-xl font-bold text-justify sm:text-xl sm:text-left'>
-                                    {t('navbar.home')}
+                                    {t('navbar.language')}
                                 </h1>
                                 <ul className='flex flex-col gap-3'>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/'>{t('navbar.home')}</Link>
+                                        <Link to='/home'>
+                                            {t('navbar.home')}
+                                        </Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
                                         <Link to='/aboutus'>
@@ -68,20 +67,13 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/contact'>
-                                            {t('navbar.contact')}
-                                        </Link>
-                                    </li>
-                                    <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/login'>
-                                            {t('navbar.login')}
-                                        </Link>
+                                        <Link to='/'>{t('navbar.login')}</Link>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div className=''>
-                            <div className='px-4 py-8'>
+                            <div className='px-4 py-8 '>
                                 <h1 className='mb-3 text-xl font-bold text-justify sm:text-xl sm:text-left'>
                                     {t('services.title')}
                                 </h1>
@@ -93,12 +85,7 @@ const Footer = () => {
                                     </li>
                                     <li className='cursor-pointer hover:text-blue-500'>
                                         <Link to='/product'>
-                                            {t('services.subtitle')}
-                                        </Link>
-                                    </li>
-                                    <li className='cursor-pointer hover:text-blue-500'>
-                                        <Link to='/product'>
-                                            {t('services.add_to_cart')}
+                                            {t('services.description')}
                                         </Link>
                                     </li>
                                 </ul>
@@ -125,7 +112,7 @@ const Footer = () => {
                 </div>
                 <div>
                     <div className='py-10 text-center border-t-2 border-gray-300/50'>
-                        {t('copyright')}
+                        © 2025 || {t('about.title')}
                     </div>
                 </div>
             </section>

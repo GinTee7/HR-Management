@@ -64,6 +64,25 @@ i18n.use(initReactI18next).init({
                     contact_button: 'Contact Us',
                     title: 'About Us',
                     read_more: 'See details'
+                },
+                footer: {
+                    companyName: 'Minh Long',
+                    companyDescription:
+                        'Our products always create healthier plants, easier to grow, and significantly increase yields and profits for Vietnamese farmers.',
+                    headquarters:
+                        'Headquarters: No. 98, Dong Thanh Hamlet, Thanh Dong A Commune, Tan Hiep, Kien Giang',
+                    phone: '1900 8982',
+                    importantLinks: 'Important Links',
+                    home: 'Home',
+                    aboutUs: 'About Us',
+                    products: 'Products',
+                    login: 'Login',
+                    productTypes: 'Product Categories',
+                    fertilizer: 'Fertilizer',
+                    pesticide: 'Pesticide',
+                    fungicide: 'Fungicide',
+                    plantProtection: 'Plant Protection',
+                    copyright: '© 2025 || Minh Long Management System'
                 }
             }
         },
@@ -127,14 +146,33 @@ i18n.use(initReactI18next).init({
                     contact_button: 'Liên Hệ Ngay',
                     title: 'Về Minh Long',
                     read_more: 'Xem chi tiết'
+                },
+                footer: {
+                    companyName: 'Minh Long',
+                    companyDescription:
+                        'Các sản phẩm của chúng tôi luôn tạo ra những cây khỏe mạnh hơn, dễ trồng, giúp tăng đáng kể năng suất và lợi nhuận cho người nông dân Việt Nam.',
+                    headquarters:
+                        'Trụ sở chính: Số 98, Ấp Đông Thành, Xã Thạnh Đông A, Tân Hiệp, Kiên Giang',
+                    phone: '1900 8982',
+                    importantLinks: 'Liên kết quan trọng',
+                    home: 'Trang chủ',
+                    aboutUs: 'Giới thiệu',
+                    products: 'Sản phẩm',
+                    login: 'Đăng nhập',
+                    productTypes: 'Các loại sản phẩm',
+                    fertilizer: 'Phân bón',
+                    pesticide: 'Thuốc trừ sâu',
+                    fungicide: 'Thuốc trừ bệnh',
+                    plantProtection: 'Thuốc bảo vệ thực vật',
+                    copyright: '© 2025 || Hệ thống quản lý Minh Long'
                 }
             }
         }
     },
-    lng: 'vi', // Ngôn ngữ mặc định
-    fallbackLng: 'en', // Nếu không tìm thấy ngôn ngữ thì dùng tiếng Anh
+    lng: 'vi',
+    fallbackLng: 'en',
     interpolation: {
-        escapeValue: false // Không cần escape ký tự đặc biệt
+        escapeValue: false
     }
 });
 

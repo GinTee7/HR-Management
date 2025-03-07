@@ -131,10 +131,10 @@ i18n.use(initReactI18next).init({
             }
         }
     },
-    lng: 'vi', // Ngôn ngữ mặc định
-    fallbackLng: 'en', // Nếu không tìm thấy ngôn ngữ thì dùng tiếng Anh
+    lng: 'vi',
+    fallbackLng: 'en',
     interpolation: {
-        escapeValue: false // Không cần escape ký tự đặc biệt
+        escapeValue: false
     }
 });
 
