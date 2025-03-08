@@ -15,7 +15,7 @@ const SignUpPage = () => {
         phone: '',
         userType: 'EMPLOYEE',
         fullName: '',
-        position: 'STAFF',
+        position: '',
         department: '',
         agencyName: '',
         street: '',
@@ -179,6 +179,7 @@ const SignUpPage = () => {
                                         value={formData.position}
                                         onChange={handleChange}
                                         required
+                                        defaultValue={'STAFF'}
                                     />
                                     <input
                                         className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'

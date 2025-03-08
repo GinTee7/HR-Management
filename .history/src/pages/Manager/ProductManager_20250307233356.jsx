@@ -9,6 +9,9 @@ import {
 } from '@ant-design/icons';
 import toast, { Toaster } from 'react-hot-toast';
 
+const API_BASE_URL =
+    'https://d1ef-2405-4800-5717-9fd0-20f0-34e8-8635-ac7a.ngrok-free.app/api/product';
+
 const ProductManager = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -17,62 +20,68 @@ const ProductManager = () => {
     const [editingProduct, setEditingProduct] = useState(null);
     const [form] = Form.useForm();
 
-    const fetchProducts = () => {
-        axios
-            .get('https://67890c382c874e66b7d76465.mockapi.io/products')
-            .then(response => {
-                const fetchedProducts = response.data.map(product => ({
-                    ...product,
-                    key: product.id,
-                    image: product.image
-                }));
-                setProducts(fetchedProducts);
-                setFilteredProducts(fetchedProducts);
-            })
-            .catch(error => {
-                console.error('Error fetching products:', error);
-                toast.error('Không thể tải sản phẩm từ API!');
-            });
+    const fetchProducts = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}`);
+            const fetchedProducts = response.data.map(product => ({
+                key: product.productId,
+                productId: product.productId,
+                productCode: product.productCode,
+                name: product.productName,
+                unit: product.unit,
+                defaultExpiration: product.defaultExpiration,
+                categoryId: product.categoryId,
+                description: product.description,
+                taxId: product.taxId,
+                createdBy: product.createdBy,
+                createdDate: product.createdDate,
+                updatedBy: product.updatedBy,
+                updatedDate: product.updatedDate
+            }));
+            setProducts(fetchedProducts);
+            setFilteredProducts(fetchedProducts);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            toast.error('Không thể tải sản phẩm từ API!');
+        }
     };
 
     useEffect(() => {
         fetchProducts();
     }, []);
 
-    const handleAddOrEditProduct = values => {
-        if (editingProduct) {
-            axios
-                .put(
-                    `https://67890c382c874e66b7d76465.mockapi.io/products/${editingProduct.id}`,
+    const handleAddOrEditProduct = async values => {
+        try {
+            if (editingProduct) {
+                await axios.put(
+                    `${API_BASE_URL}/${editingProduct.productId}`,
                     values
-                )
-                .then(() => {
-                    toast.success('Sản phẩm đã được cập nhật!');
-                    fetchProducts();
-                    setIsModalVisible(false);
-                    form.resetFields();
-                    setEditingProduct(null);
-                })
-                .catch(error => {
-                    console.error('Error updating product:', error);
-                    toast.error('Lỗi cập nhật sản phẩm!');
-                });
-        } else {
-            axios
-                .post(
-                    'https://67890c382c874e66b7d76465.mockapi.io/products',
-                    values
-                )
-                .then(() => {
-                    toast.success('Sản phẩm đã được thêm!');
-                    fetchProducts();
-                    setIsModalVisible(false);
-                    form.resetFields();
-                })
-                .catch(error => {
-                    console.error('Error adding product:', error);
-                    toast.error('Lỗi thêm sản phẩm!');
-                });
+                );
+                toast.success('Sản phẩm đã được cập nhật!');
+            } else {
+                await axios.post(API_BASE_URL, values);
+                toast.success('Sản phẩm đã được thêm!');
+            }
+            fetchProducts();
+            setIsModalVisible(false);
+            form.resetFields();
+            setEditingProduct(null);
+        } catch (error) {
+            console.error('Error saving product:', error);
+            toast.error(
+                editingProduct ? 'Lỗi cập nhật sản phẩm!' : 'Lỗi thêm sản phẩm!'
+            );
+        }
+    };
+
+    const handleDelete = async productId => {
+        try {
+            await axios.delete(`${API_BASE_URL}/${productId}`);
+            toast.success('Sản phẩm đã được xóa!');
+            fetchProducts();
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            toast.error('Lỗi xóa sản phẩm!');
         }
     };
 
@@ -89,7 +98,9 @@ const ProductManager = () => {
                     product.name
                         .toLowerCase()
                         .includes(searchTerm.toLowerCase()) ||
-                    product.price.toString().includes(searchTerm)
+                    product.productCode
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase())
             );
             setFilteredProducts(filteredData);
         } else {
@@ -98,26 +109,12 @@ const ProductManager = () => {
     };
 
     const columns = [
-        {
-            title: 'Hình Ảnh',
-            dataIndex: 'image',
-            key: 'image',
-            render: (_, record) => (
-                <img
-                    src={record.img}
-                    alt='Sản phẩm'
-                    className='object-cover w-16 h-16 border rounded'
-                />
-            )
-        },
+        { title: 'Mã Sản Phẩm', dataIndex: 'productCode', key: 'productCode' },
         { title: 'Tên Sản Phẩm', dataIndex: 'name', key: 'name' },
         {
-            title: 'Giá (VNĐ)',
-            dataIndex: 'price',
-            key: 'price',
-            render: price => `${Number(price).toLocaleString()} đ`,
-            sorter: (a, b) => parseFloat(a.price) - parseFloat(b.price), // Ensure the price is sorted as a number
-            sortDirections: ['ascend', 'descend'] // Allow sorting in both directions
+            title: 'Đơn Vị',
+            dataIndex: 'unit',
+            key: 'unit'
         },
         {
             title: 'Mô Tả',
@@ -126,10 +123,10 @@ const ProductManager = () => {
             ellipsis: true
         },
         {
-            title: 'Debt Time',
-            dataIndex: 'debtTime',
-            key: 'debtTime',
-            render: debtTime => debtTime || 'N/A'
+            title: 'Ngày Tạo',
+            dataIndex: 'createdDate',
+            key: 'createdDate',
+            render: date => new Date(date).toLocaleString()
         },
         {
             title: 'Thao Tác',
@@ -147,7 +144,7 @@ const ProductManager = () => {
                         type='primary'
                         danger
                         icon={<DeleteOutlined />}
-                        onClick={() => handleDelete(record.key)}
+                        onClick={() => handleDelete(record.productId)}
                     >
                         Xóa
                     </Button>
@@ -188,19 +185,13 @@ const ProductManager = () => {
             <Table
                 columns={columns}
                 dataSource={filteredProducts}
-                rowKey='key'
+                rowKey='productId'
                 bordered
-                onChange={(pagination, filters, sorter) => {
-                    if (sorter.order) {
-                        // Handle sorting if needed
-                        // sorter.order can be "ascend" or "descend"
-                    }
-                }}
             />
 
             <Modal
                 title={editingProduct ? 'Cập Nhật Sản Phẩm' : 'Thêm Sản Phẩm'}
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 onOk={() => form.submit()}
             >
@@ -210,16 +201,16 @@ const ProductManager = () => {
                     onFinish={handleAddOrEditProduct}
                 >
                     <Form.Item
-                        name='image'
-                        label='Hình Ảnh'
+                        name='productCode'
+                        label='Mã Sản Phẩm'
                         rules={[
                             {
                                 required: true,
-                                message: 'Vui lòng nhập URL hình ảnh!'
+                                message: 'Vui lòng nhập mã sản phẩm!'
                             }
                         ]}
                     >
-                        <Input placeholder='Nhập URL hình ảnh' />
+                        <Input />
                     </Form.Item>
                     <Form.Item
                         name='name'
@@ -233,23 +224,11 @@ const ProductManager = () => {
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item
-                        name='price'
-                        label='Giá'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập giá sản phẩm!'
-                            }
-                        ]}
-                    >
-                        <Input type='number' />
+                    <Form.Item name='unit' label='Đơn Vị'>
+                        <Input />
                     </Form.Item>
                     <Form.Item name='description' label='Mô Tả'>
                         <Input.TextArea rows={3} />
-                    </Form.Item>
-                    <Form.Item name='debtTime' label='Debt Time'>
-                        <Input placeholder='Nhập Debt Time (nếu có)' />
                     </Form.Item>
                 </Form>
             </Modal>

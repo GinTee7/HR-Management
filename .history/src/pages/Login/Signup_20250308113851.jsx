@@ -22,7 +22,7 @@ const SignUpPage = () => {
         wardName: '',
         districtName: '',
         provinceName: '',
-        createdAt: new Date().toISOString()
+        createdAt: ''
     });
 
     const [errors, setErrors] = useState({});

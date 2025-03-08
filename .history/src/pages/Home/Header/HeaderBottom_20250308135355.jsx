@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../../redux/authSlice'; // ✅ Import action logout từ Redux
+import { logout } from '../redux/authSlice'; // ✅ Import action logout từ Redux
 import { Link } from 'react-router-dom';
 import { FaUser, FaCaretDown, FaShoppingCart } from 'react-icons/fa';
 

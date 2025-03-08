@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from '../../redux/authSlice';
+import { loginSuccess } from '../../redux/authSlice'; // ✅ Import action từ Redux
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '@assets/logo.png';
@@ -9,7 +9,7 @@ const LoginPage = () => {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const dispatch = useDispatch();
+    const dispatch = useDispatch(); // ✅ Dùng dispatch để gửi action
     const navigate = useNavigate();
 
     const API_URL =
@@ -28,33 +28,31 @@ const LoginPage = () => {
                 }
             );
 
-            console.log('✅ API Response:', response.data);
+            console.log('✅ Login successful:', response.data);
             const { token, roleName } = response.data;
 
-            if (!token) {
-                console.error('❌ API không trả về token!');
-                setError('Login failed: No token received');
-                return;
-            }
+            if (token) {
+                dispatch(loginSuccess({ token, role: roleName })); // ✅ Gửi action Redux
 
-            // ✅ Lưu token vào Redux và LocalStorage
-            dispatch(loginSuccess({ token, role: roleName }));
-            localStorage.setItem('token', token);
-            localStorage.setItem('roleName', roleName);
-
-            // ✅ Chuyển hướng sau đăng nhập
-            switch (roleName) {
-                case 'ADMIN':
-                    navigate('/admin/dashboard');
-                    break;
-                case 'WAREHOUSE MANAGER':
-                    navigate('/warehouse-manager/dashboard');
-                    break;
-                case 'SALES MANAGER':
-                    navigate('/business-manager/dashboard');
-                    break;
-                default:
-                    navigate('/');
+                // ✅ Chuyển hướng dựa theo role
+                switch (roleName) {
+                    case 'ADMIN':
+                        navigate('/admin');
+                        break;
+                    case 'AGENCY':
+                        navigate('/');
+                        break;
+                    case 'WAREHOUSE MANAGER':
+                        navigate('/warehouse-manager');
+                        break;
+                    case 'SALES MANAGER':
+                        navigate('/business-manager');
+                        break;
+                    default:
+                        navigate('/');
+                }
+            } else {
+                setError('Login failed. Please try again.');
             }
         } catch (err) {
             console.error('❌ Login Error:', err.response?.data || err.message);

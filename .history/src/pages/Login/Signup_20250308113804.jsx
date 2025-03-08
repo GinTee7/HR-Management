@@ -15,14 +15,14 @@ const SignUpPage = () => {
         phone: '',
         userType: 'EMPLOYEE',
         fullName: '',
-        position: 'STAFF',
+        position: '',
         department: '',
         agencyName: '',
         street: '',
         wardName: '',
         districtName: '',
         provinceName: '',
-        createdAt: new Date().toISOString()
+        createdAt: ''
     });
 
     const [errors, setErrors] = useState({});

@@ -15,7 +15,7 @@ const SignUpPage = () => {
         phone: '',
         userType: 'EMPLOYEE',
         fullName: '',
-        position: 'STAFF',
+        position: '',
         department: '',
         agencyName: '',
         street: '',

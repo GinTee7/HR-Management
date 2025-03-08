@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from '../../redux/authSlice';
+import { loginSuccess } from '../../redux/authSlice'; // ✅ Import action từ Redux
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '@assets/logo.png';
@@ -9,7 +9,7 @@ const LoginPage = () => {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const dispatch = useDispatch();
+    const dispatch = useDispatch(); // ✅ Dùng dispatch để gửi action
     const navigate = useNavigate();
 
     const API_URL =
@@ -28,33 +28,38 @@ const LoginPage = () => {
                 }
             );
 
-            console.log('✅ API Response:', response.data);
-            const { token, roleName } = response.data;
+            console.log('✅ Login successful:', response.data);
+            const { token, roleName, userType, department } = response.data;
 
-            if (!token) {
-                console.error('❌ API không trả về token!');
-                setError('Login failed: No token received');
-                return;
-            }
+            if (token) {
+                // ✅ Gửi action Redux
+                dispatch(
+                    loginSuccess({
+                        token,
+                        role: roleName,
+                        userType,
+                        department
+                    })
+                );
 
-            // ✅ Lưu token vào Redux và LocalStorage
-            dispatch(loginSuccess({ token, role: roleName }));
-            localStorage.setItem('token', token);
-            localStorage.setItem('roleName', roleName);
-
-            // ✅ Chuyển hướng sau đăng nhập
-            switch (roleName) {
-                case 'ADMIN':
-                    navigate('/admin/dashboard');
-                    break;
-                case 'WAREHOUSE MANAGER':
-                    navigate('/warehouse-manager/dashboard');
-                    break;
-                case 'SALES MANAGER':
-                    navigate('/business-manager/dashboard');
-                    break;
-                default:
-                    navigate('/');
+                // ✅ Chuyển hướng dựa theo userType & department
+                if (userType === 'ADMIN') {
+                    navigate('/admin');
+                } else if (userType === 'EMPLOYEE') {
+                    if (department === 'SALES MANAGER') {
+                        navigate('/business-manager');
+                    } else if (department === 'WAREHOUSE MANAGER') {
+                        navigate('/warehouse-manager');
+                    } else {
+                        navigate('/employee-dashboard'); // ✅ Mặc định cho nhân viên
+                    }
+                } else if (userType === 'AGENCY') {
+                    navigate('/agency-dashboard');
+                } else {
+                    navigate('/'); // ✅ Trang mặc định nếu không xác định được userType
+                }
+            } else {
+                setError('Login failed. Please try again.');
             }
         } catch (err) {
             console.error('❌ Login Error:', err.response?.data || err.message);

@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { loginSuccess } from '../../redux/authSlice';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '@assets/logo.png';
 
 const LoginPage = () => {
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const { t, i18n } = useTranslation();
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const API_URL =
         'https://7d53-2405-4802-9171-74d0-99ef-cf6b-c234-b678.ngrok-free.app/api/auth/login';
+
+    // Kiểm tra nếu đã có token thì chuyển hướng
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/');
+        }
+    }, [navigate]);
+
+    const changeLanguage = lang => {
+        i18n.changeLanguage(lang);
+    };
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -28,37 +40,41 @@ const LoginPage = () => {
                 }
             );
 
-            console.log('✅ API Response:', response.data);
+            console.log('✅ Login successful:', response.data);
+
             const { token, roleName } = response.data;
 
-            if (!token) {
-                console.error('❌ API không trả về token!');
-                setError('Login failed: No token received');
-                return;
+            if (token) {
+                localStorage.setItem('token', token); // ✅ Lưu token vào localStorage
+                localStorage.setItem('roleName', roleName); // ✅ Lưu roleName để quản lý quyền
             }
 
-            // ✅ Lưu token vào Redux và LocalStorage
-            dispatch(loginSuccess({ token, role: roleName }));
-            localStorage.setItem('token', token);
-            localStorage.setItem('roleName', roleName);
-
-            // ✅ Chuyển hướng sau đăng nhập
+            // ✅ Chuyển hướng dựa trên roleName
             switch (roleName) {
                 case 'ADMIN':
-                    navigate('/admin/dashboard');
+                    navigate('/admin');
+                    break;
+                case 'AGENCY':
+                    navigate('/');
                     break;
                 case 'WAREHOUSE MANAGER':
-                    navigate('/warehouse-manager/dashboard');
+                    navigate('/warehouse-manager');
                     break;
                 case 'SALES MANAGER':
-                    navigate('/business-manager/dashboard');
+                    navigate('/business-manager');
                     break;
                 default:
-                    navigate('/');
+                    setError(t('Unauthorized access'));
             }
         } catch (err) {
             console.error('❌ Login Error:', err.response?.data || err.message);
-            setError('Invalid username or password');
+
+            // ✅ Hiển thị lỗi chi tiết hơn từ API
+            if (err.response?.data?.message) {
+                setError(t(err.response.data.message));
+            } else {
+                setError(t('Invalid username or password'));
+            }
         }
     };
 
@@ -68,14 +84,30 @@ const LoginPage = () => {
                 <div className='hidden md:flex items-center justify-center w-1/2 bg-gradient-to-b from-[#2E4F4F] to-[#3A6565] p-6'>
                     <img
                         src={logo}
-                        alt='Enterprise Logo'
+                        alt={t('Enterprise Logo')}
                         className='object-contain w-[80%] h-auto shadow-xl rounded-lg'
                     />
                 </div>
 
                 <div className='flex flex-col justify-center w-full p-8 bg-white md:w-1/2'>
+                    {/* Language Selector */}
+                    <div className='flex justify-end mb-4 space-x-2'>
+                        <button
+                            onClick={() => changeLanguage('en')}
+                            className='px-3 py-1 text-sm font-semibold transition bg-gray-200 rounded-md hover:bg-gray-300'
+                        >
+                            EN
+                        </button>
+                        <button
+                            onClick={() => changeLanguage('vi')}
+                            className='px-3 py-1 text-sm font-semibold transition bg-gray-200 rounded-md hover:bg-gray-300'
+                        >
+                            VI
+                        </button>
+                    </div>
+
                     <h2 className='mb-6 text-2xl font-bold text-center text-gray-800'>
-                        Welcome Back
+                        {t('Welcome Back')}
                     </h2>
 
                     <form
@@ -85,21 +117,32 @@ const LoginPage = () => {
                         <input
                             className='w-full px-4 py-3 text-lg text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#2E4F4F] focus:bg-white'
                             type='text'
-                            name='userName'
-                            placeholder='Username'
+                            name='userName' // ✅ Gửi đúng field "userName"
+                            placeholder={t('Username')}
                             value={userName}
                             onChange={e => setUserName(e.target.value)}
                             required
                         />
 
-                        <input
-                            className='w-full px-4 py-3 text-lg text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#2E4F4F] focus:bg-white'
-                            type='password'
-                            placeholder='Password'
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            required
-                        />
+                        <div className='relative flex items-center'>
+                            <input
+                                className='w-full px-4 py-3 text-lg text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#2E4F4F] focus:bg-white'
+                                type={passwordVisible ? 'text' : 'password'}
+                                placeholder={t('Password')}
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                required
+                            />
+                            <button
+                                type='button'
+                                onClick={() =>
+                                    setPasswordVisible(!passwordVisible)
+                                }
+                                className='absolute text-gray-500 transition right-4 hover:text-teal-600'
+                            >
+                                {passwordVisible ? t('Hide') : t('Show')}
+                            </button>
+                        </div>
 
                         {error && (
                             <p className='text-center text-red-600'>{error}</p>
@@ -109,7 +152,7 @@ const LoginPage = () => {
                             type='submit'
                             className='w-full py-3 text-lg font-bold text-white bg-gradient-to-r from-[#2E4F4F] to-[#3A6565] rounded-lg shadow-md hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-[#2E4F4F]'
                         >
-                            Login
+                            {t('Login')}
                         </button>
 
                         <div className='mt-4 text-center'>
@@ -117,19 +160,19 @@ const LoginPage = () => {
                                 href='/forgot-password'
                                 className='text-sm font-medium text-teal-700 hover:underline'
                             >
-                                Forgot your password?
+                                {t('Forgot your password?')}
                             </a>
                         </div>
                         <div className='mt-4 text-center'>
                             <p className='text-gray-700'>
-                                Don't have an account?
+                                {t("Don't have an account?")}
                             </p>
                             <button
                                 type='button'
                                 onClick={() => navigate('/signup')}
                                 className='font-medium text-teal-700 hover:underline'
                             >
-                                Create an account
+                                {t('Create an account')}
                             </button>
                         </div>
                     </form>

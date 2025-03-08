@@ -15,14 +15,14 @@ const SignUpPage = () => {
         phone: '',
         userType: 'EMPLOYEE',
         fullName: '',
-        position: 'STAFF',
+        position: '',
         department: '',
         agencyName: '',
         street: '',
         wardName: '',
         districtName: '',
         provinceName: '',
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString() // ✅ Định dạng chuẩn
     });
 
     const [errors, setErrors] = useState({});
@@ -57,8 +57,21 @@ const SignUpPage = () => {
             return;
         }
 
+        // ✅ Cập nhật dữ liệu trước khi gửi
+        const updatedData = {
+            ...formData,
+            agencyName:
+                formData.userType === 'AGENCY' ? formData.agencyName : '',
+            position: formData.userType === 'EMPLOYEE' ? formData.position : '',
+            department:
+                formData.userType === 'EMPLOYEE' ? formData.department : '',
+            createdAt: new Date().toISOString() // Luôn đảm bảo đúng định dạng
+        };
+
+        console.log('📢 Sending Data:', JSON.stringify(updatedData, null, 2)); // Debug dữ liệu gửi đi
+
         try {
-            await axios.post(API_URL, formData, {
+            await axios.post(API_URL, updatedData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -77,7 +90,7 @@ const SignUpPage = () => {
             }, 3000);
         } catch (err) {
             console.error(
-                'Registration Error:',
+                '❌ Registration Error:',
                 err.response?.data || err.message
             );
             toast.error(
@@ -102,15 +115,6 @@ const SignUpPage = () => {
                     >
                         {/* USER DETAILS */}
                         <div className='flex flex-col gap-5'>
-                            <input
-                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
-                                type='text'
-                                name='fullName'
-                                placeholder={t('Full Name')}
-                                value={formData.fullName}
-                                onChange={handleChange}
-                                required
-                            />
                             <input
                                 className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
                                 type='text'

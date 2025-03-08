@@ -10,19 +10,19 @@ const SignUpPage = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        phone: '',
+        username: 'johndoe',
+        email: 'johndoe@gmail.com',
+        phone: '0123456789',
         userType: 'EMPLOYEE',
-        fullName: '',
-        position: 'STAFF',
-        department: '',
+        fullName: 'John Doe',
+        position: 'Software Engineer',
+        department: 'IT',
         agencyName: '',
-        street: '',
-        wardName: '',
-        districtName: '',
-        provinceName: '',
-        createdAt: new Date().toISOString()
+        street: '123 Main Street',
+        wardName: 'Ward 1',
+        districtName: 'District A',
+        provinceName: 'Province X',
+        createdAt: '2025-03-08T04:27:46.020Z'
     });
 
     const [errors, setErrors] = useState({});

@@ -9,22 +9,18 @@ const SignUpPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        phone: '',
-        userType: 'EMPLOYEE',
-        fullName: '',
-        position: 'STAFF',
-        department: '',
-        agencyName: '',
-        street: '',
-        wardName: '',
-        districtName: '',
-        provinceName: '',
-        createdAt: new Date().toISOString()
-    });
-
+    const [userType, setUserType] = useState('EMPLOYEE');
+    const [username, setUsername] = useState('john_doe');
+    const [fullName, setFullName] = useState('John Doe');
+    const [email, setEmail] = useState('john.doe@gmail.com');
+    const [phone, setPhone] = useState('0123456789');
+    const [position, setPosition] = useState('Software Engineer');
+    const [department, setDepartment] = useState('IT');
+    const [agencyName, setAgencyName] = useState('TechCorp Ltd.');
+    const [street, setStreet] = useState('123 Main Street');
+    const [wardName, setWardName] = useState('Ward 1');
+    const [districtName, setDistrictName] = useState('District A');
+    const [provinceName, setProvinceName] = useState('Province X');
     const [errors, setErrors] = useState({});
 
     const API_URL =
@@ -33,22 +29,18 @@ const SignUpPage = () => {
     const validateInputs = () => {
         let newErrors = {};
 
-        if (!formData.email.includes('@gmail.com')) {
+        if (!email.includes('@gmail.com')) {
             newErrors.email = t(
                 'Email must be a valid Gmail address (e.g., example@gmail.com)'
             );
         }
 
-        if (!/^\d{10}$/.test(formData.phone)) {
+        if (!/^\d{10}$/.test(phone)) {
             newErrors.phone = t('Phone number must be exactly 10 digits');
         }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
-    };
-
-    const handleChange = e => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async e => {
@@ -57,15 +49,33 @@ const SignUpPage = () => {
             return;
         }
 
+        const userData = {
+            username,
+            fullName,
+            email,
+            phone,
+            userType,
+            position: userType === 'EMPLOYEE' ? position || '' : '',
+            department: userType === 'EMPLOYEE' ? department || '' : '',
+            agencyName: userType === 'AGENCY' ? agencyName || '' : '',
+            street: street || '',
+            wardName: wardName || '',
+            districtName: districtName || '',
+            provinceName: provinceName || '',
+            createdAt: '2025-03-08T04:27:46.020Z'
+        };
+
         try {
-            await axios.post(API_URL, formData, {
+            await axios.post(API_URL, userData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
             toast.success(
-                t('Registration successful! Please wait for admin approval.'),
+                t(
+                    'Registration successful! Please wait for admin to provide your password.'
+                ),
                 {
                     position: 'top-right',
                     autoClose: 3000
@@ -100,37 +110,33 @@ const SignUpPage = () => {
                         className='grid grid-cols-2 gap-5'
                         onSubmit={handleSubmit}
                     >
-                        {/* USER DETAILS */}
                         <div className='flex flex-col gap-5'>
                             <input
-                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
+                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-[#2E4F4F] rounded-lg'
                                 type='text'
-                                name='fullName'
                                 placeholder={t('Full Name')}
-                                value={formData.fullName}
-                                onChange={handleChange}
+                                value={fullName}
+                                onChange={e => setFullName(e.target.value)}
                                 required
                             />
                             <input
-                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
+                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-[#2E4F4F] rounded-lg'
                                 type='text'
-                                name='username'
                                 placeholder={t('Username')}
-                                value={formData.username}
-                                onChange={handleChange}
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
                                 required
                             />
                             <input
                                 className={`w-full px-5 py-3 text-lg bg-gray-100 border ${
                                     errors.email
                                         ? 'border-red-500'
-                                        : 'border-gray-400'
+                                        : 'border-[#2E4F4F]'
                                 } rounded-lg`}
                                 type='email'
-                                name='email'
                                 placeholder={t('Email')}
-                                value={formData.email}
-                                onChange={handleChange}
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
                                 required
                             />
                             {errors.email && (
@@ -142,13 +148,12 @@ const SignUpPage = () => {
                                 className={`w-full px-5 py-3 text-lg bg-gray-100 border ${
                                     errors.phone
                                         ? 'border-red-500'
-                                        : 'border-gray-400'
+                                        : 'border-[#2E4F4F]'
                                 } rounded-lg`}
                                 type='text'
-                                name='phone'
                                 placeholder={t('Phone')}
-                                value={formData.phone}
-                                onChange={handleChange}
+                                value={phone}
+                                onChange={e => setPhone(e.target.value)}
                                 required
                             />
                             {errors.phone && (
@@ -156,12 +161,10 @@ const SignUpPage = () => {
                                     {errors.phone}
                                 </span>
                             )}
-
                             <select
-                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
-                                name='userType'
-                                value={formData.userType}
-                                onChange={handleChange}
+                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-[#2E4F4F] rounded-lg'
+                                value={userType}
+                                onChange={e => setUserType(e.target.value)}
                             >
                                 <option value='EMPLOYEE'>
                                     {t('Employee')}
@@ -169,89 +172,51 @@ const SignUpPage = () => {
                                 <option value='AGENCY'>{t('Agency')}</option>
                             </select>
 
-                            {formData.userType === 'EMPLOYEE' && (
+                            {userType === 'EMPLOYEE' && (
                                 <>
                                     <input
-                                        className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
+                                        className='w-full px-5 py-3 text-lg bg-gray-100 border border-[#2E4F4F] rounded-lg'
                                         type='text'
-                                        name='position'
                                         placeholder={t('Position')}
-                                        value={formData.position}
-                                        onChange={handleChange}
+                                        value={position}
+                                        onChange={e =>
+                                            setPosition(e.target.value)
+                                        }
                                         required
                                     />
                                     <input
-                                        className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
+                                        className='w-full px-5 py-3 text-lg bg-gray-100 border border-[#2E4F4F] rounded-lg'
                                         type='text'
-                                        name='department'
                                         placeholder={t('Department')}
-                                        value={formData.department}
-                                        onChange={handleChange}
+                                        value={department}
+                                        onChange={e =>
+                                            setDepartment(e.target.value)
+                                        }
                                         required
                                     />
                                 </>
                             )}
 
-                            {formData.userType === 'AGENCY' && (
+                            {userType === 'AGENCY' && (
                                 <input
-                                    className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
+                                    className='w-full px-5 py-3 text-lg bg-gray-100 border border-[#2E4F4F] rounded-lg'
                                     type='text'
-                                    name='agencyName'
                                     placeholder={t('Agency Name')}
-                                    value={formData.agencyName}
-                                    onChange={handleChange}
+                                    value={agencyName}
+                                    onChange={e =>
+                                        setAgencyName(e.target.value)
+                                    }
                                     required
                                 />
                             )}
                         </div>
-
-                        {/* ADDRESS DETAILS */}
-                        <div className='flex flex-col gap-5'>
-                            <input
-                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
-                                type='text'
-                                name='street'
-                                placeholder={t('Street')}
-                                value={formData.street}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
-                                type='text'
-                                name='wardName'
-                                placeholder={t('Ward')}
-                                value={formData.wardName}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
-                                type='text'
-                                name='districtName'
-                                placeholder={t('District')}
-                                value={formData.districtName}
-                                onChange={handleChange}
-                                required
-                            />
-                            <input
-                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
-                                type='text'
-                                name='provinceName'
-                                placeholder={t('Province')}
-                                value={formData.provinceName}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <button
-                            type='submit'
-                            className='w-full col-span-2 py-3 text-lg font-bold text-white bg-blue-600 rounded-lg hover:opacity-90'
-                        >
-                            {t('Sign Up')}
-                        </button>
                     </form>
+                    <button
+                        type='submit'
+                        className='w-full py-3 text-lg font-bold text-white bg-gradient-to-r from-[#2E4F4F] to-[#3A6565] rounded-lg hover:opacity-90'
+                    >
+                        {t('Sign Up')}
+                    </button>
                 </div>
             </div>
             <ToastContainer />

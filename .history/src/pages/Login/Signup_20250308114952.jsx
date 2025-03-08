@@ -14,15 +14,15 @@ const SignUpPage = () => {
         email: '',
         phone: '',
         userType: 'EMPLOYEE',
-        fullName: '',
+        fullName: 'John Doe',
         position: 'STAFF',
-        department: '',
+        department: 'SALES MANAGER',
         agencyName: '',
         street: '',
         wardName: '',
         districtName: '',
         provinceName: '',
-        createdAt: new Date().toISOString()
+        createdAt: ''
     });
 
     const [errors, setErrors] = useState({});
@@ -102,15 +102,6 @@ const SignUpPage = () => {
                     >
                         {/* USER DETAILS */}
                         <div className='flex flex-col gap-5'>
-                            <input
-                                className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
-                                type='text'
-                                name='fullName'
-                                placeholder={t('Full Name')}
-                                value={formData.fullName}
-                                onChange={handleChange}
-                                required
-                            />
                             <input
                                 className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
                                 type='text'

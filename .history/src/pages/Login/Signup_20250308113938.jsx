@@ -22,7 +22,7 @@ const SignUpPage = () => {
         wardName: '',
         districtName: '',
         provinceName: '',
-        createdAt: new Date().toISOString()
+        createdAt: ''
     });
 
     const [errors, setErrors] = useState({});
@@ -102,7 +102,7 @@ const SignUpPage = () => {
                     >
                         {/* USER DETAILS */}
                         <div className='flex flex-col gap-5'>
-                            <input
+                            {/* <input
                                 className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
                                 type='text'
                                 name='fullName'
@@ -110,7 +110,7 @@ const SignUpPage = () => {
                                 value={formData.fullName}
                                 onChange={handleChange}
                                 required
-                            />
+                            /> */}
                             <input
                                 className='w-full px-5 py-3 text-lg bg-gray-100 border border-gray-400 rounded-lg'
                                 type='text'

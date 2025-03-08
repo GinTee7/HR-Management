@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { FaUser, FaCaretDown, FaShoppingCart } from 'react-icons/fa';
 
 const HeaderBottom = () => {
-    const { token, userType, department } = useSelector(state => state.auth); // ✅ Lấy Redux State
+    const { token } = useSelector(state => state.auth); // ✅ Lấy trạng thái đăng nhập từ Redux
     const dispatch = useDispatch();
     const [showUser, setShowUser] = useState(false);
 
@@ -26,12 +26,6 @@ const HeaderBottom = () => {
                     <div className='absolute right-0 p-4 mt-2 bg-white rounded-lg shadow-lg'>
                         {token ? (
                             <>
-                                <p className='mb-2 text-sm text-gray-600'>
-                                    User Type: {userType}
-                                </p>
-                                <p className='mb-2 text-sm text-gray-600'>
-                                    Department: {department}
-                                </p>
                                 <Link to='/profile' className='block mb-2'>
                                     Profile
                                 </Link>

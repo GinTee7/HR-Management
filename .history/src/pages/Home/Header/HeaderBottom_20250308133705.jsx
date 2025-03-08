@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../../redux/authSlice'; // ✅ Import action logout từ Redux
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import { FaUser, FaCaretDown, FaShoppingCart } from 'react-icons/fa';
 
 const HeaderBottom = () => {
-    const { token, userType, department } = useSelector(state => state.auth); // ✅ Lấy Redux State
-    const dispatch = useDispatch();
+    const { token, logout } = useContext(AuthContext);
     const [showUser, setShowUser] = useState(false);
 
     return (
@@ -26,17 +24,11 @@ const HeaderBottom = () => {
                     <div className='absolute right-0 p-4 mt-2 bg-white rounded-lg shadow-lg'>
                         {token ? (
                             <>
-                                <p className='mb-2 text-sm text-gray-600'>
-                                    User Type: {userType}
-                                </p>
-                                <p className='mb-2 text-sm text-gray-600'>
-                                    Department: {department}
-                                </p>
                                 <Link to='/profile' className='block mb-2'>
                                     Profile
                                 </Link>
                                 <button
-                                    onClick={() => dispatch(logout())}
+                                    onClick={logout}
                                     className='block w-full text-left text-red-500'
                                 >
                                     Logout
