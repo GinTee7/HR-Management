@@ -73,7 +73,7 @@ const SignUpPage = () => {
             );
 
             setTimeout(() => {
-                navigate('/');
+                navigate('/signin');
             }, 3000);
         } catch (err) {
             console.error(

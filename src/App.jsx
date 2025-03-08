@@ -26,6 +26,7 @@ import WarehouseImport from './components/Warehouse/WarehouseImport';
 import WarehouseExport from './components/Warehouse/WarehouseExport';
 import Profile from './pages/Home/Profile/Profile';
 import Order from './components/Order/Order';
+import Category from './pages/Home/Category/Category';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ContactPage from './pages/Home/Contact/Contact';
@@ -71,6 +72,7 @@ function App() {
                         <>
                             <Layout>
                                 <Hero />
+                                <Category/>
                                 <Services />
                                 {/* <Banner /> */}
                             </Layout>
