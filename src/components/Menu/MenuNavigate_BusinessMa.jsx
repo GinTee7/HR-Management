@@ -63,8 +63,8 @@ const MenuNavigate_BusinessMana = ({ buttonClick }) => {
             icon: <UserOutlined />
         },
         {
-            key: 'product-manager',
-            label: t('Quản lý sản phẩm'),
+            key: 'product',
+            label: t('Sản phẩm'),
             icon: <ShoppingCartOutlined />,
             children: [
                 {

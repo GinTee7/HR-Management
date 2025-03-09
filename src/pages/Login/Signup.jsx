@@ -29,7 +29,7 @@ const SignUpPage = () => {
     const [errors, setErrors] = useState({});
 
     const API_URL =
-        'https://5b27-2405-4802-9171-74d0-2891-e238-b764-2156.ngrok-free.app/api/auth/register';
+        'https://79c3-2405-4802-9171-74d0-c448-f85b-9980-17ce.ngrok-free.app/api/auth/register';
 
     const validateInputs = () => {
         let newErrors = {};
