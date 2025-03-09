@@ -5,7 +5,6 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import CryptoJS from "crypto-js";
 
 interface User {
   username: string;
@@ -22,46 +21,30 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const SECRET_KEY = "dat1234565756"; 
-
-const encryptToken = (token: string) => {
-  return CryptoJS.AES.encrypt(token, SECRET_KEY).toString();
-};
-
-const decryptToken = (encryptedToken: string) => {
-  try {
-    const bytes = CryptoJS.AES.decrypt(encryptedToken, SECRET_KEY);
-    return bytes.toString(CryptoJS.enc.Utf8);
-  } catch (error) {
-    return null;
-  }
-};
-
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const storedToken = sessionStorage.getItem("authToken");
   const [token, setToken] = useState<string | null>(
-    storedToken ? decryptToken(storedToken) : null
+    localStorage.getItem("authToken")
   );
   const [user, setUser] = useState<User | null>(() => {
-    const storedUser = sessionStorage.getItem("user");
+    const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
   useEffect(() => {
     if (token) {
-      sessionStorage.setItem("authToken", encryptToken(token));
+      localStorage.setItem("authToken", token);
     } else {
-      sessionStorage.removeItem("authToken");
+      localStorage.removeItem("authToken");
     }
   }, [token]);
 
   useEffect(() => {
     if (user) {
-      sessionStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
     } else {
-      sessionStorage.removeItem("user");
+      localStorage.removeItem("user");
     }
   }, [user]);
 
