@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../../redux/authSlice'; // ✅ Import action logout từ Redux
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaCaretDown, FaShoppingCart } from 'react-icons/fa';
 
 const HeaderBottom = () => {
-    const { token } = useSelector(state => state.auth); // ✅ Lấy trạng thái đăng nhập từ Redux
-    const dispatch = useDispatch();
+    const [token, setToken] = useState(localStorage.getItem('token'));
     const [showUser, setShowUser] = useState(false);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        setToken(null);
+        navigate('/signin'); // Chuyển hướng về trang đăng nhập
+    };
 
     return (
         <div className='flex items-center justify-between p-4 bg-gray-200'>
@@ -30,7 +34,7 @@ const HeaderBottom = () => {
                                     Profile
                                 </Link>
                                 <button
-                                    onClick={() => dispatch(logout())}
+                                    onClick={handleLogout}
                                     className='block w-full text-left text-red-500'
                                 >
                                     Logout

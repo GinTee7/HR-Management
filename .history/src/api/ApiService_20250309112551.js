@@ -10,12 +10,12 @@ const apiClient = axios.create({
     }
 });
 
-const attachToken = () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        apiClient.defaults.headers['Authorization'] = `Bearer ${token}`;
-    }
-};
+// const attachToken = () => {
+//   const token = localStorage.getItem('token');
+//   if (token) {
+//     apiClient.defaults.headers['Authorization'] = `Bearer ${token}`;
+//   }
+// };
 
 // Hàm dùng chung để gọi API
 export const fetchData = async endpoint => {

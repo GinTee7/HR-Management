@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import ProtectedRoute from './redux/ProtectedRoute'; // ✅ Import ProtectedRoute
+// import ProtectedRoute from './redux/ProtectedRoute'; // ✅ Import ProtectedRoute
 import Header from '@pages/Login/Header';
 import ForgotPassword from '@pages/Login/ForgotPassword';
 import MainLayout from './MainLayout/MainLayout';

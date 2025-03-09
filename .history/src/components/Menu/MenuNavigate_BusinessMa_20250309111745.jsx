@@ -73,7 +73,7 @@ const MenuNavigate_BusinessMana = ({ buttonClick }) => {
                     icon: <FileAddOutlined />
                 },
                 {
-                    key: 'tax-manager',
+                    key: 'create-tax',
                     label: t('Tạo thuế'),
                     icon: <FileAddOutlined />
                 },
