@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const SignUpPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    //fix
 
     const [formData, setFormData] = useState({
         username: '',
