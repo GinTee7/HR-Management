@@ -29,7 +29,7 @@ const SignUpPage = () => {
     const [errors, setErrors] = useState({});
 
     const API_URL =
-        'https://79c3-2405-4802-9171-74d0-c448-f85b-9980-17ce.ngrok-free.app/api/auth/register';
+        'https://tight-probably-ant.ngrok-free.app/api/auth/register';
 
     const validateInputs = () => {
         let newErrors = {};

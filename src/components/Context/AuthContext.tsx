@@ -22,7 +22,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const SECRET_KEY = "dat1234565756"; 
+const SECRET_KEY = "tin1234565756"; 
 
 const encryptToken = (token: string) => {
   return CryptoJS.AES.encrypt(token, SECRET_KEY).toString();
