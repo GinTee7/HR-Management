@@ -1,22 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Table,
-    Button,
-    Input,
-    Space,
-    Modal,
-    Form,
-    Switch,
-    Card,
-    Tooltip,
-    Tag
-} from 'antd';
+import { Table, Button, Input, Space, Modal, Form, Switch } from 'antd';
 import {
     PlusOutlined,
     EditOutlined,
     DeleteOutlined,
     SearchOutlined
 } from '@ant-design/icons';
+
 import 'antd/dist/reset.css';
 
 const CategoryManager = () => {
@@ -27,6 +17,7 @@ const CategoryManager = () => {
     const [editingCategory, setEditingCategory] = useState(null);
     const [form] = Form.useForm();
 
+    // Giả lập dữ liệu ban đầu
     useEffect(() => {
         const initialCategories = [
             {
@@ -40,7 +31,32 @@ const CategoryManager = () => {
                 createdDate: '2025-03-01',
                 updatedBy: 'admin',
                 updatedDate: '2025-03-05'
+            },
+            {
+                categoryId: 1,
+                categoryName: 'Điện thoại',
+                parentCategoryId: null,
+                sortOrder: 1,
+                notes: 'Danh mục điện thoại',
+                isActive: true,
+                createdBy: 'admin',
+                createdDate: '2025-03-01',
+                updatedBy: 'admin',
+                updatedDate: '2025-03-05'
+            },
+            {
+                categoryId: 1,
+                categoryName: 'Điện thoại',
+                parentCategoryId: null,
+                sortOrder: 1,
+                notes: 'Danh mục điện thoại',
+                isActive: true,
+                createdBy: 'admin',
+                createdDate: '2025-03-01',
+                updatedBy: 'admin',
+                updatedDate: '2025-03-05'
             }
+            // Thêm các danh mục khác nếu cần
         ];
         setCategories(initialCategories);
         setFilteredCategories(initialCategories);
@@ -98,103 +114,76 @@ const CategoryManager = () => {
             title: 'ID',
             dataIndex: 'categoryId',
             key: 'categoryId',
-            sorter: (a, b) => a.categoryId - b.categoryId,
-            align: 'center'
+            sorter: (a, b) => a.categoryId - b.categoryId
         },
         {
             title: 'Tên danh mục',
             dataIndex: 'categoryName',
             key: 'categoryName',
-            sorter: (a, b) => a.categoryName.localeCompare(b.categoryName),
-            align: 'left'
+            sorter: (a, b) => a.categoryName.localeCompare(b.categoryName)
         },
         {
             title: 'ID danh mục cha',
             dataIndex: 'parentCategoryId',
             key: 'parentCategoryId',
-            sorter: (a, b) =>
-                (a.parentCategoryId || 0) - (b.parentCategoryId || 0),
-            align: 'center'
+            sorter: (a, b) => a.parentCategoryId - b.parentCategoryId
         },
         {
-            title: 'Thứ tự',
+            title: 'Thứ tự sắp xếp',
             dataIndex: 'sortOrder',
             key: 'sortOrder',
-            sorter: (a, b) => a.sortOrder - b.sortOrder,
-            align: 'center'
+            sorter: (a, b) => a.sortOrder - b.sortOrder
         },
-        {
-            title: 'Ghi chú',
-            dataIndex: 'notes',
-            key: 'notes',
-            align: 'left'
-        },
+        { title: 'Ghi chú', dataIndex: 'notes', key: 'notes' },
         {
             title: 'Kích hoạt',
             dataIndex: 'isActive',
             key: 'isActive',
-            render: isActive => (
-                <Tag color={isActive ? 'green' : 'red'}>
-                    {isActive ? 'Có' : 'Không'}
-                </Tag>
-            ),
-            align: 'center'
+            render: isActive => (isActive ? 'Có' : 'Không')
         },
-        {
-            title: 'Ngày tạo',
-            dataIndex: 'createdDate',
-            key: 'createdDate',
-            align: 'center'
-        },
+        { title: 'Người tạo', dataIndex: 'createdBy', key: 'createdBy' },
+        { title: 'Ngày tạo', dataIndex: 'createdDate', key: 'createdDate' },
+        { title: 'Người cập nhật', dataIndex: 'updatedBy', key: 'updatedBy' },
         {
             title: 'Ngày cập nhật',
             dataIndex: 'updatedDate',
-            key: 'updatedDate',
-            align: 'center'
+            key: 'updatedDate'
         },
         {
             title: 'Hành động',
             key: 'actions',
-            align: 'center',
             render: (_, record) => (
                 <Space size='middle'>
-                    <Tooltip title='Chỉnh sửa'>
-                        <Button
-                            icon={<EditOutlined />}
-                            onClick={() => {
-                                setEditingCategory(record);
-                                form.setFieldsValue(record);
-                                setIsModalVisible(true);
-                            }}
-                        />
-                    </Tooltip>
-                    <Tooltip title='Xóa'>
-                        <Button
-                            icon={<DeleteOutlined />}
-                            onClick={() => handleDelete(record.categoryId)}
-                            danger
-                        />
-                    </Tooltip>
+                    <Button
+                        icon={<EditOutlined />}
+                        onClick={() => {
+                            setEditingCategory(record);
+                            form.setFieldsValue(record);
+                            setIsModalVisible(true);
+                        }}
+                    >
+                        Sửa
+                    </Button>
+                    <Button
+                        icon={<DeleteOutlined />}
+                        onClick={() => handleDelete(record.categoryId)}
+                        danger
+                    >
+                        Xóa
+                    </Button>
                 </Space>
             )
         }
     ];
 
     return (
-        <Card title='Quản lý danh mục' bordered={false}>
-            <Space
-                style={{
-                    marginBottom: 16,
-                    width: '100%',
-                    justifyContent: 'space-between'
-                }}
-            >
-                <Input.Search
-                    placeholder='Tìm kiếm danh mục...'
+        <div>
+            <Space style={{ marginBottom: 16 }}>
+                <Input
+                    placeholder='Tìm kiếm...'
                     prefix={<SearchOutlined />}
                     value={searchText}
                     onChange={handleSearch}
-                    style={{ width: 300 }}
                 />
                 <Button
                     type='primary'
@@ -213,11 +202,10 @@ const CategoryManager = () => {
                 dataSource={filteredCategories}
                 rowKey='categoryId'
                 pagination={{ pageSize: 5 }}
-                bordered
             />
             <Modal
                 title={editingCategory ? 'Chỉnh sửa danh mục' : 'Thêm danh mục'}
-                open={isModalVisible}
+                visible={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 onOk={() => form.submit()}
             >
@@ -256,7 +244,7 @@ const CategoryManager = () => {
                     </Form.Item>
                 </Form>
             </Modal>
-        </Card>
+        </div>
     );
 };
 
