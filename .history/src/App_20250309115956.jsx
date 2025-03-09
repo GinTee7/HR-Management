@@ -31,7 +31,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ContactPage from './pages/Home/Contact/Contact';
 import TaxManager from './pages/Manager/TaxManager';
-import CategoryManager from './pages/Manager/CategoryManager';
 
 function App() {
     React.useEffect(() => {
@@ -178,10 +177,7 @@ function App() {
                         element={<ProductManager />}
                     />
                     <Route path='tax-manager' element={<TaxManager />} />
-                    <Route
-                        path='category-manager'
-                        element={<CategoryManager />}
-                    />
+                    <Route path='cetagory-manager' element={<TaxManager />} />
                     <Route
                         path='debt-history'
                         element={<h1>Lịch sử công nợ</h1>}
