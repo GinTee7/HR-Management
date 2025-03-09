@@ -19,6 +19,8 @@ import HeaderBottom from '@pages/Home/Header/HeaderBottom';
 import AboutUs from '@pages/Home/AboutUs/AboutUs';
 
 // import WarehouseManager from "@pages/Manager/WarehouseManager";
+import WarehouseDashboard from './pages/Manager/WarehouseDashboard';
+import WarehouseManagerLayout from './pages/Manager/WarehouseManagerLayout copy';
 
 import WarehouseImport from './components/Warehouse/WarehouseImport';
 import WarehouseExport from './components/Warehouse/WarehouseExport';
@@ -33,9 +35,6 @@ import ProductManager from '@pages/Manager/BusinessManager/ProductManager';
 import CategoryManager from '@pages/Manager/BusinessManager/CategoryManager';
 import TaxManager from '@pages/Manager/BusinessManager/TaxManager';
 import BusinessManagerLayout from '@pages/Manager/BusinessManager/BusinessManagerLayout';
-import WarehouseManagerLayout from './pages/Manager/WarehouseManager/WarehouseManagerLayout';
-import WarehouseDashboard from './pages/Manager/WarehouseManager/WarehouseDashboard';
-import BusinessManagerProfile from './pages/Manager/BusinessManager/BusinessManagerProfile';
 
 function App() {
     React.useEffect(() => {
@@ -177,10 +176,6 @@ function App() {
                     element={<BusinessManagerLayout />}
                 >
                     <Route path='dashboard' element={<h1>Trang chủ</h1>} />
-                    <Route
-                        path='profile'
-                        element={<BusinessManagerProfile />}
-                    />
                     <Route
                         path='product-manager'
                         element={<ProductManager />}

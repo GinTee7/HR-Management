@@ -19,23 +19,21 @@ import HeaderBottom from '@pages/Home/Header/HeaderBottom';
 import AboutUs from '@pages/Home/AboutUs/AboutUs';
 
 // import WarehouseManager from "@pages/Manager/WarehouseManager";
-
+import WarehouseDashboard from './pages/Manager/WarehouseDashboard';
+import WarehouseManagerLayout from './pages/Manager/WarehouseManagerLayout copy';
+import BusinessManagerLayout from './pages/Manager/BusinessManagerLayout';
 import WarehouseImport from './components/Warehouse/WarehouseImport';
 import WarehouseExport from './components/Warehouse/WarehouseExport';
 import Profile from './pages/Home/Profile/Profile';
 import Order from './components/Order/Order';
-import Category from '@pages/Home/Category/Category';
+import Category from './pages/Home/Category/Category';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import ContactPage from '@pages/Home/Contact/Contact';
+import ContactPage from './pages/Home/Contact/Contact';
 import ProductManager from '@pages/Manager/BusinessManager/ProductManager';
 
 import CategoryManager from '@pages/Manager/BusinessManager/CategoryManager';
 import TaxManager from '@pages/Manager/BusinessManager/TaxManager';
-import BusinessManagerLayout from '@pages/Manager/BusinessManager/BusinessManagerLayout';
-import WarehouseManagerLayout from './pages/Manager/WarehouseManager/WarehouseManagerLayout';
-import WarehouseDashboard from './pages/Manager/WarehouseManager/WarehouseDashboard';
-import BusinessManagerProfile from './pages/Manager/BusinessManager/BusinessManagerProfile';
 
 function App() {
     React.useEffect(() => {
@@ -177,10 +175,6 @@ function App() {
                     element={<BusinessManagerLayout />}
                 >
                     <Route path='dashboard' element={<h1>Trang chủ</h1>} />
-                    <Route
-                        path='profile'
-                        element={<BusinessManagerProfile />}
-                    />
                     <Route
                         path='product-manager'
                         element={<ProductManager />}

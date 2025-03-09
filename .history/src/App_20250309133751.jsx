@@ -35,7 +35,6 @@ import TaxManager from '@pages/Manager/BusinessManager/TaxManager';
 import BusinessManagerLayout from '@pages/Manager/BusinessManager/BusinessManagerLayout';
 import WarehouseManagerLayout from './pages/Manager/WarehouseManager/WarehouseManagerLayout';
 import WarehouseDashboard from './pages/Manager/WarehouseManager/WarehouseDashboard';
-import BusinessManagerProfile from './pages/Manager/BusinessManager/BusinessManagerProfile';
 
 function App() {
     React.useEffect(() => {
@@ -177,10 +176,6 @@ function App() {
                     element={<BusinessManagerLayout />}
                 >
                     <Route path='dashboard' element={<h1>Trang chủ</h1>} />
-                    <Route
-                        path='profile'
-                        element={<BusinessManagerProfile />}
-                    />
                     <Route
                         path='product-manager'
                         element={<ProductManager />}
