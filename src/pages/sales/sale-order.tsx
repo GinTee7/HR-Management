@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { get, put } from "@/api/axiosUtils"
@@ -16,6 +18,11 @@ interface Product {
     taxId: number
     images: string[]
     availableStock: number
+    createdBy?: string
+    createdDate?: string
+    updatedBy?: string
+    updatedDate?: string
+    requestProductDetail?: []
 }
 
 interface RequestProductDetail {
@@ -37,6 +44,22 @@ interface RequestProduct {
     requestStatus: "Pending" | "Approved" | "Completed" | "Canceled"
     requestProductDetails: RequestProductDetail[]
     agencyName?: string // Thêm tên đại lý nếu có
+    requestCode?: number
+}
+
+
+
+// Định nghĩa kiểu dữ liệu cho chi tiết đơn hàng
+interface OrderDetail {
+    requestProductId: string
+    requestCode: number
+    agencyId: number
+    approvedBy: number | null
+    createdAt: string
+    updatedAt: string | null
+    requestStatus: "Pending" | "Approved" | "Completed" | "Canceled"
+    requestProductDetails: RequestProductDetail[]
+    agencyName?: string
 }
 
 export default function SalesOrders() {
@@ -45,8 +68,10 @@ export default function SalesOrders() {
     const [orders, setOrders] = useState<RequestProduct[]>([])
     const [filteredOrders, setFilteredOrders] = useState<RequestProduct[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [isLoadingDetails, setIsLoadingDetails] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [selectedOrder, setSelectedOrder] = useState<RequestProduct | null>(null)
+    const [orderDetail, setOrderDetail] = useState<OrderDetail | null>(null) // State mới để lưu chi tiết đơn hàng
     const [showOrderDetail, setShowOrderDetail] = useState(false)
     const [statusFilter, setStatusFilter] = useState<string>("all")
     const [searchQuery, setSearchQuery] = useState("")
@@ -140,11 +165,12 @@ export default function SalesOrders() {
                 (order) =>
                     order.requestProductId.toLowerCase().includes(query) ||
                     order.agencyName?.toLowerCase().includes(query) ||
-                    order.requestProductDetails.some(
-                        (detail) =>
-                            detail.product.productName.toLowerCase().includes(query) ||
-                            detail.product.productCode.toLowerCase().includes(query),
-                    ),
+                    (order.requestProductDetails &&
+                        order.requestProductDetails.some(
+                            (detail) =>
+                                detail.product.productName.toLowerCase().includes(query) ||
+                                detail.product.productCode.toLowerCase().includes(query),
+                        )),
             )
         }
 
@@ -161,10 +187,85 @@ export default function SalesOrders() {
         setFilteredOrders(filtered)
     }, [orders, statusFilter, searchQuery, dateRange])
 
+    // Sắp xếp đơn hàng theo trạng thái
+    const sortedOrders = [...filteredOrders].sort((a, b) => {
+        // Thứ tự ưu tiên: PENDING -> APPROVED -> COMPLETED -> CANCELLED
+        const statusOrder = {
+            Pending: 0,
+            Approved: 1,
+            Completed: 2,
+            Canceled: 3,
+        }
+
+        return statusOrder[a.requestStatus] - statusOrder[b.requestStatus]
+    })
+
     // Hiển thị chi tiết đơn hàng
-    const handleViewOrderDetail = (order: RequestProduct) => {
-        setSelectedOrder(order)
-        setShowOrderDetail(true)
+    const handleViewOrderDetail = async (order: RequestProduct) => {
+        try {
+            setIsLoadingDetails(true)
+            setShowOrderDetail(true)
+
+            // Hiển thị dữ liệu cơ bản trước khi có kết quả API
+            setSelectedOrder(order)
+            setOrderDetail(null) // Reset orderDetail khi mở modal mới
+
+            // Lấy token từ auth-service
+            const token = getToken()
+
+            if (!token) {
+                navigate("/login")
+                return
+            }
+
+            // Gọi API để lấy chi tiết đơn hàng
+            const response = await fetch(`https://minhlong.mlhr.org/api/request-products/${order.requestProductId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+
+            const data = await response.json()
+
+            if (data && data.length > 0) {
+                // API trả về một mảng, lấy phần tử đầu tiên
+                const detail = data[0]
+
+                // Cập nhật state với dữ liệu chi tiết từ API
+                const orderDetailData: OrderDetail = {
+                    requestProductId: detail.requestProductId,
+                    requestCode: detail.requestCode,
+                    agencyId: detail.agencyId,
+                    approvedBy: detail.approvedBy,
+                    createdAt: detail.createdAt,
+                    updatedAt: detail.updatedAt,
+                    requestStatus: detail.requestStatus,
+                    requestProductDetails: detail.requestProductDetails,
+                    agencyName: `Đại lý ${detail.agencyId}`, // Thêm tên đại lý
+                }
+
+                setOrderDetail(orderDetailData)
+                console.log("Chi tiết đơn hàng:", orderDetailData)
+            } else {
+                console.warn("Không thể tải chi tiết đơn hàng từ API. Sử dụng dữ liệu cơ bản.")
+            }
+        } catch (err) {
+            console.error("Error fetching order details:", err)
+
+            // Kiểm tra lỗi xác thực
+            if (err instanceof Error && err.message.includes("401")) {
+                navigate("/login")
+                return
+            }
+
+            alert("Đã xảy ra lỗi khi tải chi tiết đơn hàng")
+        } finally {
+            setIsLoadingDetails(false)
+        }
     }
 
     // Phê duyệt đơn hàng
@@ -206,6 +307,16 @@ export default function SalesOrders() {
                     })
                 }
 
+                // Cập nhật orderDetail nếu có
+                if (orderDetail && orderDetail.requestProductId === requestProductId) {
+                    setOrderDetail({
+                        ...orderDetail,
+                        requestStatus: "Approved",
+                        updatedAt: new Date().toISOString(),
+                        approvedBy: 4,
+                    })
+                }
+
                 alert("Đơn hàng đã được phê duyệt thành công!")
             } else {
                 alert("Không thể phê duyệt đơn hàng. Vui lòng thử lại sau.")
@@ -222,60 +333,6 @@ export default function SalesOrders() {
             alert("Đã xảy ra lỗi khi phê duyệt đơn hàng")
         }
     }
-
-    // Xác nhận hoàn thành đơn hàng
-    // const handleCompleteOrder = async (requestProductId: string) => {
-    //     try {
-    //         // Kiểm tra quyền SALES_MANAGER
-    //         if (!isSalesManager()) {
-    //             alert("Bạn không có quyền xác nhận hoàn thành đơn hàng")
-    //             return
-    //         }
-
-    //         // Lấy token từ auth-service
-    //         const token = getToken()
-
-    //         if (!token) {
-    //             navigate("/login")
-    //             return
-    //         }
-
-    //         const response = await put(`/request-product/${requestProductId}/complete`, {})
-
-    //         if (response.success) {
-    //             // Cập nhật trạng thái đơn hàng trong state
-    //             const updatedOrders = orders.map((order) =>
-    //                 order.requestProductId === requestProductId
-    //                     ? { ...order, requestStatus: "Completed" as const, updatedAt: new Date().toISOString() }
-    //                     : order,
-    //             )
-    //             setOrders(updatedOrders)
-
-    //             // Nếu đang xem chi tiết đơn hàng này, cập nhật thông tin
-    //             if (selectedOrder && selectedOrder.requestProductId === requestProductId) {
-    //                 setSelectedOrder({
-    //                     ...selectedOrder,
-    //                     requestStatus: "Completed",
-    //                     updatedAt: new Date().toISOString(),
-    //                 })
-    //             }
-
-    //             alert("Đơn hàng đã được xác nhận hoàn thành!")
-    //         } else {
-    //             alert("Không thể xác nhận hoàn thành đơn hàng. Vui lòng thử lại sau.")
-    //         }
-    //     } catch (err) {
-    //         console.error("Error completing order:", err)
-
-    //         // Kiểm tra lỗi xác thực
-    //         if (err instanceof Error && err.message.includes("401")) {
-    //             navigate("/login")
-    //             return
-    //         }
-
-    //         alert("Đã xảy ra lỗi khi xác nhận hoàn thành đơn hàng")
-    //     }
-    // }
 
     // Hủy đơn hàng
     const handleCancelOrder = async (requestProductId: string) => {
@@ -314,6 +371,15 @@ export default function SalesOrders() {
                     })
                 }
 
+                // Cập nhật orderDetail nếu có
+                if (orderDetail && orderDetail.requestProductId === requestProductId) {
+                    setOrderDetail({
+                        ...orderDetail,
+                        requestStatus: "Canceled",
+                        updatedAt: new Date().toISOString(),
+                    })
+                }
+
                 alert("Đơn hàng đã được hủy thành công!")
             } else {
                 alert("Không thể hủy đơn hàng. Vui lòng thử lại sau.")
@@ -333,11 +399,17 @@ export default function SalesOrders() {
 
     // Tính tổng số lượng sản phẩm trong đơn hàng
     const getTotalQuantity = (order: RequestProduct) => {
+        if (!order.requestProductDetails || !Array.isArray(order.requestProductDetails)) {
+            return 0
+        }
         return order.requestProductDetails.reduce((total, detail) => total + detail.quantity, 0)
     }
 
     // Tính tổng số loại sản phẩm trong đơn hàng
     const getTotalProductTypes = (order: RequestProduct) => {
+        if (!order.requestProductDetails || !Array.isArray(order.requestProductDetails)) {
+            return 0
+        }
         return order.requestProductDetails.length
     }
 
@@ -384,7 +456,6 @@ export default function SalesOrders() {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
-
         })
     }
 
@@ -483,10 +554,10 @@ export default function SalesOrders() {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {filteredOrders.map((order) => (
+                                    {sortedOrders.map((order) => (
                                         <tr key={order.requestProductId} className="hover:bg-gray-50">
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {order.requestProductId.substring(0, 8)}
+                                                {order.requestCode}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {formatDateTime(order.createdAt)}
@@ -514,7 +585,7 @@ export default function SalesOrders() {
                                                         </button>
                                                     )}
 
-                                                    {(order.requestStatus === "Pending") && (
+                                                    {order.requestStatus === "Pending" && (
                                                         <button
                                                             onClick={() => handleCancelOrder(order.requestProductId)}
                                                             className="text-red-600 hover:text-red-900"
@@ -533,107 +604,234 @@ export default function SalesOrders() {
                 )}
 
                 {/* Order Detail Modal */}
-                {selectedOrder && showOrderDetail && (
+                {showOrderDetail && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                         <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                             <div className="p-6">
                                 <div className="flex justify-between items-center mb-4">
-                                    <h2 className="text-xl font-bold">Chi tiết đơn hàng #{selectedOrder.requestProductId}</h2>
+                                    <h2 className="text-xl font-bold">
+                                        {isLoadingDetails
+                                            ? "Đang tải chi tiết đơn hàng..."
+                                            : `Chi tiết đơn hàng #${(orderDetail || selectedOrder)?.requestCode}`}
+                                    </h2>
                                     <button onClick={() => setShowOrderDetail(false)} className="text-gray-500 hover:text-gray-700">
                                         ✕
                                     </button>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4 mb-6">
-                                    <div>
-                                        <p className="text-sm text-gray-500">Đại lý</p>
-                                        <p className="font-medium">{selectedOrder.agencyName}</p>
+                                {isLoadingDetails ? (
+                                    <div className="flex justify-center items-center py-12">
+                                        <p>Đang tải dữ liệu chi tiết...</p>
                                     </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Ngày tạo</p>
-                                        <p className="font-medium">{formatDateTime(selectedOrder.createdAt)}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Trạng thái</p>
-                                        <p className="font-medium">{renderStatusBadge(selectedOrder.requestStatus)}</p>
-                                    </div>
-                                    {selectedOrder.updatedAt && (
-                                        <div>
-                                            <p className="text-sm text-gray-500">Ngày cập nhật</p>
-                                            <p className="font-medium">{formatDateTime(selectedOrder.updatedAt)}</p>
+                                ) : orderDetail ? (
+                                    <>
+                                        <div className="grid grid-cols-2 gap-4 mb-6">
+                                            <div>
+                                                <p className="text-sm text-gray-500">Đại lý</p>
+                                                <p className="font-medium">{orderDetail.agencyName}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-500">Ngày tạo</p>
+                                                <p className="font-medium">{formatDateTime(orderDetail.createdAt)}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-500">Trạng thái</p>
+                                                <p className="font-medium">{renderStatusBadge(orderDetail.requestStatus)}</p>
+                                            </div>
+                                            {orderDetail.updatedAt && (
+                                                <div>
+                                                    <p className="text-sm text-gray-500">Ngày cập nhật</p>
+                                                    <p className="font-medium">{formatDateTime(orderDetail.updatedAt)}</p>
+                                                </div>
+                                            )}
+                                            {orderDetail.requestCode !== undefined && (
+                                                <div>
+                                                    <p className="text-sm text-gray-500">Mã yêu cầu</p>
+                                                    <p className="font-medium">{orderDetail.requestCode}</p>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-                                </div>
 
-                                <h3 className="font-medium mb-2">Sản phẩm</h3>
-                                <table className="min-w-full divide-y divide-gray-200 mb-4">
-                                    <thead className="bg-gray-50">
-                                        <tr>
-                                            <th
-                                                scope="col"
-                                                className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                            >
-                                                Mã SP
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                            >
-                                                Tên sản phẩm
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                            >
-                                                Đơn vị
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                            >
-                                                Số lượng
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                            >
-                                                Đơn giá
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
-                                        {selectedOrder.requestProductDetails.map((detail) => (
-                                            <tr key={detail.requestDetailId}>
-                                                <td className="px-4 py-3 text-sm text-gray-900">{detail.product.productCode}</td>
-                                                <td className="px-4 py-3 text-sm text-gray-900">{detail.product.productName}</td>
-                                                <td className="px-4 py-3 text-sm text-gray-500">{detail.unit}</td>
-                                                <td className="px-4 py-3 text-sm text-gray-500">{detail.quantity}</td>
-                                                <td className="px-4 py-3 text-sm text-gray-500">{detail.price.toLocaleString("vi-VN")} đ</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        <h3 className="font-medium mb-2">Sản phẩm</h3>
+                                        {orderDetail.requestProductDetails && orderDetail.requestProductDetails.length > 0 ? (
+                                            <table className="min-w-full divide-y divide-gray-200 mb-4">
+                                                <thead className="bg-gray-50">
+                                                    <tr>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Mã SP
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Tên sản phẩm
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Đơn vị
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Số lượng
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Đơn giá
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                    {orderDetail.requestProductDetails.map((detail) => (
+                                                        <tr key={detail.requestDetailId}>
+                                                            <td className="px-4 py-3 text-sm text-gray-900">{detail.product.productCode}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-900">{detail.product.productName}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-500">{detail.unit || detail.product.unit}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-500">{detail.quantity}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-500">
+                                                                {detail.price > 0 ? detail.price.toLocaleString("vi-VN") + " đ" : "Chưa có giá"}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : (
+                                            <p className="text-center py-4 text-gray-500">Không có thông tin chi tiết sản phẩm</p>
+                                        )}
 
-                                <div className="flex justify-end space-x-2 mt-6">
-                                    <button
-                                        onClick={() => setShowOrderDetail(false)}
-                                        className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                                    >
-                                        Đóng
-                                    </button>
+                                        <div className="flex justify-end space-x-2 mt-6">
+                                            <button
+                                                onClick={() => setShowOrderDetail(false)}
+                                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                                            >
+                                                Đóng
+                                            </button>
 
-                                    {selectedOrder.requestStatus === "Pending" && (
-                                        <button
-                                            onClick={() => {
-                                                handleApproveOrder(selectedOrder.requestProductId)
-                                                setShowOrderDetail(false)
-                                            }}
-                                            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-                                        >
-                                            Phê duyệt
-                                        </button>
-                                    )}
-                                </div>
+                                            {orderDetail.requestStatus === "Pending" && (
+                                                <button
+                                                    onClick={() => {
+                                                        handleApproveOrder(orderDetail.requestProductId)
+                                                        setShowOrderDetail(false)
+                                                    }}
+                                                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                                                >
+                                                    Phê duyệt
+                                                </button>
+                                            )}
+                                        </div>
+                                    </>
+                                ) : selectedOrder ? (
+                                    <>
+                                        <div className="grid grid-cols-2 gap-4 mb-6">
+                                            <div>
+                                                <p className="text-sm text-gray-500">Đại lý</p>
+                                                <p className="font-medium">{selectedOrder.agencyName}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-500">Ngày tạo</p>
+                                                <p className="font-medium">{formatDateTime(selectedOrder.createdAt)}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-500">Trạng thái</p>
+                                                <p className="font-medium">{renderStatusBadge(selectedOrder.requestStatus)}</p>
+                                            </div>
+                                            {selectedOrder.updatedAt && (
+                                                <div>
+                                                    <p className="text-sm text-gray-500">Ngày cập nhật</p>
+                                                    <p className="font-medium">{formatDateTime(selectedOrder.updatedAt)}</p>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <h3 className="font-medium mb-2">Sản phẩm</h3>
+                                        {selectedOrder.requestProductDetails && selectedOrder.requestProductDetails.length > 0 ? (
+                                            <table className="min-w-full divide-y divide-gray-200 mb-4">
+                                                <thead className="bg-gray-50">
+                                                    <tr>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Mã SP
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Tên sản phẩm
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Đơn vị
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Số lượng
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Đơn giá
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                    {selectedOrder.requestProductDetails.map((detail) => (
+                                                        <tr key={detail.requestDetailId}>
+                                                            <td className="px-4 py-3 text-sm text-gray-900">{detail.product.productCode}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-900">{detail.product.productName}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-500">{detail.unit || detail.product.unit}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-500">{detail.quantity}</td>
+                                                            <td className="px-4 py-3 text-sm text-gray-500">
+                                                                {detail.price > 0 ? detail.price.toLocaleString("vi-VN") + " đ" : "Chưa có giá"}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : (
+                                            <p className="text-center py-4 text-gray-500">Không có thông tin chi tiết sản phẩm</p>
+                                        )}
+
+                                        <div className="flex justify-end space-x-2 mt-6">
+                                            <button
+                                                onClick={() => setShowOrderDetail(false)}
+                                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                                            >
+                                                Đóng
+                                            </button>
+
+                                            {selectedOrder.requestStatus === "Pending" && (
+                                                <button
+                                                    onClick={() => {
+                                                        handleApproveOrder(selectedOrder.requestProductId)
+                                                        setShowOrderDetail(false)
+                                                    }}
+                                                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                                                >
+                                                    Phê duyệt
+                                                </button>
+                                            )}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="text-center py-8">
+                                        <p>Không thể tải chi tiết đơn hàng.</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

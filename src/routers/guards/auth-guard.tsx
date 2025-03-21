@@ -10,6 +10,10 @@ export const AuthGuard = () => {
         return <Navigate to="/login" state={{ from: location }} replace />
     }
 
-    return <Outlet />
+    return (
+        <>
+            <Outlet />
+        </>
+    )
 }
 
