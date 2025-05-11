@@ -13,16 +13,16 @@ export const OrderStatusBadge = ({ status }: OrderStatusBadgeProps) => {
             </Badge>
         case "Paid":
             return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 p-1 w-[100px]">
-                <span className="text-center w-[100px]">Đã duyệt</span>
+                <span className="text-center w-[100px]">Đã thanh toán</span>
             </Badge>
-        case "Processing":
-
+        case "WaitingDelivery":
             return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 p-1 w-[100px]">
-                <span className="text-center w-[100px]">Đang xử lý</span>
+                <span className="text-center w-[100px]">Chờ xuất kho</span>
             </Badge>
-        case "Delivery":
-            return <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 p-1 w-[100px]">
-                <span className="text-center w-[100px]">Đang giao hàng</span>
+
+        case "Exported":
+            return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 p-1 w-[100px]">
+                <span className="text-center w-[100px]">Đã xuất kho</span>
             </Badge>
 
         case "Canceled":
