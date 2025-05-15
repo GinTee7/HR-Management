@@ -1,109 +1,93 @@
+import { get } from "@/api/axiosUtils";
+import { OrderStatusCards } from "@/components/sales/dashboard/order-status-cards";
+import { SalesMetrics } from "@/components/sales/dashboard/sales-metrics";
+import { OrderSummaryCards } from "@/components/sales/order-summary-cards";
 import { SalesLayout } from "@/layouts/sale-layout";
+import { RequestProduct } from "@/types/sales-orders";
+import { getToken } from "@/utils/auth-utils";
+import { updateTotals } from "@/utils/order-utils";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SalesDashboard() {
+    const navigate = useNavigate()
+
+    const [, setIsLoading] = useState(true)
+    const [, setError] = useState<string | null>(null)
+    const [totalProducts, setTotalProducts] = useState(0)
+    const [totalQuantity, setTotalQuantity] = useState(0)
+
+    const fetchOrders = async () => {
+        setIsLoading(true)
+        setError(null)
+
+        try {
+            // Lấy token từ auth-service
+            const token = getToken()
+
+            if (!token) {
+                navigate("/login")
+                return
+            }
+
+            const response = await get<RequestProduct[]>("/request-products")
+
+            if (response.success && Array.isArray(response.result)) {
+                // Dữ liệu đã có đầy đủ thông tin từ API
+                const ordersWithLoadingState = response.result.map((order) => ({
+                    ...order,
+                    isLoading: false,
+                }))
+
+                // Cập nhật tổng số sản phẩm và số lượng
+                const { totalProductCount, totalQuantityCount } = updateTotals(ordersWithLoadingState)
+                setTotalProducts(totalProductCount)
+                setTotalQuantity(totalQuantityCount)
+
+                // Đánh dấu tất cả đơn hàng đã được tải chi tiết
+                const loadedDetails: Record<string, boolean> = {}
+                ordersWithLoadingState.forEach((order) => {
+                    loadedDetails[order.requestProductId] = true
+                })
+            } else {
+                setError("Không thể tải dữ liệu đơn hàng")
+            }
+        } catch (err) {
+            console.error("Error fetching orders:", err)
+
+            // Kiểm tra lỗi xác thực
+            if (err instanceof Error && err.message.includes("401")) {
+                navigate("/login")
+                return
+            }
+
+            setError("Đã xảy ra lỗi khi tải dữ liệu đơn hàng")
+        } finally {
+            setIsLoading(false)
+        }
+    }
+    useEffect(() => {
+        fetchOrders()
+    }, [])
+
     return (
         <SalesLayout>
-            <div className="p-6">
+            <div className="m-4">
                 <h1 className="text-2xl font-bold mb-6">Tổng quan</h1>
-
+                <OrderStatusCards />
                 {/* Summary Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    <div className="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 className="text-gray-700 font-medium mb-2">Đơn hàng</h3>
-                        <p className="text-3xl font-bold">12</p>
-                        <p className="text-sm text-gray-500 mt-1">Tháng này</p>
-                    </div>
-
-                    <div className="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 className="text-gray-700 font-medium mb-2">Sản phẩm đã mua</h3>
-                        <p className="text-3xl font-bold">24</p>
-                        <p className="text-sm text-gray-500 mt-1">Tổng số</p>
-                    </div>
-
-                    <div className="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 className="text-gray-700 font-medium mb-2">Đơn hàng đang giao</h3>
-                        <p className="text-3xl font-bold">3</p>
-                        <p className="text-sm text-gray-500 mt-1">Đang vận chuyển</p>
-                    </div>
+                <div className="mt-5">
+                    <OrderSummaryCards
+                        totalProducts={totalProducts}
+                        totalQuantity={totalQuantity}
+                    />
                 </div>
-
-                {/* Two Column Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                    {/* Recent Activities */}
-                    <div className="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 className="text-lg font-medium mb-4">Hoạt động gần đây</h3>
-                        <div className="space-y-4">
-                            <div className="flex items-start">
-                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-3">
-                                    1
-                                </div>
-                                <div>
-                                    <p className="font-medium">Đơn hàng #2023001 đã được giao</p>
-                                    <p className="text-sm text-gray-500">3/18/2025</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start">
-                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-3">
-                                    2
-                                </div>
-                                <div>
-                                    <p className="font-medium">Đơn hàng #2023002 đã được giao</p>
-                                    <p className="text-sm text-gray-500">3/18/2025</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start">
-                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-3">
-                                    3
-                                </div>
-                                <div>
-                                    <p className="font-medium">Đơn hàng #2023003 đã được giao</p>
-                                    <p className="text-sm text-gray-500">3/18/2025</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Notifications */}
-                    <div className="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 className="text-lg font-medium mb-4">Thông báo</h3>
-                        <div className="space-y-4">
-                            <div className="flex items-start">
-                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-3">
-                                    i
-                                </div>
-                                <div>
-                                    <p className="font-medium">Khuyến mãi mới cho khách hàng thân thiết</p>
-                                    <p className="text-sm text-gray-500">3/18/2025</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start">
-                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-3">
-                                    i
-                                </div>
-                                <div>
-                                    <p className="font-medium">Khuyến mãi mới cho khách hàng thân thiết</p>
-                                    <p className="text-sm text-gray-500">3/18/2025</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start">
-                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-3">
-                                    i
-                                </div>
-                                <div>
-                                    <p className="font-medium">Khuyến mãi mới cho khách hàng thân thiết</p>
-                                    <p className="text-sm text-gray-500">3/18/2025</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div className="mb-8">
+                    <SalesMetrics />
                 </div>
 
                 {/* Recent Orders Table */}
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                {/* <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                     <h3 className="text-lg font-medium p-6 pb-0">Đơn hàng gần đây</h3>
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">
@@ -169,7 +153,7 @@ export default function SalesDashboard() {
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> */}
             </div>
         </SalesLayout>
     )
