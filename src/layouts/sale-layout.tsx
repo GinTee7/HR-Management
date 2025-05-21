@@ -11,17 +11,18 @@ import {
   Menu,
   Home,
   LayoutDashboard,
-  ShoppingBag,
   Package,
   FileText,
-
   User,
   LogOut,
   CreditCard,
+  CheckCheck,
+  MessageCircleMore,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useAuth } from "@/contexts/AuthContext";
+import { NotificationPopover } from "@/components/notification-popover";
 
 interface SalesLayoutProps {
   children: ReactNode;
@@ -59,19 +60,9 @@ export function SalesLayout({ children }: SalesLayoutProps) {
 
   const navItems: NavItem[] = [
     {
-      title: "Hồ sơ cá nhân",
-      href: "/sales/profile",
-      icon: <User className="h-5 w-5" />,
-    },
-    {
-      title: "Cấp đại lý",
-      href: "/sales/level",
-      icon: <CreditCard className="h-5 w-5" />,
-    },
-    {
-      title: "Sản phẩm",
-      href: "/sales/product",
-      icon: <Package className="h-5 w-5" />,
+      title: "Tổng quan",
+      href: "/sales/dashboard",
+      icon: <LayoutDashboard className="h-5 w-5" />,
     },
 
     {
@@ -79,15 +70,36 @@ export function SalesLayout({ children }: SalesLayoutProps) {
       href: "/sales/export",
       icon: <FileText className="h-5 w-5" />,
     },
+
     {
-      title: "Đơn hàng",
-      href: "/sales/orders",
-      icon: <ShoppingBag className="h-5 w-5" />,
+      title: "Duyệt trả hàng",
+      href: "/sales/review-order",
+      icon: <CheckCheck className="h-5 w-5" />,
     },
     {
-      title: "Tổng quan",
-      href: "/sales/dashboard",
-      icon: <LayoutDashboard className="h-5 w-5" />,
+      title: "Quản lý đại lý",
+      href: "/sales/customer",
+      icon: <User className="h-5 w-5" />,
+    },
+    {
+      title: "Sản phẩm",
+      href: "/sales/product",
+      icon: <Package className="h-5 w-5" />,
+    },
+    {
+      title: "Cấp đại lý",
+      href: "/sales/level",
+      icon: <CreditCard className="h-5 w-5" />,
+    },
+    {
+      title: "Hồ sơ cá nhân",
+      href: "/sales/profile",
+      icon: <User className="h-5 w-5" />,
+    },
+    {
+      title: "Tin nhắn",
+      href: "/sales/messages",
+      icon: <MessageCircleMore className="h-5 w-5" />,
     },
 
     // {
@@ -95,9 +107,6 @@ export function SalesLayout({ children }: SalesLayoutProps) {
     //   href: "/sales/tax",
     //   icon: <Receipt className="h-5 w-5" />,
     // },
-
-
-
   ];
   return (
     <div className="min-h-screen bg-gray-100">
@@ -164,17 +173,14 @@ export function SalesLayout({ children }: SalesLayoutProps) {
                   </SheetContent>
                 </Sheet>
               )}
-              <Link
-                to="/"
-                className="text-xl font-bold flex items-center"
-              >
+              <Link to="/" className="text-xl font-bold flex items-center">
                 <Home className="h-5 w-5" />
                 <span className="ml-5 ">Trang chủ</span>
               </Link>
             </div>
 
             <div className="flex items-center">
-
+              <NotificationPopover />
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-700 hidden md:inline-block">
                   Xin chào,{" "}
