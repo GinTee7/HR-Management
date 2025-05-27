@@ -12,8 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+
 import {
   Table,
   TableBody,
@@ -187,20 +186,20 @@ export default function AgencyProductRequest() {
       // Hiển thị thông báo thành công
       toast.success("Yêu cầu đã được gửi thành công!");
 
-      // Xóa giỏ hàng
+      // Xóa giỏ hàng và localStorage
       clearCart();
 
       // Reset form
       setNote("");
 
       // Chuyển hướng đến trang danh sách yêu cầu
-      navigate("/agency/requests");
+      navigate("/agency/orders");
     } catch (error) {
       // Xử lý lỗi
       console.error("Error submitting request:", error);
 
       // Hiển thị thông báo lỗi
-      toast.success("Bạn đã đặt hàng, Vui lòng thử lại sau 24h");
+      toast.error("Lỗi hệ thống thử lại sau");
     } finally {
       setIsSubmitting(false);
     }
@@ -350,17 +349,7 @@ export default function AgencyProductRequest() {
                   </div>
                 </div>
 
-                <div className="mt-6 space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="note">Ghi chú</Label>
-                    <Textarea
-                      id="note"
-                      placeholder="Nhập ghi chú cho đơn hàng (nếu có)"
-                      value={note}
-                      onChange={(e) => setNote(e.target.value)}
-                    />
-                  </div>
-                </div>
+
               </div>
             ) : (
               <div className="text-center py-36 ">
