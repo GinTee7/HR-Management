@@ -4,7 +4,7 @@ import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import {
   MessageSquare,
@@ -36,6 +36,7 @@ interface ChatRoom {
   createdAt: string;
   memberCount: number;
   lastMessage: string;
+  lastUserName: string;
   lastTimestamp: string;
   members: Member[];
 }
@@ -55,6 +56,10 @@ interface ChatMessage {
 interface FilePreview {
   file: File;
   previewUrl: string;
+}
+interface DateGroup {
+  date: Date;
+  messages: ChatMessage[];
 }
 
 export default function ChatPage() {
@@ -76,13 +81,26 @@ export default function ChatPage() {
   const [selectedFiles, setSelectedFiles] = useState<FilePreview[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  // Add a ref to track pending message IDs
+  const pendingMessageIds = useRef<Set<string>>(new Set());
+  const [lightbox, setLightbox] = useState<{
+    isOpen: boolean;
+    currentImageIndex: number;
+    images: string[];
+    messageId: string;
+  }>({
+    isOpen: false,
+    currentImageIndex: 0,
+    images: [],
+    messageId: "",
+  });
 
   const connectionRef = useRef<signalR.HubConnection | null>(null);
   const globalConnectionRef = useRef<signalR.HubConnection | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const name = localStorage.getItem("name");
   // Fetch chat rooms on component mount
   useEffect(() => {
     const fetchRooms = async () => {
@@ -132,7 +150,7 @@ export default function ChatPage() {
         globalConnectionRef.current = null;
       }
     };
-  }, []);
+  }, [selectedRoom]);
 
   // Setup global SignalR connection for background notifications
   const setupGlobalSignalR = async () => {
@@ -160,25 +178,25 @@ export default function ChatPage() {
 
       // Set up message receiving
       connection.on("ReceiveMessage", (msg) => {
+        if (msg.senderId === localStorage.getItem("id")) return;
         // If the message is for the current chat room, update messages
         if (msg.chatRoomId === selectedRoom) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              chatMessageId: msg.chatMessageId || Date.now().toString(),
-              chatRoomId: msg.chatRoomId,
-              senderId: msg.senderId,
-              senderName: msg.senderName,
-              messageText: msg.messageText,
-              timestamp: msg.timestamp,
-              isRead: false,
-              fileUrl:
-                msg.fileUrl ||
-                (msg.imageUrls && msg.imageUrls.length > 0
-                  ? msg.imageUrls[0]
-                  : null),
-            },
-          ]);
+          console.log(
+            "Global connection received message for current room:",
+            msg
+          );
+
+          // Check if this is a response to our own message
+          if (msg.senderId === userId) {
+            // If we have a pending message with similar content, don't add it again
+            if (isPendingMessage(msg)) {
+              console.log(
+                "Skipping duplicate message from global connection",
+                msg
+              );
+              return;
+            }
+          }
         }
 
         // Update the rooms list to reflect the new message
@@ -209,6 +227,39 @@ export default function ChatPage() {
     } catch (error) {
       console.error("Global SignalR connection failed:", error);
     }
+  };
+
+  // Check if a message is a duplicate of a pending message
+  const isPendingMessage = (msg: any): boolean => {
+    // If we don't have any pending messages, it's not a duplicate
+    if (pendingMessageIds.current.size === 0) return false;
+
+    // Check if this message has similar content to any pending message
+    const isSimilar = Array.from(pendingMessageIds.current).some((id) => {
+      const pendingMsg = messages.find((m) => m.chatMessageId === id);
+      if (!pendingMsg) return false;
+
+      // Compare message content
+      const sameText = pendingMsg.messageText === msg.messageText;
+      const sameType =
+        (pendingMsg.imageUrls &&
+          pendingMsg.imageUrls.length > 0 &&
+          msg.imageUrls &&
+          msg.imageUrls.length > 0) ||
+        (pendingMsg.fileUrl && msg.fileUrl);
+
+      return sameText && sameType;
+    });
+
+    if (isSimilar) {
+      // Remove the pending message ID since we've received the server response
+      const pendingIds = Array.from(pendingMessageIds.current);
+      if (pendingIds.length > 0) {
+        pendingMessageIds.current.delete(pendingIds[0]);
+      }
+    }
+
+    return isSimilar;
   };
 
   // Update room list when a new message is received
@@ -262,6 +313,9 @@ export default function ChatPage() {
         const data = await response.json();
         setMessages(data);
 
+        // Clear pending messages when changing rooms
+        pendingMessageIds.current.clear();
+
         // Scroll to bottom after messages load
         setTimeout(() => {
           scrollToBottom();
@@ -300,6 +354,41 @@ export default function ChatPage() {
     };
   }, [selectedFiles]);
 
+  // Add this new useEffect after the other useEffects
+  // This effect ensures that when selectedRoom changes, we update our message handler
+  useEffect(() => {
+    if (!globalConnectionRef.current || !selectedRoom) return;
+
+    // Re-register the message handler when selectedRoom changes
+    const handleMessage = (msg: any) => {
+      if (msg.chatRoomId === selectedRoom) {
+        console.log("Handling message for room:", selectedRoom, msg);
+
+        // Check if this is a response to our own message
+        if (msg.senderId === userId) {
+          // If we have a pending message with similar content, don't add it again
+          if (isPendingMessage(msg)) {
+            console.log("Skipping duplicate message from room connection", msg);
+            return;
+          }
+        }
+
+        // Force scroll to bottom
+        setTimeout(scrollToBottom, 100);
+      }
+    };
+
+    // Remove previous handler and add new one
+    globalConnectionRef.current.off("ReceiveMessage");
+    globalConnectionRef.current.on("ReceiveMessage", handleMessage);
+
+    return () => {
+      if (globalConnectionRef.current) {
+        globalConnectionRef.current.off("ReceiveMessage", handleMessage);
+      }
+    };
+  }, [selectedRoom, userId]);
+
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -331,29 +420,39 @@ export default function ChatPage() {
 
       // Set up message receiving
       connection.on("ReceiveMessage", (msg) => {
-        // Only process messages for this room
-        if (msg.chatRoomId === roomId) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              chatMessageId: msg.chatMessageId || Date.now().toString(),
-              chatRoomId: msg.chatRoomId,
-              senderId: msg.senderId,
-              senderName: msg.senderName,
-              messageText: msg.messageText,
-              timestamp: msg.timestamp,
-              isRead: false,
-              fileUrl:
-                msg.fileUrl ||
-                (msg.imageUrls && msg.imageUrls.length > 0
-                  ? msg.imageUrls[0]
-                  : null),
-            },
-          ]);
+        if (msg.senderId === userId) return; // bỏ qua tin của chính mình
+        if (msg.chatRoomId !== roomId) return; // chỉ handle room đang mở
 
-          // Update the rooms list to reflect the new message
-          updateRoomWithNewMessage(msg);
+        // debug xem server gửi về cái gì
+        console.log("Incoming message", msg);
+
+        // Gom mọi link ảnh vào 1 mảng
+        const imgs: string[] = [
+          ...(Array.isArray(msg.images) ? msg.images : []),
+          ...(Array.isArray(msg.imageUrls) ? msg.imageUrls : []),
+        ];
+
+        // nếu không có images từ server mà có fileUrl (kiểm tra extension) thì thêm fileUrl vào
+        if (imgs.length === 0 && msg.fileUrl && isImageUrl(msg.fileUrl)) {
+          imgs.push(msg.fileUrl);
         }
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            chatMessageId: msg.chatMessageId || Date.now().toString(),
+            chatRoomId: msg.chatRoomId,
+            senderId: msg.senderId,
+            senderName: msg.senderName,
+            messageText: msg.messageText,
+            timestamp: msg.timestamp,
+            isRead: false,
+            imageUrls: imgs, // chỉ dùng duy nhất field này
+          },
+        ]);
+
+        updateRoomWithNewMessage(msg);
+        scrollToBottom();
       });
 
       // Start connection
@@ -385,23 +484,19 @@ export default function ChatPage() {
   };
 
   // Group messages by date
-  const groupMessagesByDate = (messages: ChatMessage[]) => {
-    const groups: { [key: string]: ChatMessage[] } = {};
+  const groupMessagesByDate = (messages: ChatMessage[]): DateGroup[] => {
+    const groups: Record<string, DateGroup> = {};
 
-    messages.forEach((message) => {
-      const date = new Date(message.timestamp).toLocaleDateString();
-      if (!groups[date]) {
-        groups[date] = [];
-      }
-      groups[date].push(message);
+    messages.forEach((msg) => {
+      // parseISO hiểu ISO với bất cứ bao nhiêu chữ số thập phân
+      const d = parseISO(msg.timestamp);
+      const key = d.toISOString().slice(0, 10); // "YYYY-MM-DD"
+      if (!groups[key]) groups[key] = { date: d, messages: [] };
+      groups[key].messages.push(msg);
     });
 
-    return Object.entries(groups).map(([date, messages]) => ({
-      date,
-      messages,
-    }));
+    return Object.values(groups);
   };
-
   // Handle file selection
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -508,6 +603,30 @@ export default function ChatPage() {
         setUploadProgress(Math.round(((i + 1) / selectedFiles.length) * 100));
       }
 
+      // Create a temporary message ID
+      const tempMessageId = Date.now().toString();
+
+      // Add to pending messages
+      pendingMessageIds.current.add(tempMessageId);
+
+      // Add the message to the local state immediately for instant feedback
+      const newMessage = {
+        chatMessageId: tempMessageId,
+        chatRoomId: selectedRoom,
+        senderId: userId,
+        senderName: "You", // This will be replaced when the server confirms
+        messageText: messageInput || "Đã gửi một hình ảnh",
+        timestamp: new Date().toISOString(),
+        isRead: false,
+        imageUrls: fileUrls,
+      };
+
+      // Update messages state immediately
+      setMessages((prev) => [...prev, newMessage]);
+
+      // Scroll to bottom to show the new message
+      setTimeout(scrollToBottom, 50);
+
       // Send message with all file URLs
       await connectionRef.current.invoke(
         "SendMessage",
@@ -523,7 +642,7 @@ export default function ChatPage() {
       clearAllFiles();
       setUploadProgress(0);
 
-      console.log("✅ Files uploaded and messages sent");
+      console.log("✅ Files uploaded and messages sent", fileUrls);
     } catch (error) {
       console.error("Error uploading files:", error);
       alert("Không thể tải lên tệp. Vui lòng thử lại sau.");
@@ -556,6 +675,32 @@ export default function ChatPage() {
         throw new Error("Invalid GUID format for user ID or room ID");
       }
 
+      // Create a temporary message ID
+      const tempMessageId = Date.now().toString();
+
+      // Add to pending messages
+      pendingMessageIds.current.add(tempMessageId);
+
+      // Create a temporary message for immediate feedback
+      const tempMessage = {
+        chatMessageId: tempMessageId,
+        chatRoomId: selectedRoom,
+        senderId: userId,
+        senderName: "You", // Will be replaced by server response
+        messageText: messageInput,
+        timestamp: new Date().toISOString(),
+        isRead: false,
+      };
+
+      // Add to messages immediately
+      setMessages((prev) => [...prev, tempMessage]);
+
+      // Clear input field
+      setMessageInput("");
+
+      // Scroll to bottom
+      setTimeout(scrollToBottom, 50);
+
       // Send message via SignalR
       await connectionRef.current.invoke(
         "SendMessage",
@@ -567,7 +712,6 @@ export default function ChatPage() {
       );
 
       console.log("✅ Message sent");
-      setMessageInput("");
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -659,7 +803,10 @@ export default function ChatPage() {
                           </span>
                         </div>
                         <p className="text-sm text-gray-500 truncate mt-1">
-                          {room.lastMessage}
+                          {room.lastUserName === name
+                            ? "Bạn"
+                            : room.lastUserName}
+                          : {room.lastMessage}
                         </p>
                       </div>
                     </div>
@@ -687,7 +834,7 @@ export default function ChatPage() {
                   <div key={groupIndex} className="mb-6">
                     <div className="flex justify-center mb-4">
                       <div className="bg-gray-200 text-gray-600 text-xs px-3 py-1 rounded-full">
-                        {new Date(group.date).toLocaleDateString("vi-VN", {
+                        {group.date.toLocaleDateString("vi-VN", {
                           weekday: "long",
                           year: "numeric",
                           month: "long",
@@ -719,33 +866,37 @@ export default function ChatPage() {
                               </p>
                             )}
 
-                            {message.fileUrl && isImageUrl(message.fileUrl) && (
-                              <div className="mt-2 overflow-hidden rounded-md">
-                                <img
-                                  src={message.fileUrl || "/placeholder.svg"}
-                                  alt="Shared image"
-                                  className="max-w-full h-auto object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                                  onClick={() =>
-                                    window.open(message.fileUrl, "_blank")
-                                  }
-                                />
-                              </div>
-                            )}
+                            {(() => {
+                              // Gom chung imageUrls + fileUrl thành 1 mảng
+                              const imgs: string[] = [
+                                ...(message.imageUrls ?? []),
+                                ...(message.fileUrl ? [message.fileUrl] : []),
+                              ];
 
-                            {message.imageUrls &&
-                              message.imageUrls.length > 0 && (
+                              if (imgs.length === 0) return null;
+
+                              return (
                                 <div className="mt-2 flex flex-wrap gap-2">
-                                  {message.imageUrls.map((url, index) => (
+                                  {imgs.map((url, i) => (
                                     <img
-                                      key={index}
+                                      key={`${message.chatMessageId}-img-${i}`}
                                       src={url || "/placeholder.svg"}
-                                      alt={`Shared image ${index + 1}`}
-                                      className="max-w-[200px] h-auto object-contain cursor-pointer hover:opacity-90 transition-opacity rounded-md"
-                                      onClick={() => window.open(url, "_blank")}
+                                      alt="Shared image"
+                                      className="max-w-[200px] h-auto object-contain rounded-md cursor-pointer hover:opacity-90 transition-opacity"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setLightbox({
+                                          isOpen: true,
+                                          currentImageIndex: i,
+                                          images: imgs,
+                                          messageId: message.chatMessageId,
+                                        });
+                                      }}
                                     />
                                   ))}
                                 </div>
-                              )}
+                              );
+                            })()}
 
                             {message.fileUrl &&
                               !isImageUrl(message.fileUrl) && (
@@ -907,6 +1058,127 @@ export default function ChatPage() {
           )}
         </div>
       </div>
+      {lightbox.isOpen && (
+        <div
+          className="fixed inset-0 bg-white bg-opacity-95 z-50 flex items-center justify-center p-4"
+          onClick={() => setLightbox((prev) => ({ ...prev, isOpen: false }))}
+        >
+          <div className="relative max-w-4xl w-full bg-white rounded-lg shadow-xl overflow-hidden">
+            <div className="absolute top-4 right-4 z-10">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full bg-white hover:bg-gray-100 border-gray-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightbox((prev) => ({ ...prev, isOpen: false }));
+                }}
+              >
+                <X className="h-4 w-4 text-gray-500" />
+              </Button>
+            </div>
+
+            <div className="p-4 flex items-center justify-center">
+              <img
+                src={
+                  lightbox.images[lightbox.currentImageIndex] ||
+                  "/placeholder.svg"
+                }
+                alt="Enlarged view"
+                className="max-h-[80vh] max-w-full object-contain rounded-md"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+
+            {/* Navigation controls */}
+            {lightbox.images.length > 1 && (
+              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                {lightbox.images.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`w-2 h-2 rounded-full ${
+                      index === lightbox.currentImageIndex
+                        ? "bg-red-500"
+                        : "bg-gray-300"
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLightbox((prev) => ({
+                        ...prev,
+                        currentImageIndex: index,
+                      }));
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Left/Right navigation arrows */}
+            {lightbox.images.length > 1 && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-100 rounded-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightbox((prev) => ({
+                      ...prev,
+                      currentImageIndex:
+                        (prev.currentImageIndex - 1 + prev.images.length) %
+                        prev.images.length,
+                    }));
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-100 rounded-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightbox((prev) => ({
+                      ...prev,
+                      currentImageIndex:
+                        (prev.currentImageIndex + 1) % prev.images.length,
+                    }));
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </SalesLayout>
   );
 }
