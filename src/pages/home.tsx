@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  Phone,
   Leaf,
   ShoppingBag,
   BookOpen,
@@ -17,10 +16,13 @@ import { FeaturedProductsSection } from "@/components/featured-products-section"
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { FloatingChat } from "@/components/floating-chat";
 
 export default function Home() {
   // Slideshow state and images
   const [currentSlide, setCurrentSlide] = useState(0);
+  const navigate = useNavigate();
   const slides = [
     {
       image:
@@ -96,21 +98,24 @@ export default function Home() {
   // Blog posts data
   const blogPosts = [
     {
-      image: "/placeholder.svg?height=300&width=500",
+      image:
+        "https://resource.kinhtedothi.vn/2021/12/22/cach-cham-soc-cay-xanh-trong-nha-3.jpg ",
       title: "Cách chăm sóc cây xanh trong nhà",
       excerpt:
         "Những bí quyết giúp cây xanh trong nhà luôn khỏe mạnh và phát triển tốt.",
       date: "15/03/2023",
     },
     {
-      image: "/placeholder.svg?height=300&width=500",
+      image:
+        "https://nshpos.com/Web/Resources/Uploaded/18/images/tintuc/blog/cay%20canh%20trong%20nha/cay-canh-trong-nha-1.jpg",
       title: "Top 10 cây cảnh dễ trồng cho người mới bắt đầu",
       excerpt:
         "Gợi ý những loại cây cảnh dễ chăm sóc, phù hợp với người mới bắt đầu trồng cây.",
       date: "20/04/2023",
     },
     {
-      image: "/placeholder.svg?height=300&width=500",
+      image:
+        "https://www.canhquanxanh.com.vn/images/images/tintuc/cay-canh-van-phong.jpg",
       title: "Cách bố trí cây xanh trong không gian làm việc",
       excerpt:
         "Những ý tưởng sáng tạo để bố trí cây xanh trong văn phòng làm việc.",
@@ -158,6 +163,7 @@ export default function Home() {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button
+                      onClick={() => navigate("/collections")}
                       size="lg"
                       className="bg-primary hover:bg-primary/90 text-white"
                     >
@@ -338,8 +344,8 @@ export default function Home() {
       {/* Newsletter Section */}
       <section className="py-16 bg-primary/5 dark:bg-primary/10">
         <ResponsiveContainer maxWidth="4xl">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 md:p-12 shadow-sm border border-slate-200 dark:border-slate-800">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 md:p-12 shadow-sm border border-slate-200 dark:border-slate-800 flex justify-center items-center w-full">
+            <div className=" items-center">
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">
                   Đăng ký nhận thông tin
@@ -357,31 +363,13 @@ export default function Home() {
                   <Button className="shrink-0">Đăng ký</Button>
                 </div>
               </div>
-              <div className="hidden md:block">
-                <img
-                  src="/placeholder.svg?height=300&width=400"
-                  alt="Newsletter"
-                  className="w-full h-auto rounded-lg"
-                />
-              </div>
             </div>
           </div>
         </ResponsiveContainer>
       </section>
 
-      {/* Add phone icon with ringing animation */}
-      <div className="fixed bottom-6 right-6 z-30">
-        <div className="relative">
-          <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping"></div>
-          <div className="absolute inset-0 bg-primary/20 rounded-full animate-pulse"></div>
-          <a
-            href="tel:02812345678"
-            className="relative flex items-center justify-center w-16 h-16 bg-primary rounded-full shadow-lg hover:bg-primary/90 transition-colors"
-          >
-            <Phone className="h-6 w-6 text-primary-foreground" />
-          </a>
-        </div>
-      </div>
+      {/* Floating chat button */}
+      <FloatingChat />
     </div>
   );
 }

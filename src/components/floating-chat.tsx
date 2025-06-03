@@ -15,12 +15,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import * as signalR from "@microsoft/signalr";
+import { toast } from "sonner";
 
 interface Manager {
   userId: string;
   fullName: string;
 }
 
+// Update the ChatMessage interface to better handle image arrays
 interface ChatMessage {
   chatMessageId: string;
   chatRoomId: string;
@@ -59,9 +61,23 @@ export function FloatingChat() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [lightbox, setLightbox] = useState<{
+    isOpen: boolean;
+    currentImageIndex: number;
+    images: string[];
+    messageId: string;
+  }>({
+    isOpen: false,
+    currentImageIndex: 0,
+    images: [],
+    messageId: "",
+  });
 
   const connectionRef = useRef<signalR.HubConnection | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Add pendingMessageIds ref to track pending messages
+  const pendingMessageIds = useRef<Set<string>>(new Set());
 
   // Fetch manager info when component mounts
   useEffect(() => {
@@ -85,6 +101,9 @@ export function FloatingChat() {
         connectionRef.current = null;
         setConnectionStatus("disconnected");
       }
+
+      // Clear pending message IDs
+      pendingMessageIds.current.clear();
     };
   }, []);
 
@@ -115,7 +134,10 @@ export function FloatingChat() {
     try {
       setLoading(true);
       const authToken = localStorage.getItem("auth_token");
-
+      if (!authToken) {
+        toast.error("Bạn cần đăng nhập để trò chuyện");
+        throw new Error("Authentication token not found");
+      }
       const response = await fetch(
         "https://minhlong.mlhr.org/api/agency/manager-by",
         {
@@ -202,6 +224,8 @@ export function FloatingChat() {
 
       // Set the chat room ID
       setChatRoomId(room.chatRoomId);
+      // Clear pending messages when changing rooms
+      pendingMessageIds.current.clear();
 
       // Fetch messages for this room
       await fetchMessages(room.chatRoomId);
@@ -263,8 +287,28 @@ export function FloatingChat() {
         .withAutomaticReconnect([0, 2000, 5000, 10000])
         .build();
 
-      // Set up message receiving
-      connection.on("ReceiveMessage", (msg) => {
+      // Replace the ReceiveMessage handler in connectToSignalR with this improved version
+      connection.on("ReceiveMessage", (msg: any) => {
+        // nếu tin của chính mình, bỏ qua
+        if (msg.senderId === localStorage.getItem("id")) return;
+
+        // check duplicate
+        if (
+          msg.senderId === localStorage.getItem("id") &&
+          isPendingMessage(msg)
+        ) {
+          return;
+        }
+
+        // gom chung: msg.images + msg.imageUrls + (fileUrl nếu đúng định dạng)
+        const imgs: string[] = [
+          ...(Array.isArray(msg.images) ? msg.images : []),
+          ...(Array.isArray(msg.imageUrls) ? msg.imageUrls : []),
+        ];
+        if (imgs.length === 0 && msg.fileUrl && isImageUrl(msg.fileUrl)) {
+          imgs.push(msg.fileUrl);
+        }
+
         setMessages((prev) => [
           ...prev,
           {
@@ -272,17 +316,16 @@ export function FloatingChat() {
             chatRoomId: msg.chatRoomId,
             senderId: msg.senderId,
             senderName: msg.senderName,
-            messageText: msg.messageText,
+            // nếu chỉ gửi ảnh thì hide text
+            messageText: imgs.length ? "" : msg.messageText,
             timestamp: msg.timestamp,
             isRead: false,
-            fileUrl:
-              msg.fileUrl ||
-              (msg.imageUrls && msg.imageUrls.length > 0
-                ? msg.imageUrls[0]
-                : null),
-            imageUrls: msg.imageUrls,
+            imageUrls: imgs,
+            fileUrl: imgs.length ? undefined : msg.fileUrl,
           },
         ]);
+
+        scrollToBottom();
       });
 
       // Start connection
@@ -300,6 +343,39 @@ export function FloatingChat() {
       console.error("SignalR connection failed:", error);
       setConnectionStatus("disconnected");
     }
+  };
+
+  // Add this function to check for pending messages
+  const isPendingMessage = (msg: any): boolean => {
+    // If we don't have any pending messages, it's not a duplicate
+    if (pendingMessageIds.current.size === 0) return false;
+
+    // Check if this message has similar content to any pending message
+    const isSimilar = Array.from(pendingMessageIds.current).some((id) => {
+      const pendingMsg = messages.find((m) => m.chatMessageId === id);
+      if (!pendingMsg) return false;
+
+      // Compare message content
+      const sameText = pendingMsg.messageText === msg.messageText;
+      const sameType =
+        (pendingMsg.imageUrls &&
+          pendingMsg.imageUrls.length > 0 &&
+          msg.imageUrls &&
+          msg.imageUrls.length > 0) ||
+        (pendingMsg.fileUrl && msg.fileUrl);
+
+      return sameText && sameType;
+    });
+
+    if (isSimilar) {
+      // Remove the pending message ID since we've received the server response
+      const pendingIds = Array.from(pendingMessageIds.current);
+      if (pendingIds.length > 0) {
+        pendingMessageIds.current.delete(pendingIds[0]);
+      }
+    }
+
+    return isSimilar;
   };
 
   // Handle file selection
@@ -350,7 +426,7 @@ export function FloatingChat() {
     }
   };
 
-  // Upload files and send message
+  // Update the uploadFilesAndSendMessage function to track pending messages
   const uploadFilesAndSendMessage = async () => {
     if (selectedFiles.length === 0 || !chatRoomId || !connectionRef.current)
       return;
@@ -408,6 +484,30 @@ export function FloatingChat() {
         setUploadProgress(Math.round(((i + 1) / selectedFiles.length) * 100));
       }
 
+      // Create a temporary message ID
+      const tempMessageId = Date.now().toString();
+
+      // Add to pending messages
+      pendingMessageIds.current.add(tempMessageId);
+
+      // Add the message to the local state immediately for instant feedback
+      const newMessage = {
+        chatMessageId: tempMessageId,
+        chatRoomId: chatRoomId,
+        senderId: userId,
+        senderName: "You", // This will be replaced when the server confirms
+        messageText: messageInput || "Đã gửi một hình ảnh",
+        timestamp: new Date().toISOString(),
+        isRead: false,
+        imageUrls: fileUrls,
+      };
+
+      // Update messages state immediately
+      setMessages((prev) => [...prev, newMessage]);
+
+      // Scroll to bottom to show the new message
+      setTimeout(scrollToBottom, 50);
+
       // Send message with all file URLs
       await connectionRef.current.invoke(
         "SendMessage",
@@ -423,7 +523,7 @@ export function FloatingChat() {
       clearAllFiles();
       setUploadProgress(0);
 
-      console.log("✅ Files uploaded and messages sent");
+      console.log("✅ Files uploaded and messages sent", fileUrls);
     } catch (error) {
       console.error("Error uploading files:", error);
       alert("Không thể tải lên tệp. Vui lòng thử lại sau.");
@@ -432,7 +532,7 @@ export function FloatingChat() {
     }
   };
 
-  // Handle sending a message
+  // Update the handleSendMessage function to track pending messages
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -451,6 +551,32 @@ export function FloatingChat() {
         throw new Error("Invalid user ID or chat room ID");
       }
 
+      // Create a temporary message ID
+      const tempMessageId = Date.now().toString();
+
+      // Add to pending messages
+      pendingMessageIds.current.add(tempMessageId);
+
+      // Create a temporary message for immediate feedback
+      const tempMessage = {
+        chatMessageId: tempMessageId,
+        chatRoomId: chatRoomId,
+        senderId: userId,
+        senderName: "You", // Will be replaced by server response
+        messageText: messageInput,
+        timestamp: new Date().toISOString(),
+        isRead: false,
+      };
+
+      // Add to messages immediately
+      setMessages((prev) => [...prev, tempMessage]);
+
+      // Clear input field
+      setMessageInput("");
+
+      // Scroll to bottom
+      setTimeout(scrollToBottom, 50);
+
       // Send message via SignalR
       await connectionRef.current.invoke(
         "SendMessage",
@@ -462,7 +588,6 @@ export function FloatingChat() {
       );
 
       console.log("✅ Message sent");
-      setMessageInput("");
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -479,12 +604,14 @@ export function FloatingChat() {
     setIsOpen(!isOpen);
   };
 
+  // Update the message rendering in the return statement to better handle images
+  // Replace the message rendering part with this improved version
   return (
     <>
       {/* Floating chat button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 bg-green-600 text-white rounded-full p-3 shadow-lg hover:bg-green-700 transition-colors z-50"
+        className="fixed bottom-6 right-6 bg-green-600 text-white rounded-full p-4 shadow-lg hover:bg-green-700 transition-colors z-50"
         aria-label="Chat with manager"
       >
         <MessageSquare className="h-6 w-6" />
@@ -568,28 +695,23 @@ export function FloatingChat() {
                           </p>
                         )}
 
-                        {message.fileUrl && isImageUrl(message.fileUrl) && (
-                          <div className="mt-2 overflow-hidden rounded-md">
-                            <img
-                              src={message.fileUrl || "/placeholder.svg"}
-                              alt="Shared image"
-                              className="max-w-full h-auto object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                              onClick={() =>
-                                window.open(message.fileUrl, "_blank")
-                              }
-                            />
-                          </div>
-                        )}
-
-                        {message.imageUrls && message.imageUrls.length > 0 && (
+                        {(message.imageUrls ?? []).length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-1">
-                            {message.imageUrls.map((url, index) => (
+                            {(message.imageUrls ?? []).map((url, i) => (
                               <img
-                                key={index}
+                                key={`${message.chatMessageId}-img-${i}`}
                                 src={url || "/placeholder.svg"}
-                                alt={`Shared image ${index + 1}`}
-                                className="max-w-[150px] h-auto object-contain cursor-pointer hover:opacity-90 transition-opacity rounded-md"
-                                onClick={() => window.open(url, "_blank")}
+                                alt="Shared image"
+                                className="max-w-[150px] object-contain rounded-md cursor-pointer hover:opacity-90 transition-opacity"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setLightbox({
+                                    isOpen: true,
+                                    currentImageIndex: i,
+                                    images: message.imageUrls || [],
+                                    messageId: message.chatMessageId,
+                                  });
+                                }}
                               />
                             ))}
                           </div>
@@ -729,6 +851,129 @@ export function FloatingChat() {
                 )}
               </Button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Image Lightbox */}
+      {lightbox.isOpen && (
+        <div
+          className="fixed inset-0 bg-white bg-opacity-95 z-[100] flex items-center justify-center p-4"
+          onClick={() => setLightbox((prev) => ({ ...prev, isOpen: false }))}
+        >
+          <div className="relative max-w-4xl w-full bg-white rounded-lg shadow-xl overflow-hidden">
+            <div className="absolute top-4 right-4 z-10">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full bg-white hover:bg-gray-100 border-gray-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightbox((prev) => ({ ...prev, isOpen: false }));
+                }}
+              >
+                <X className="h-4 w-4 text-gray-500" />
+              </Button>
+            </div>
+
+            <div className="p-4 flex items-center justify-center">
+              <img
+                src={
+                  lightbox.images[lightbox.currentImageIndex] ||
+                  "/placeholder.svg"
+                }
+                alt="Enlarged view"
+                className="max-h-[80vh] max-w-full object-contain rounded-md"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+
+            {/* Navigation controls */}
+            {lightbox.images.length > 1 && (
+              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                {lightbox.images.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`w-2 h-2 rounded-full ${
+                      index === lightbox.currentImageIndex
+                        ? "bg-green-600"
+                        : "bg-gray-300"
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLightbox((prev) => ({
+                        ...prev,
+                        currentImageIndex: index,
+                      }));
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Left/Right navigation arrows */}
+            {lightbox.images.length > 1 && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-100 rounded-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightbox((prev) => ({
+                      ...prev,
+                      currentImageIndex:
+                        (prev.currentImageIndex - 1 + prev.images.length) %
+                        prev.images.length,
+                    }));
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-100 rounded-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightbox((prev) => ({
+                      ...prev,
+                      currentImageIndex:
+                        (prev.currentImageIndex + 1) % prev.images.length,
+                    }));
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}
