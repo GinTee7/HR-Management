@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Menu, Search, User, ChevronDown, LogOut, Settings, ShoppingBag } from "lucide-react"
+import { Menu, User, ChevronDown, LogOut, Settings, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -168,9 +168,9 @@ export function SiteHeader({ isHomePage = false }: SiteHeaderProps) {
     const userRole = user?.role || ""
     const displayName = user?.username || userDetails?.username || "User"
 
-    const isSalesManager = () => {
-        return userRole === UserRole.SALES_MANAGER
-    }
+    // const isSalesManager = () => {
+    //     return userRole === UserRole.SALES_MANAGER
+    // }
 
     const isAgency = () => {
         return userRole === UserRole.AGENCY
@@ -446,7 +446,7 @@ export function SiteHeader({ isHomePage = false }: SiteHeaderProps) {
 
                 <div className="ml-auto flex items-center space-x-4">
                     {/* Only show cart indicator if user is verified and has appropriate role */}
-                    {isEmailVerified && (isSalesManager() || isAgency()) && (
+                    {isEmailVerified && isAgency() && (
                         <div className="mr-2">
                             <CartIndicator />
                         </div>
@@ -527,10 +527,6 @@ export function SiteHeader({ isHomePage = false }: SiteHeaderProps) {
                         </Button>
                     )}
 
-                    {/* Search Button */}
-                    <Button variant="ghost" size="icon">
-                        <Search className="h-5 w-5" />
-                    </Button>
 
                     {/* User Icon - Mobile */}
                     {isAuthenticated &&
