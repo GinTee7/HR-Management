@@ -64,12 +64,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const baseURL = `https://minhlong.mlhr.org`;
 
   // Function to fetch user details from API
-  const fetchUserDetails = async (userId: string) => {
+  const fetchUserDetails = async () => {
     try {
       const token = localStorage.getItem("auth_token");
       if (!token) return null;
 
-      const response = await fetch(`${baseURL}/api/get-info-user/${userId}`, {
+      const response = await fetch(`${baseURL}/api/get-info-user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -144,11 +144,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setUser(decodedUser);
       localStorage.setItem("auth_token", token);
-      localStorage.setItem("id", decodedUser.id);
       console.log("User authenticated:", decodedUser);
 
       // Fetch additional user details
-      const details = await fetchUserDetails(decodedUser.id);
+      const details = await fetchUserDetails();
       if (details) {
         setUserDetails(details);
         console.log("User details fetched:", details);
@@ -199,10 +198,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser(decodedUser);
 
           // Fetch additional user details
-          const details = await fetchUserDetails(decodedUser.id);
+          const details = await fetchUserDetails();
           if (details) {
             setUserDetails(details);
-            console.log("User details fetched:", details);
           }
         } else {
           // Token is invalid or expired
