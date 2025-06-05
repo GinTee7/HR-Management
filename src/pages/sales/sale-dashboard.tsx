@@ -7,12 +7,9 @@ import { getToken } from "@/utils/auth-utils";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
+import { ExportTable } from "@/components/ExportTable";
+import { RequestExport } from "@/types/export-request";
 
-interface ExportRequest {
-    requestDate: string;
-    finalPrice: number;
-    status: string;
-}
 
 interface GroupedData {
     requestDate: string;
@@ -32,6 +29,7 @@ export default function SalesDashboard() {
     const [groupedData, setGroupedData] = useState<GroupedData[]>([])
     const [selectedYear, setSelectedYear] = useState('2025')
     const [statusData, setStatusData] = useState<StatusData[]>([])
+    const [formattedData, setFormattedData] = useState<RequestExport[]>([])
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
@@ -45,13 +43,12 @@ export default function SalesDashboard() {
     const getStatusLabel = (status: string) => {
         switch (status) {
             case "Requested":
-                return "Chờ duyệt"
+                return "Chờ xuất kho"
             case "Approved":
-                return "Đã duyệt"
+                return "Đã xuất kho"
             case "Processing":
                 return "Chờ xử lý"
-            case "Partially_Exported":
-                return "Trả một phần"
+
             case "Canceled":
                 return "Đã hủy"
             default:
@@ -67,8 +64,6 @@ export default function SalesDashboard() {
                 return "#dcfce7" // green-50
             case "Processing":
                 return "#dbeafe" // blue-50
-            case "Partially_Exported":
-                return "#fee2e2" // red-50
             case "Canceled":
                 return "#fee2e2" // red-50
             default:
@@ -81,11 +76,10 @@ export default function SalesDashboard() {
             case "Requested":
                 return "#fde68a" // yellow-200
             case "Approved":
-                return "#86efac" // green-200
+                return "#86efac"  // green-200
             case "Processing":
                 return "#93c5fd" // blue-200
-            case "Partially_Exported":
-                return "#fca5a5" // red-200
+
             case "Canceled":
                 return "#fca5a5" // red-200
             default:
@@ -105,7 +99,7 @@ export default function SalesDashboard() {
                 return
             }
 
-            const response = await get<ExportRequest[]>("/RequestExport/manage-by-sales")
+            const response = await get<RequestExport[]>("/RequestExport/manage-by-sales")
 
             if (response.success && Array.isArray(response.result)) {
                 // Format data for chart
@@ -143,7 +137,7 @@ export default function SalesDashboard() {
                 }, {})
 
                 // Ensure all statuses are included with count 0 if no data
-                const allStatuses = ["Requested", "Approved", "Processing", "Partially_Exported", "Canceled"]
+                const allStatuses = ["Approved", "Canceled", "Requested", "Processing"]
                 const statusArray = allStatuses.map(status => ({
                     status: getStatusLabel(status),
                     count: statusCount[status] || 0,
@@ -151,6 +145,9 @@ export default function SalesDashboard() {
                 }))
 
                 setStatusData(statusArray)
+
+                // Store formatted data for table
+                setFormattedData(formattedData)
             } else {
                 setError("Không thể tải dữ liệu xuất hàng")
             }
@@ -266,7 +263,7 @@ export default function SalesDashboard() {
                 </div>
 
                 {/* Status Chart */}
-                <div className="mt-8 bg-white p-6 rounded-lg shadow">
+                <div className="mt-8 mb-8 bg-white p-6 rounded-lg shadow">
                     <h2 className="text-xl font-semibold mb-4">Thống kê trạng thái đơn hàng</h2>
                     {isLoading ? (
                         <div className="flex justify-center items-center h-64">
@@ -307,6 +304,8 @@ export default function SalesDashboard() {
                         </div>
                     )}
                 </div>
+
+                <ExportTable data={formattedData} />
             </div>
         </SalesLayout>
     )
