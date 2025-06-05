@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useMemo, useEffect } from 'react';
-import { Search, DollarSign, Package, Users, TrendingUp, BarChart3 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
+import { Search, DollarSign, Package, TrendingUp, BarChart3 } from 'lucide-react';
+import { Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
 import { Order, STATUS_AGENCY_ORDER } from '@/types/agency-orders';
 import { TodayRevenue } from './today-revenue';
 import { MonthlyRevenue } from './monthly-revenue';
@@ -44,6 +44,7 @@ export default function OrderDashboard() {
     const [dateRange, setDateRange] = useState({ from: '', to: '' });
     const token = localStorage.getItem("auth_token") || "";
     const [loading, setLoading] = useState(false);
+    const [selectedYear, setSelectedYear] = useState<number>(2024);
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -94,19 +95,79 @@ export default function OrderDashboard() {
 
     // Chart data preparation
     const chartData = useMemo(() => {
-        // Daily revenue chart data
-        const dailyRevenue = orders.reduce((acc, order) => {
-            const date = order.orderDate;
-            if (!acc[date]) {
-                acc[date] = { date, revenue: 0, orders: 0, discount: 0 };
+        // Generate all months for the selected year
+        const generateMonthlyData = () => {
+            // Define the structure of a monthly data point
+            interface MonthlyDataPoint {
+                date: string;
+                monthNumber: number;
+                revenue: number;
+                orders: number;
+                discount: number;
             }
-            acc[date].revenue += order.finalPrice;
-            acc[date].orders += 1;
-            acc[date].discount += order.discount;
-            return acc;
-        }, {} as Record<string, { date: string; revenue: number; orders: number; discount: number }>);
 
-        const revenueData = Object.values(dailyRevenue).sort((a, b) => a.date.localeCompare(b.date));
+            const months: MonthlyDataPoint[] = [];
+            for (let i = 0; i < 12; i++) {
+                const month = i + 1; // month is 1-indexed
+                const date = new Date(selectedYear, i, 1); // Use 0-indexed month for Date constructor
+                months.push({
+                    date: date.toISOString().split('T')[0],
+                    monthNumber: month,
+                    revenue: 0,
+                    orders: 0,
+                    discount: 0
+                });
+            }
+
+            // Add actual data if available
+            orders.forEach(order => {
+                const orderDate = new Date(order.orderDate);
+                if (orderDate.getFullYear() === selectedYear) {
+                    const monthIndex = orderDate.getMonth();
+                    // Ensure monthIndex is within bounds (0-11)
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        months[monthIndex].revenue += order.finalPrice;
+                        months[monthIndex].orders += 1;
+                        months[monthIndex].discount += (order.totalPrice - order.finalPrice);
+                    }
+                }
+            });
+
+            return months;
+        };
+
+        // Process daily data for 2025
+        const processDailyData = () => {
+            const dailyRevenue = orders.reduce((acc, order) => {
+                const orderDate = new Date(order.orderDate);
+                if (orderDate.getFullYear() === 2025) {
+                    const dateKey = orderDate.toISOString().split('T')[0];
+                    if (!acc[dateKey]) {
+                        acc[dateKey] = {
+                            date: dateKey,
+                            revenue: 0,
+                            orders: 0,
+                            discount: 0
+                        };
+                    }
+                    acc[dateKey].revenue += order.finalPrice;
+                    acc[dateKey].orders += 1;
+                    acc[dateKey].discount += (order.totalPrice - order.finalPrice);
+                }
+                return acc;
+            }, {} as Record<string, { date: string; revenue: number; orders: number; discount: number }>);
+
+            // Convert to array and sort by date
+            return Object.values(dailyRevenue)
+                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        };
+
+        const revenueData = selectedYear === 2024 ? generateMonthlyData() : processDailyData();
+
+        // Sort monthly data for 2024 to ensure correct order
+        if (selectedYear === 2024) {
+            revenueData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        }
 
         // Status pie chart data
         const statusData = Object.entries(stats.statusCounts).map(([status, count]) => ({
@@ -145,16 +206,16 @@ export default function OrderDashboard() {
             agencyData,
             salesData
         };
-    }, [orders, stats.statusCounts]);
+    }, [orders, stats.statusCounts, selectedYear]);
 
     // Filtered orders
     const filteredOrders = useMemo(() => {
         return orders.filter(order => {
             const matchesSearch =
-                order.orderCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                order.agencyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                order.salesName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                order.requestCode.toLowerCase().includes(searchTerm.toLowerCase());
+                (order.orderCode?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                (order.agencyName?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                (order.salesName?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                (order.requestCode?.toLowerCase() || '').includes(searchTerm.toLowerCase());
 
             const matchesStatus = statusFilter === 'All' || order.status === statusFilter;
 
@@ -206,7 +267,7 @@ export default function OrderDashboard() {
                 </div>
 
                 {/* Statistics Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
                     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
                         <div className="flex items-center justify-between">
                             <div>
@@ -219,17 +280,6 @@ export default function OrderDashboard() {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-gray-600">Tổng doanh thu</p>
-                                <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalRevenue)}</p>
-                            </div>
-                            <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                <DollarSign className="h-6 w-6 text-green-600" />
-                            </div>
-                        </div>
-                    </div>
 
                     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
                         <div className="flex items-center justify-between">
@@ -243,17 +293,7 @@ export default function OrderDashboard() {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-gray-600">Đại lý hoạt động</p>
-                                <p className="text-2xl font-bold text-gray-900">{new Set(orders.map(o => o.agencyName)).size}</p>
-                            </div>
-                            <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                                <Users className="h-6 w-6 text-purple-600" />
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
 
                 {/* Charts Section */}
@@ -262,30 +302,77 @@ export default function OrderDashboard() {
                     <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold text-gray-900">Xu hướng doanh thu</h3>
-                            <TrendingUp className="h-5 w-5 text-blue-600" />
+                            <div className="flex items-center gap-2">
+                                <select
+                                    value={selectedYear}
+                                    onChange={(e) => setSelectedYear(Number(e.target.value))}
+                                    className="border border-gray-300 rounded-md px-2 py-1 text-sm"
+                                >
+                                    <option value={2024}>2024</option>
+                                    <option value={2025}>2025</option>
+                                </select>
+                                <TrendingUp className="h-5 w-5 text-blue-600" />
+                            </div>
                         </div>
                         <ResponsiveContainer width="100%" height={300}>
                             <AreaChart data={chartData.revenueData}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis
-                                    dataKey="date"
-                                    tickFormatter={(value) => new Date(value).toLocaleDateString('vi-VN', { month: 'short', day: 'numeric' })}
+                                    dataKey={selectedYear === 2024 ? 'monthNumber' : 'date'}
+                                    tickFormatter={(value) => {
+                                        if (selectedYear === 2024) {
+                                            return `T${value}`; // Value is now the month number (1-12)
+                                        }
+                                        const date = new Date(value);
+                                        return `${date.getDate()}/${date.getMonth() + 1}`;
+                                    }}
                                 />
-                                <YAxis tickFormatter={(value) => `${(value / 1000000).toFixed(1)}M`} />
+                                <YAxis
+                                    yAxisId="left"
+                                    tickFormatter={(value) => {
+                                        if (value >= 1000000) {
+                                            return `${(value / 1000000).toFixed(1)}Triệu`;
+                                        }
+                                        return `${(value / 1000).toFixed(0)}K`;
+                                    }}
+                                />
+                                <YAxis
+                                    yAxisId="right"
+                                    orientation="right"
+                                    tickFormatter={(value) => `${value}`}
+                                />
                                 <Tooltip
                                     formatter={(value: number, name: string) => [
-                                        name === 'revenue' ? formatCurrency(value) : value,
-                                        name === 'revenue' ? 'Doanh thu' : 'Số đơn'
+                                        name === 'revenue' ? formatCurrency(value) : formatCurrency(value),
+                                        name === 'revenue' ? 'Doanh thu' : 'Doanh thu'
                                     ]}
-                                    labelFormatter={(value) => `Ngày: ${formatDate(value)}`}
+                                    labelFormatter={(value) => {
+                                        const date = new Date(value);
+                                        if (selectedYear === 2024) {
+                                            return `Tháng: ${date.toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })}`;
+                                        }
+                                        return `Ngày: ${date.toLocaleDateString('vi-VN', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+                                    }}
                                 />
+                                <Legend />
                                 <Area
+                                    yAxisId="left"
                                     type="monotone"
                                     dataKey="revenue"
                                     stroke="#3B82F6"
                                     fill="#3B82F6"
                                     fillOpacity={0.1}
                                     strokeWidth={2}
+                                    name="Doanh thu"
+                                />
+                                <Line
+                                    yAxisId="right"
+                                    type="monotone"
+                                    dataKey="orders"
+                                    stroke="#10B981"
+                                    strokeWidth={2}
+                                    dot={{ r: 4 }}
+                                    name="Số đơn"
                                 />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -316,13 +403,26 @@ export default function OrderDashboard() {
                                 <Tooltip formatter={(value) => [value, 'Số đơn']} />
                             </PieChart>
                         </ResponsiveContainer>
+
+                        {/* Status Summary */}
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                            <p className="text-sm font-medium text-gray-700 mb-2">Tổng số đơn: <span className="font-semibold text-gray-900">{stats.totalOrders}</span></p>
+                            <ul className="list-disc list-inside text-sm text-gray-600">
+                                {Object.entries(stats.statusCounts).map(([status, count]) => (
+                                    <li key={status} className="flex items-center">
+                                        <span className={`inline-block w-3 h-3 rounded-full mr-2 ${statusColors[status as STATUS_AGENCY_ORDER]}`}></span>
+                                        <span>{statusLabels[status as STATUS_AGENCY_ORDER]}: </span><span className="font-semibold"> {count}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
 
-                {/* Performance Charts */}
 
 
-                {/* Daily Orders and Revenue Comparison */}
+                {/* Daily Orders and Revenue Comparison
                 <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-8">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">So sánh đơn hàng và doanh thu theo ngày</h3>
                     <ResponsiveContainer width="100%" height={400}>
@@ -372,7 +472,7 @@ export default function OrderDashboard() {
                             />
                         </LineChart>
                     </ResponsiveContainer>
-                </div>
+                </div> */}
 
                 {/* Filters and Search */}
                 <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-6">
@@ -497,10 +597,10 @@ export default function OrderDashboard() {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {formatCurrency(order.finalPrice)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusColors[order.status]}`}>
+                                        <td className="px-6 py-4 whitespace-nowrap flex justify-center">
+                                            <h1 className={` w-28 px-2 py-2 text-xs font-semibold rounded-full ${statusColors[order.status]} text-center`}>
                                                 {statusLabels[order.status]}
-                                            </span>
+                                            </h1>
                                         </td>
 
                                     </tr>
