@@ -27,6 +27,7 @@ export interface UserDetails {
   phone: string;
   status: boolean;
   verifyEmail: boolean;
+  name: string;
 }
 
 // Define the auth context state
@@ -45,8 +46,8 @@ const AuthContext = createContext<AuthContextType>({
   userDetails: null,
   isAuthenticated: false,
   isLoading: true,
-  login: () => { },
-  logout: () => { },
+  login: () => {},
+  logout: () => {},
 });
 
 // Custom hook to use the auth context
@@ -105,19 +106,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return {
         id:
           payload[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
           ] || "",
         username:
           payload[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
           ] || "",
         email:
           payload[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
           ] || "",
         role:
           payload[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
           ] || "",
         token: token,
       };
@@ -133,7 +134,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (decodedUser) {
       // Check if user has valid role
-      const hasValidRole = Object.values(UserRole).includes(decodedUser.role as UserRole);
+      const hasValidRole = Object.values(UserRole).includes(
+        decodedUser.role as UserRole
+      );
 
       if (!hasValidRole) {
         console.error("Invalid user role");
@@ -144,6 +147,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setUser(decodedUser);
       localStorage.setItem("auth_token", token);
+      localStorage.setItem("id", decodedUser.id);
+
       console.log("User authenticated:", decodedUser);
 
       // Fetch additional user details
@@ -168,7 +173,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         },
         method: "POST",
         credentials: "include",
-
       });
       if (res.ok) {
         console.log(res);
@@ -180,7 +184,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         localStorage.removeItem("remembered_username");
         toast.success("Đăng xuất thành công!");
       }
-
     } catch (error) {
       console.error("Error during logout:", error);
       toast.error("Có lỗi xảy ra khi đăng xuất!");
